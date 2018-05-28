@@ -61,8 +61,7 @@ main.js
 // when the transition ends, activate the portal context
 //  to swap it into the current tab
 //  thereby completing the navigation
-insetPortal.activate();
-insetPortal.postMessage();
+insetPortal.activate({data: [...]}); // optional: pass some data to the portal
 [...]
 ```
 ## Key scenarios
