@@ -89,6 +89,25 @@ After being activated, a portal opened by the news aggregator will now receive t
 <TODO sample code demonstrating how the API can be used to solve the use case>
 ```
 
+publisher.com/articles/2018/05/monthly-trends...
+```
+[...]
+// tentative approach
+window.addEventListener('portalactivate', e => {
+  let predecessor = e.adoptPredecessor(document);
+  console.assert(predecessor instanceof HTMLPortalElement);
+  // by special dispensation, this element keeps the portal alive for the duration of the portalactivate event
+  // past that, the author must attach it to the document
+  
+  // maintain the user's expectations vis-a-vis the news aggregator flow
+  // by keeping the news aggregator's UI around in the form of a portal 
+  document.getElementById("extUI").appendChild(predecessor);
+  
+  // add script to forward swipe gestures to the news aggregator (portal)
+  [...]
+});
+```
+
 ### Publication with an infinite list of articles
 A web publication wants to offer an infinite list of articles but without having to redesign their website which is architectured as a Multi Page App. The desired UX is as follows:
  - As a user reaches the end of an article, they are presented with a sneak peek of a related article.
