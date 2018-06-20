@@ -3,6 +3,8 @@
 
 The name Portals is tentative and the proposal is very early stages. Feedback wanted!
 
+<img src="portal-mocks-1.png" alt="Mocks showing a seamless navigation between 2 sites with an inset 1/2" width="50%"><img src="portal-mocks-2.png" alt="Mocks showing a seamless navigation between 2 sites with an inset 2/2" width="50%">
+
 ## tl;dr:
 This is a proposal for enabling seamless navigations between sites or pages. In particular, this proposal enables a page to show another page as an inset and perform a seamless transition between an inset state and a navigated state.
 
