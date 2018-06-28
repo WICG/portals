@@ -167,4 +167,10 @@ There are various use cases for Portals that may require different visual behavi
 
 
 ## Considerations for GDPR compliance
-TODO: sync with Legal/Privacy team
+Feedback from Legal: seems fine. 
+
+Details:
+ - The proposed API would allow the publisher to seek user consent on activation (e.g. using the associated event to trigger a user consent flow if not already obtained [1])
+ - The embedder can restrain the embedded content in such a way that preserver the user's privacy until activation. This allows a publisher to show something useful while in the yet-to-be-activated flow (as opposed to a user consent flow).
+ 
+[1]: this probably means that most content owners would want to opt for the "reload-me under my origin" on activation. Otherwise, they would have to seek user consent all the time due to the opaque origin context. There might be a better option though.
