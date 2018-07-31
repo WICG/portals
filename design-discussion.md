@@ -109,6 +109,10 @@ This can be solved by providing new lifecycle events:
 
 Alternative: consider re-using existing events.
 
+## Session history
+ - A portal context should have its own session history.
+ - Upon activation, a portal inherits the session history of its predecessor, appending its current entry as the last entry in the history.
+
 ## On activation: do nothing / reload me under my origin
 This is only relevant when activating a Portal that ran in the isolated mode. The desired behavior must be specified before the activation occurs:
  - Default: do nothing
@@ -126,10 +130,6 @@ This is only relevant when activating a Portal that ran in the isolated mode. Th
  - Should an activated Portal have the ability to deactivate itself? Probably, yes.
  - Then, would the Portal keep their real origin and state? Probably, yes.
  - Should an inactive portal receive input events? No. Allowing interactivity with inactive portals creates additional complexity.
-
-## Trickiness around history
- - What happens to the history of an activated Portal that went back to an unactivated state?
- - Does it go back to being disallowed from navigating itself?
 
 ## Yet-to-be-activated Portals and Viewability
 By default, iframes are not mindful of viewability. This resulted in various interventions, e.g. throttling requestAnimationFrame or timers for offscreen cross origin iframes. 
