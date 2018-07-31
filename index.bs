@@ -1,0 +1,30 @@
+<pre class="metadata">
+Title: Portals
+Shortname: portals
+Level: 1
+Status: DREAM
+URL: https://kenjibaheux.github.io/portals/
+Editor: Jeremy Roman, Google, jbroman@chromium.org
+Abstract: This specification defines a mechanism that allows for rendering of, and seamless navigation to, embedded content.
+Repository: https://github.com/KenjiBaheux/portals/
+Markup Shorthands: css no, markdown yes
+</pre>
+
+Introduction {#intro}
+=====================
+
+[[HTML]] defines a <a>top-level browsing context</a>, or a [=top-level browsing context=].
+
+<pre highlight="webidl">
+    [HTMLConstructor]
+    interface HTMLPortalElement : HTMLElement {
+        [CEReactions, Reflect, URL] attribute USVString src;
+        Promise&lt;void&gt; activate();
+        void postMessage(any message, DOMString targetOrigin, optional sequence&lt;object&gt; transfer = []);
+    };
+</pre>
+
+<section>
+  <h2 id="hello-world">Hello world</h2>
+  <p>[[HTML]] defines a <a>top-level browsing context</a>.</p>
+</section>
