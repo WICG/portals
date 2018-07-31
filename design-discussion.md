@@ -121,6 +121,10 @@ This is only relevant when activating a Portal that ran in the isolated mode. Th
  - Yet-to-be-activated Portals should not be allowed to navigate themselves, e.g. this would defeat various assumptions, in particular privacy preserving guarantees.
  - This also means that the portal wouldn’t have to deal with history issues.
 
+## Portals inside iframes
+ - A nested browsing context (e.g. iframes) shouldn't be allowed to create portals.
+   - Since a portal's activation replaces the top-level page, iframes shouldn't create or activate portals.
+
 # Open questions
 ## Deactivating oneself
  - Should an activated Portal have the ability to deactivate itself? Probably, yes.
