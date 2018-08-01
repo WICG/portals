@@ -112,6 +112,7 @@ Alternative: consider re-using existing events.
 ## Session history
  - A portal context should have its own session history.
  - Upon activation, a portal inherits the session history of its predecessor, appending its current entry as the last entry in the history.
+   - Optionally, a page should be able to specify that a portal activation should replace its current entry in the session history, similarly to using location.replace for navigation.
 
 ## On activation: do nothing / reload me under my origin
 This is only relevant when activating a Portal that ran in the isolated mode. The desired behavior must be specified before the activation occurs:
