@@ -5,26 +5,236 @@ Level: 1
 Status: DREAM
 URL: https://kenjibaheux.github.io/portals/
 Editor: Jeremy Roman, Google, jbroman@chromium.org
+Editor: Lucas Gadani, Google, lfg@chromium.org
 Abstract: This specification defines a mechanism that allows for rendering of, and seamless navigation to, embedded content.
 Repository: https://github.com/KenjiBaheux/portals/
 Markup Shorthands: css no, markdown yes
 </pre>
-
-Introduction {#intro}
-=====================
-
-[[HTML]] defines a <a>top-level browsing context</a>, or a [=top-level browsing context=].
-
-<pre highlight="webidl">
-    [HTMLConstructor]
-    interface HTMLPortalElement : HTMLElement {
-        [CEReactions, Reflect, URL] attribute USVString src;
-        Promise&lt;void&gt; activate();
-        void postMessage(any message, DOMString targetOrigin, optional sequence&lt;object&gt; transfer = []);
-    };
+<pre class="link-defaults">
+spec:html; type:dfn; for:/; text:browsing context
+</pre>
+<pre class="anchors">
+spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
+    type: attribute
+        urlPrefix: comms.html
+            text: origin; for: MessageEvent; url: dom-messageevent-origin
+            text: source; for: MessageEvent; url: dom-messageevent-source
+            text: ports; for: MessageEvent; url: dom-messageevent-ports
+            text: data; for: MessageEvent; url: dom-messageevent-data
+    type: dfn
+        urlPrefix: browsers.html
+            text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
 </pre>
 
+<section class="non-normative">
+  Introduction {#intro}
+  =====================
+
+  *This section is non-normative.*
+
+  This specification extends [[HTML]] to define a new kind of [=top-level browsing context=],
+  which can be embedded in another document, and a mechanism for replacing the contents of another
+  top-level browsing context with the previously embedded context.
+</section>
+
 <section>
-  <h2 id="hello-world">Hello world</h2>
-  <p>[[HTML]] defines a <a>top-level browsing context</a>.</p>
+  Concepts {#concepts}
+  ====================
+
+  A <dfn>portal browsing context</dfn> is a [=browsing context=] created according to the steps in this specification.
+  A portal browsing context cannot have a [=parent browsing context=].
+
+  A portal browsing context has a <dfn>host</dfn> which is embeds its rendered output and
+  receives messages sent from the portal browsing context. This specification defines
+  {{HTMLPortalElement}}, which hosts a portal browsing context inside an HTML document.
+
+  <p class="note">
+    This implies that every [=portal browsing context=] is a [=top-level browsing context=].
+    It is expected that a Web browser will not present a tab or window to display a portal browsing
+    context, but rather that it will be presented only through a [=host=] element.
+  </p>
+
+  <section algorithm="portal-browsing-context-activate">
+    To <dfn>activate a portal browsing context</dfn> |portalBrowsingContext|, run the following steps:
+
+    1. Fill me in.
+  </section>
+
+  <section algorithm="portal-browsing-context-adopt-predecessor">
+    To <dfn>adopt the predecessor browsing context</dfn>, run the following steps:
+
+    1. Fill me in.
+  </section>
+</section>
+
+<section>
+  API {#api}
+  ==========
+
+  The `portal` element {#the-portal-element}
+  ------------------------------------------
+
+  A <dfn element>portal</dfn> element for a [=portal browsing context=] to be embedded in an HTML document.
+
+  A <{portal}> element may have a <dfn for="HTMLPortalElement">guest browsing context</dfn>, which is a
+  [=portal browsing context=]. If so, the element is the [=host=] of its [=guest browsing context=].
+
+  <p class="note">
+    A <{portal}> is similar to an <{iframe}>, in that it allows another browsing context to be embedded.
+    However, the [=portal browsing context=] hosted by a <{portal}> is part of a separate [=unit of related
+    browsing contexts=]. The user agent is thus free to use a separate [=event loop=] for the browsing
+    contexts, even if they are [=same origin-domain=].
+  </p>
+
+  <xmp class="idl">
+      [HTMLConstructor]
+      interface HTMLPortalElement : HTMLElement {
+          [CEReactions, Reflect, URL] attribute USVString src;
+          Promise<void> activate();
+          void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
+      };
+  </xmp>
+
+  <div class="issue">
+    This should also include a `PostMessageOptions` dictionary overload, to reflect the changes due to the
+    [user activation proposal](https://github.com/dtapuska/useractivation).
+  </div>
+
+  <section algorithm="htmlportalelement-postmessage">
+    The <dfn method for="HTMLPortalElement"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
+
+    1. Let |portalBrowsingContext| be the [=guest browsing context=] of the [=context object=].
+
+    1. Let |settings| be the [=relevant settings object=] of the [=context object=].
+
+    1. Let |origin| be the [=serialization of an origin|serialization=] of |settings|'s [=environment settings object/origin=].
+
+    1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
+        [[HTML#concept-settings-object-origin|origin]] of |settings|.
+
+    1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
+
+    1. [=Queue a task=] on the [[HTML#posted-message-task-source|posted message task source]] to run the following steps:
+        1. If |targetOrigin| is not a single literal U+002A ASTERISK character (*) and the portal's origin is not [=same origin=] with |targetOrigin|,
+            then abort these steps.
+
+        1. Let |targetWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
+
+        1. Let |portalHost| be the |targetWindow|'s [=portal host object=].
+
+        1. Let |targetRealm| be the |targetWindow|'s [=environment settings object/realm=].
+
+        1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
+
+            If this throws an exception, catch it, [=fire an event=] named {{PortalHost/messageerror!!event}} at |portalHost| using {{MessageEvent}}
+            with the {{MessageEvent/origin}} attribute initialized to |origin| and the {{MessageEvent/source}} attribute initialized to |portalHost|,
+            then abort these steps.
+
+        1. Let |messageClone| be |deserializeRecord|.\[[Deserialized]].
+
+        1. Let |newPorts| be a new [=frozen array type|frozen array=] consisting of all {{MessagePort}} objects in
+            |deserializeRecord|.\[[TransferredValues]], if any, maintaining their relative order.
+
+        1. [=Fire an event=] named {{PortalHost/message!!event}} at |portalHost| using {{MessageEvent}}, with the {{MessageEvent/origin}} attribute
+            initialized to |origin|, the {{MessageEvent/source}} attribute initialized to |portalHost|, the {{MessageEvent/data}} attribute
+            initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
+  </section>
+
+  The following events are dispatched on {{HTMLPortalElement}} objects:
+
+  <table class="data" dfn-for="HTMLPortalElement">
+    <thead>
+      <tr>
+        <th>Event name</th>
+        <th>Interface</th>
+        <th>Dispatched when</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><dfn event for="HTMLPortalElement"><code>message</code></dfn></td>
+        <td>{{MessageEvent}}</td>
+        <td>A message is received by the object, and deserialization does not throw an exception.</td>
+      </tr>
+      <tr>
+        <td><dfn event for="HTMLPortalElement"><code>messageerror</code></dfn></td>
+        <td>{{MessageEvent}}</td>
+        <td>A message is received by the object, but deserialization throws an exception.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  Portal Guest API {#guest-api}
+  -----------------------------
+
+  The <dfn>portal host object</dfn> of a [=portal browsing context=] is a {{PortalHost}}, which can be
+  used to communicate with the [=host=] of the [=portal browsing context=].
+
+  <xmp class="idl">
+      interface PortalHost {
+          void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
+      };
+
+      partial interface Window {
+          readonly attribute PortalHost? portalHost;
+      };
+
+      interface PortalActivateEvent : Event {
+          HTMLPortalElement adoptPredecessor(Document document);
+      };
+  </xmp>
+
+  <div class="issue">
+    This should also include a `PostMessageOptions` dictionary overload, to reflect the changes due to the
+    [user activation proposal](https://github.com/dtapuska/useractivation).
+  </div>
+
+  The following events are dispatched on {{PortalHost}} objects:
+
+  <table class="data" dfn-for="PortalHost">
+    <thead>
+      <tr>
+        <th>Event name</th>
+        <th>Interface</th>
+        <th>Dispatched when</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><dfn event for="PortalHost"><code>message</code></dfn></td>
+        <td>{{MessageEvent}}</td>
+        <td>A message is received by the object, and deserialization does not throw an exception.</td>
+      </tr>
+      <tr>
+        <td><dfn event for="PortalHost"><code>messageerror</code></dfn></td>
+        <td>{{MessageEvent}}</td>
+        <td>A message is received by the object, but deserialization throws an exception.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  The following events are dispatched on {{Window}} objects:
+
+  <table class="data" dfn-for="PortalHost">
+    <thead>
+      <tr>
+        <th>Event name</th>
+        <th>Interface</th>
+        <th>Dispatched when</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><dfn event for="PortalHost"><code>portalactivate</code></dfn></td>
+        <td>{{PortalActivateEvent}}</td>
+        <td>The window is associated with a new [=top-level browsing context=] due to activation of its [=portal browsing context=].</td>
+      </tr>
+    </tbody>
+  </table>
+
+</section>
+
+<section>
+  Security Considerations {#security-considerations}
+  ==================================================
 </section>
