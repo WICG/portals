@@ -24,6 +24,11 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
         urlPrefix: browsers.html
             text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
+        urlPrefix: web-messaging.html
+            text: posted message task source; url: posted-message-task-source
+spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
+    type: dfn
+        text: promise; url: sec-promise-objects
 </pre>
 
 <section class="non-normative">
@@ -57,7 +62,13 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |portalBrowsingContext|, run the following steps:
 
-    1. Fill me in.
+    1. [=in parallel=]
+
+    1. When the user agent has completed these steps, it *must* [=queue a task=] from the [=DOM manipulation task source=] to run the following steps:
+
+        1. [=Fire an event=] named {{Window/portalactivate!!event}} at |successorWindow| using {{PortalActivateEvent}}.
+
+        1. This algorithm is complete.
   </section>
 
   <section algorithm="portal-browsing-context-adopt-predecessor">
@@ -89,8 +100,8 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
   <xmp class="idl">
       [HTMLConstructor]
       interface HTMLPortalElement : HTMLElement {
-          [CEReactions, Reflect, URL] attribute USVString src;
-          Promise<void> activate();
+          [CEReactions] attribute USVString src;
+          [NewObject] Promise<void> activate();
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
       };
   </xmp>
@@ -100,8 +111,26 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     [user activation proposal](https://github.com/dtapuska/useractivation).
   </div>
 
+  <section algorithm="htmlportalelement-activate">
+    The <dfn method for="HTMLPortalElement"><code>activate()</code></dfn> method *must* run these steps:
+
+    1. If the [=context object=] does not have an associated [=guest browsing context=], throw an "{{InvalidStateError}}" {{DOMException}}.
+
+    1. Let |portalBrowsingContext| be the [=guest browsing context=] of the [=context object=].
+
+    1. Let |promise| be a new [=promise=].
+
+    1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|.
+
+    1. [=Queue a task=] from the [=DOM manipulation task source=] to run the following steps:
+
+        1. Resolve |promise| with undefined.
+  </section>
+
   <section algorithm="htmlportalelement-postmessage">
     The <dfn method for="HTMLPortalElement"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
+
+    1. If the [=context object=] does not have an associated [=guest browsing context=], throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of the [=context object=].
 
@@ -114,7 +143,8 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
-    1. [=Queue a task=] on the [[HTML#posted-message-task-source|posted message task source]] to run the following steps:
+    1. [=Queue a task=] from the [=posted message task source=] to the [=event loop=] of |portalBrowsingContext| to run the following steps:
+
         1. If |targetOrigin| is not a single literal U+002A ASTERISK character (*) and the portal's origin is not [=same origin=] with |targetOrigin|,
             then abort these steps.
 
@@ -215,7 +245,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
 
   The following events are dispatched on {{Window}} objects:
 
-  <table class="data" dfn-for="PortalHost">
+  <table class="data" dfn-for="Window">
     <thead>
       <tr>
         <th>Event name</th>
@@ -225,7 +255,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     </thead>
     <tbody>
       <tr>
-        <td><dfn event for="PortalHost"><code>portalactivate</code></dfn></td>
+        <td><dfn event for="Window"><code>portalactivate</code></dfn></td>
         <td>{{PortalActivateEvent}}</td>
         <td>The window is associated with a new [=top-level browsing context=] due to activation of its [=portal browsing context=].</td>
       </tr>
