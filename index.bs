@@ -23,9 +23,16 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: data; for: MessageEvent; url: dom-messageevent-data
     type: dfn
         urlPrefix: browsers.html
+            text: document browsing context; url: concept-document-bc
             text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
+        urlPrefix: browsing-the-web.html
+            text: refuse to allow the document to be unloaded; url: refused-to-allow-the-document-to-be-unloaded
+        urlPrefix: history.html
+            text: session history; url: session-history
         urlPrefix: web-messaging.html
             text: posted message task source; url: posted-message-task-source
+        urlPrefix: window-object.html
+            text: close a browsing context; url: close-a-browsing-context
 spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     type: dfn
         text: promise; url: sec-promise-objects
@@ -60,21 +67,42 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
   </p>
 
   <section algorithm="portal-browsing-context-activate">
-    To <dfn>activate a portal browsing context</dfn> |portalBrowsingContext|, run the following steps:
+    To <dfn>activate a portal browsing context</dfn> |portalBrowsingContext| in
+    place of |predecessorBrowsingContext|, run the following steps [=in parallel=]:
 
-    1. [=in parallel=]
+    1. Let |successorWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
-    1. When the user agent has completed these steps, it *must* [=queue a task=] from the [=DOM manipulation task source=] to run the following steps:
+    1. Update the user interface to replace |predecessorBrowsingContext| with |portalBrowsingContext|.
+        From this point onward, |portalBrowsingContext| is no longer a [=portal browsing context=].
+
+    1. [=Queue a task=] from the [=DOM manipulation task source=] to the [=event loop=] associated with
+        |successorWindow| to run the following steps:
 
         1. [=Fire an event=] named {{Window/portalactivate!!event}} at |successorWindow| using {{PortalActivateEvent}}.
 
-        1. This algorithm is complete.
+        1. If |predecessorBrowsingContext| is not a portal browsing context, [=close a browsing context|close=] it.
+            The user agent *should not* [=refuse to allow the document to be unloaded=].
+
+        1. [=Queue a task=] to [=complete portal activation=].
   </section>
 
-  <section algorithm="portal-browsing-context-adopt-predecessor">
-    To <dfn>adopt the predecessor browsing context</dfn>, run the following steps:
+  <div class="issue">
+    We need to specify how the [=session history=] of each browsing context is
+    affected by activation, and supply non-normative text that explains how
+    these histories are expected to be presented to the user.
+  </div>
 
-    1. Fill me in.
+  <section algorithm="portal-browsing-context-adopt-predecessor">
+    To <dfn>adopt the predecessor browsing context</dfn> |predecessorBrowsingContext| in |document|, run the following steps:
+
+    1. Let |portalElement| be the result of [=creating an element=] given |document|, `portal`, and the [=HTML namespace=].
+
+    1. [=Assert=]: |portalElement| is an {{HTMLPortalElement}}.
+
+    1. Set the [=guest browsing context=] of |portalElement| to |predecessorBrowsingContext|. From this point onward,
+        |predecessorBrowsingContext| is a [=portal browsing context=].
+
+    1. Return |portalElement|.
   </section>
 </section>
 
@@ -111,28 +139,41 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     [user activation proposal](https://github.com/dtapuska/useractivation).
   </div>
 
+  The following tasks may be [=queue a task|queued=] by this standard. Unless otherwise specified, each
+  task *must* be queued from the [=DOM manipulation task source=].
+
+  * <dfn>complete portal activation</dfn>
+
   <section algorithm="htmlportalelement-activate">
     The <dfn method for="HTMLPortalElement"><code>activate()</code></dfn> method *must* run these steps:
 
-    1. If the [=context object=] does not have an associated [=guest browsing context=], throw an "{{InvalidStateError}}" {{DOMException}}.
-
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of the [=context object=].
+
+        If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
+
+    1. Let |predecessorBrowsingContext| be the [=document browsing context|browsing context=] of the
+        [=context object=]'s [=node document|document=].
+
+        If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Let |promise| be a new [=promise=].
 
-    1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|.
+    1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
+        in place of |predecessorBrowsingContext|.
 
-    1. [=Queue a task=] from the [=DOM manipulation task source=] to run the following steps:
+        To [=complete portal activation=], run these steps:
 
         1. Resolve |promise| with undefined.
+
+    1. Return |promise|.
   </section>
 
   <section algorithm="htmlportalelement-postmessage">
     The <dfn method for="HTMLPortalElement"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
 
-    1. If the [=context object=] does not have an associated [=guest browsing context=], throw an "{{InvalidStateError}}" {{DOMException}}.
-
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of the [=context object=].
+
+        If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Let |settings| be the [=relevant settings object=] of the [=context object=].
 
@@ -267,4 +308,9 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 <section>
   Security Considerations {#security-considerations}
   ==================================================
+
+  <div class="issue">
+    We should explicitly cover how this specification interacts with [[CSP]],
+    [[RFC7034]] and other specifications that confine the behavior of frames.
+  </div>
 </section>
