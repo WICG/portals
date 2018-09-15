@@ -72,15 +72,23 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. Let |successorWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
-    1. Update the user interface to replace |predecessorBrowsingContext| with |portalBrowsingContext|.
-        From this point onward, |portalBrowsingContext| is no longer a [=portal browsing context=].
+    1. Update the user interface to replace |predecessorBrowsingContext| with |portalBrowsingContext|
+        (e.g., by updating the tab/window contents and browser chrome).
+
+        From this point onward, |portalBrowsingContext| is no longer a [=portal browsing context=] and has no [=host=].
 
     1. [=Queue a task=] from the [=DOM manipulation task source=] to the [=event loop=] associated with
         |successorWindow| to run the following steps:
 
-        1. [=Fire an event=] named {{Window/portalactivate!!event}} at |successorWindow| using {{PortalActivateEvent}}.
+        1. Let |event| be the result of [=creating an event=] using {{PortalActivateEvent}}.
 
-        1. If |predecessorBrowsingContext| is not a portal browsing context, [=close a browsing context|close=] it.
+        1. Initialize |event|'s {{Event/type}} attribute to {{Window/portalactivate!!event}}.
+
+        1. Set |event|'s [=PortalActivateEvent/predecessor browsing context=] to |predecessorBrowsingContext|.
+
+        1. [=Dispatch=] |event| to |successorWindow|.
+
+        1. If |predecessorBrowsingContext| is not a [=portal browsing context=], [=close a browsing context|close=] it.
             The user agent *should not* [=refuse to allow the document to be unloaded=].
 
         1. [=Queue a task=] to [=complete portal activation=].
@@ -100,7 +108,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     1. [=Assert=]: |portalElement| is an {{HTMLPortalElement}}.
 
     1. Set the [=guest browsing context=] of |portalElement| to |predecessorBrowsingContext|. From this point onward,
-        |predecessorBrowsingContext| is a [=portal browsing context=].
+        |predecessorBrowsingContext| is a [=portal browsing context=], with |portalElement| as its [=host=].
 
     1. Return |portalElement|.
   </section>
@@ -211,6 +219,11 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
             initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
   </section>
 
+  Whenever a <{portal}> element's {{HTMLPortalElement/src}} attribute is set or the element is [=insertion steps|inserted=] or [=removing steps|removed=],
+  run the following steps:
+
+  1. Fill me in.
+
   The following events are dispatched on {{HTMLPortalElement}} objects:
 
   <table class="data" dfn-for="HTMLPortalElement">
@@ -235,8 +248,8 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     </tbody>
   </table>
 
-  Portal Guest API {#guest-api}
-  -----------------------------
+  The `PortalHost` interface {#the-portalhost-interface}
+  ------------------------------------------------------
 
   The <dfn>portal host object</dfn> of a [=portal browsing context=] is a {{PortalHost}}, which can be
   used to communicate with the [=host=] of the [=portal browsing context=].
@@ -249,16 +262,17 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
       partial interface Window {
           readonly attribute PortalHost? portalHost;
       };
-
-      interface PortalActivateEvent : Event {
-          HTMLPortalElement adoptPredecessor(Document document);
-      };
   </xmp>
+
 
   <div class="issue">
     This should also include a `PostMessageOptions` dictionary overload, to reflect the changes due to the
     [user activation proposal](https://github.com/dtapuska/useractivation).
   </div>
+
+  <section algorithm="portalhost-postmessage">
+    The <dfn method for="PortalHost"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
+  </section>
 
   The following events are dispatched on {{PortalHost}} objects:
 
@@ -283,6 +297,26 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
       </tr>
     </tbody>
   </table>
+
+  The `PortalActivateEvent` interface {#the-portalactivateevent-interface}
+  ------------------------------------------------------------------------
+
+  <xmp class="idl">
+      interface PortalActivateEvent : Event {
+          HTMLPortalElement adoptPredecessor(Document document);
+      };
+  </xmp>
+
+  A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
+  which is a [=top-level browsing context=].
+
+  <section algorithm="portalactivateevent-adoptpredecessor">
+    The <dfn method for="PortalActivateEvent"><code>adoptPredecessor(|document|)</code></dfn> method *must* run these steps:
+
+    1. Let |predecessorBrowsingContext| be the [=context object=]'s [=PortalActivateEvent/predecessor browsing context=].
+
+    1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |document|, and return the result.
+  </section>
 
   The following events are dispatched on {{Window}} objects:
 
