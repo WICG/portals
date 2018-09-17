@@ -234,7 +234,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </section>
 
   <section algorithm="htmlportalelement-acceptpostedmessage">
-    To <dfn for="HTMLPortalElement">[=accept a message posted to the host=] for a <{portal}> element</dfn> with
+    To [=accept a message posted to the host=] for a <{portal}> element with
     |serializeWithTransferResult|, |origin| and |targetOrigin|, [=queue a task=] from the
     [=posted message task source=] to the [=event loop=] associated with the
     element's [=node document|document=]'s [=document browsing context|browsing
@@ -264,7 +264,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </section>
 
   <section algorithm="htmlportalelement-close">
-    To <dfn for="HTMLPortalElement">detach a <{portal}> element</dfn>, run the following steps:
+    To <dfn for="HTMLPortalElement">close a <{portal}> element</dfn>, run the following steps:
 
     1. If the [=context object=] has a [=guest browsing context=], then [=close a browsing context|close=] it.
         The user agent *should not* [=refuse to allow the document to be unloaded=].
@@ -278,10 +278,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. [=Assert=]: the [=context object=] has a [=guest browsing context=].
 
     1. If the [=context object=] has no {{HTMLPortalElement/src}} attribute specified, or its value is the empty string,
-        then [=detach a portal element|detach=] the [=context object=] and abort these steps.
+        then [=close a portal element|close=] the [=context object=] and abort these steps.
 
     1. [=Parse a URL|Parse=] the value of the {{HTMLPortalElement/src}} attribute. If that is not successful,
-        then [=detach a portal element|detach=] the [=context object=] and abort these steps.
+        then [=close a portal element|close=] the [=context object=] and abort these steps.
         Otherwise, let |url| be the [=resulting URL record=].
 
     1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
@@ -314,7 +314,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   1. If the [=context object=] does not have a [=guest browsing context=], abort these steps.
 
-  1. [=detach a portal element|Detach=] the [=context object=].
+  1. [=close a portal element|Close=] the [=context object=].
 
   <div class="issue">
     It might be convenient to not immediately detach the portal element, but instead to do so
@@ -349,16 +349,16 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   The `PortalHost` interface {#the-portalhost-interface}
   ------------------------------------------------------
 
-  The <dfn>portal host object</dfn> of a [=portal browsing context=] is a {{PortalHost}}, which can be
-  used to communicate with the [=host=] of the [=portal browsing context=].
+  The <dfn>portal host object</dfn> of a [=browsing context=] is a {{PortalHost}}.
+
+  <div class="note">
+    The [=portal host object=] can be used to communicate with the [=host=] of a [=portal browsing context=].
+    Its operations throw if used while it's context is not a [=portal browsing context=] (i.e. there is no host).
+  </div>
 
   <xmp class="idl">
       interface PortalHost {
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
-      };
-
-      partial interface Window {
-          readonly attribute PortalHost? portalHost;
       };
   </xmp>
 
@@ -370,6 +370,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   <section algorithm="portalhost-postmessage">
     The <dfn method for="PortalHost"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
+
+    1. If the [=context object=]'s associated [=browsing context=] is not a [=portal browsing context=],
+        throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Let |settings| be the [=relevant settings object=] of the [=context object=].
 
@@ -407,6 +410,26 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
       </tr>
     </tbody>
   </table>
+
+  <xmp class="idl">
+      partial interface Window {
+          readonly attribute PortalHost? portalHost;
+      };
+  </xmp>
+
+  <section algorithm="window-portalhost">
+    The <dfn attribute for="Window">portalHost</dfn> attribute *must* run the following steps:
+
+    1. Let |windowProxy| be the [=context object=]'s {{WindowProxy}} object.
+
+    1. If there is no [=browsing context=] with |windowProxy| as its {{WindowProxy}} object, then return null.
+
+    1. Let |context| be that [=browsing context=].
+
+    1. If |context| is not a [=portal browsing context=], then return null.
+
+    1. Return the [=portal host object=] of |context|.
+  </section>
 
   The `PortalActivateEvent` interface {#the-portalactivateevent-interface}
   ------------------------------------------------------------------------
@@ -446,7 +469,6 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
       </tr>
     </tbody>
   </table>
-
 </section>
 
 <section>
