@@ -30,7 +30,10 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: refuse to allow the document to be unloaded; url: refused-to-allow-the-document-to-be-unloaded
         urlPrefix: history.html
             text: session history; url: session-history
+        urlPrefix: origin.html
+            text: origin; url: concept-origin
         urlPrefix: urls-and-fetching.html
+            text: parse a URL; url: parse-a-url
             text: resulting URL record; url: resulting-url-record
         urlPrefix: web-messaging.html
             text: posted message task source; url: posted-message-task-source
@@ -67,6 +70,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   A portal browsing context has a <dfn>host</dfn> which is embeds its rendered output and
   receives messages sent from the portal browsing context. This specification defines
   {{HTMLPortalElement}}, which hosts a portal browsing context inside an HTML document.
+  A host defines steps to <dfn>accept a message posted to the host</dfn>.
 
   <p class="note">
     This implies that every [=portal browsing context=] is a [=top-level browsing context=].
@@ -202,8 +206,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. [=Queue a task=] from the [=posted message task source=] to the [=event loop=] of |portalBrowsingContext| to run the following steps:
 
-        1. If |targetOrigin| is not a single literal U+002A ASTERISK character (*) and the portal's origin is not [=same origin=] with |targetOrigin|,
-            then abort these steps.
+        1. If |targetOrigin| is not a single literal U+002A ASTERISK character
+            (*) and the [=origin=] of |portalBrowsingContext|'s
+            [=active document=] is not [=same origin=] with |targetOrigin|, then
+            abort these steps.
 
         1. Let |targetWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
@@ -227,6 +233,36 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
             initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
   </section>
 
+  <section algorithm="htmlportalelement-acceptpostedmessage">
+    To <dfn for="HTMLPortalElement">[=accept a message posted to the host=] for a <{portal}> element</dfn> with
+    |serializeWithTransferResult|, |origin| and |targetOrigin|, [=queue a task=] from the
+    [=posted message task source=] to the [=event loop=] associated with the
+    element's [=node document|document=]'s [=document browsing context|browsing
+    context=] to run the following steps:
+
+    1. Let |settings| be the [=relevant settings object=] of the [=context object=].
+
+    1. If |targetOrigin| is not a single literal U+002A ASTERISK character
+        (*) and |settings|'s [=environment settings object/origin=] is not
+        [=same origin=] with |targetOrigin|, then abort these steps.
+
+    1. Let |targetRealm| be |settings|'s [=environment settings object/realm=].
+
+    1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
+
+        If this throws an exception, catch it, [=fire an event=] named {{HTMLPortalElement/messageerror!!event}} at the [=context object=] using {{MessageEvent}}
+        with the {{MessageEvent/origin}} attribute initialized to |origin| and the {{MessageEvent/source}} attribute initialized to the [=context object=],
+
+    1. Let |messageClone| be |deserializeRecord|.\[[Deserialized]].
+
+    1. Let |newPorts| be a new [=frozen array type|frozen array=] consisting of all {{MessagePort}} objects in
+        |deserializeRecord|.\[[TransferredValues]], if any, maintaining their relative order.
+
+    1. [=Fire an event=] named {{HTMLPortalElement/message!!event}} at the [=context object=] using {{MessageEvent}}, with the {{MessageEvent/origin}} attribute
+        initialized to |origin|, the {{MessageEvent/source}} attribute initialized to the [=context object=], the {{MessageEvent/data}} attribute
+        initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
+  </section>
+
   <section algorithm="htmlportalelement-close">
     To <dfn for="HTMLPortalElement">detach a <{portal}> element</dfn>, run the following steps:
 
@@ -244,7 +280,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. If the [=context object=] has no {{HTMLPortalElement/src}} attribute specified, or its value is the empty string,
         then [=detach a portal element|detach=] the [=context object=] and abort these steps.
 
-    1. [=Parse a URL|parse=] the value of the {{HTMLPortalElement/src}} attribute. If that is not successful,
+    1. [=Parse a URL|Parse=] the value of the {{HTMLPortalElement/src}} attribute. If that is not successful,
         then [=detach a portal element|detach=] the [=context object=] and abort these steps.
         Otherwise, let |url| be the [=resulting URL record=].
 
@@ -334,6 +370,18 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   <section algorithm="portalhost-postmessage">
     The <dfn method for="PortalHost"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
+
+    1. Let |settings| be the [=relevant settings object=] of the [=context object=].
+
+    1. Let |origin| be the [=serialization of an origin|serialization=] of |settings|'s [=environment settings object/origin=].
+
+    1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
+        [[HTML#concept-settings-object-origin|origin]] of |settings|.
+
+    1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
+
+    1. Run the steps to [=accept a message posted to the host=] for the [=host=] associated with the [=context object=]
+        with |serializeWithTransferResult|, |origin| and |targetOrigin|.
   </section>
 
   The following events are dispatched on {{PortalHost}} objects:
