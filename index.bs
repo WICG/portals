@@ -23,12 +23,15 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: data; for: MessageEvent; url: dom-messageevent-data
     type: dfn
         urlPrefix: browsers.html
+            text: create a new browsing context; url: creating-a-new-browsing-context
             text: document browsing context; url: concept-document-bc
             text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
         urlPrefix: browsing-the-web.html
             text: refuse to allow the document to be unloaded; url: refused-to-allow-the-document-to-be-unloaded
         urlPrefix: history.html
             text: session history; url: session-history
+        urlPrefix: urls-and-fetching.html
+            text: resulting URL record; url: resulting-url-record
         urlPrefix: web-messaging.html
             text: posted message task source; url: posted-message-task-source
         urlPrefix: window-object.html
@@ -36,6 +39,11 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
 spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     type: dfn
         text: promise; url: sec-promise-objects
+spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
+    type: dfn
+        text: request referrer policy; url: concept-request-referrer-policy
+        text: request; url: concept-request
+        text: request URL; url: concept-request-url
 </pre>
 
 <section class="non-normative">
@@ -219,10 +227,64 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
             initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
   </section>
 
-  Whenever a <{portal}> element's {{HTMLPortalElement/src}} attribute is set or the element is [=insertion steps|inserted=] or [=removing steps|removed=],
-  run the following steps:
+  <section algorithm="htmlportalelement-close">
+    To <dfn for="HTMLPortalElement">detach a <{portal}> element</dfn>, run the following steps:
 
-  1. Fill me in.
+    1. If the [=context object=] has a [=guest browsing context=], then [=close a browsing context|close=] it.
+        The user agent *should not* [=refuse to allow the document to be unloaded=].
+
+    1. Clear the [=context object=]'s [=guest browsing context=].
+  </section>
+
+  <section algorithm="htmlportalelement-setsourceurl">
+    To <dfn for="HTMLPortalElement">set the source URL of a <{portal}> element</dfn>, run the following steps:
+
+    1. [=Assert=]: the [=context object=] has a [=guest browsing context=].
+
+    1. If the [=context object=] has no {{HTMLPortalElement/src}} attribute specified, or its value is the empty string,
+        then [=detach a portal element|detach=] the [=context object=] and abort these steps.
+
+    1. [=Parse a URL|parse=] the value of the {{HTMLPortalElement/src}} attribute. If that is not successful,
+        then [=detach a portal element|detach=] the [=context object=] and abort these steps.
+        Otherwise, let |url| be the [=resulting URL record=].
+
+    1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
+
+    1. [=Navigate=] the [=guest browsing context=] to |resource|.
+  </section>
+
+  <div class="issue">
+    Is {{no-referrer}} the right referrer policy here, or should we send the document's URL?
+  </div>
+
+  Whenever a <{portal}> element's {{HTMLPortalElement/src}} attribute is set, run the following steps:
+
+  1. If the [=context object=] does not have a [=guest browsing context=], abort these steps.
+
+  1. [=set the source URL of a portal element|Set the source URL=] of the [=context object=].
+
+  Whenever a <{portal}> element is [=insertion steps|inserted=], run the following steps:
+
+  1. If the [=context object=] has a [=guest browsing context=] or is not [=connected=], abort these steps.
+
+  1. [=Create a new browsing context=] with noopener, and let |newBrowsingContext| be the result.
+
+  1. Set the [=context object=]'s [=guest browsing context=] to |newBrowsingContext|.
+      |newBrowsingContext| is a [=portal browsing context=] from this point onward.
+
+  1. [=set the source URL of a portal element|Set the source URL=] of the [=context object=].
+
+  Whenever a <{portal}> element is [=removing steps|removed=], run the following steps:
+
+  1. If the [=context object=] does not have a [=guest browsing context=], abort these steps.
+
+  1. [=detach a portal element|Detach=] the [=context object=].
+
+  <div class="issue">
+    It might be convenient to not immediately detach the portal element, but instead to do so
+    in a microtask. This would allow developers to reinsert the <{portal}> element without losing
+    its browsing context.
+  </div>
 
   The following events are dispatched on {{HTMLPortalElement}} objects:
 
