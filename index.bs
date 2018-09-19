@@ -357,7 +357,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </div>
 
   <xmp class="idl">
-      interface PortalHost {
+      interface PortalHost : EventTarget {
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
       };
   </xmp>
@@ -411,26 +411,6 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     </tbody>
   </table>
 
-  <xmp class="idl">
-      partial interface Window {
-          readonly attribute PortalHost? portalHost;
-      };
-  </xmp>
-
-  <section algorithm="window-portalhost">
-    The <dfn attribute for="Window">portalHost</dfn> attribute *must* run the following steps:
-
-    1. Let |windowProxy| be the [=context object=]'s {{WindowProxy}} object.
-
-    1. If there is no [=browsing context=] with |windowProxy| as its {{WindowProxy}} object, then return null.
-
-    1. Let |context| be that [=browsing context=].
-
-    1. If |context| is not a [=portal browsing context=], then return null.
-
-    1. Return the [=portal host object=] of |context|.
-  </section>
-
   The `PortalActivateEvent` interface {#the-portalactivateevent-interface}
   ------------------------------------------------------------------------
 
@@ -449,6 +429,38 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. Let |predecessorBrowsingContext| be the [=context object=]'s [=PortalActivateEvent/predecessor browsing context=].
 
     1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |document|, and return the result.
+  </section>
+
+  Miscellaneous extensions {#miscellaneous-extensions}
+  ----------------------------------------------------
+
+  The {{MessageEventSource}} union is extended to include the new interfaces
+  which can produce {{MessageEvent}} events.
+
+  <xmp class="idl">
+  typedef (WindowProxy or MessagePort or ServiceWorker or HTMLPortalElement or PortalHost) MessageEventSource;
+  </xmp>
+
+  A {{PortalHost}} is exposed at times when the window may be in a [=portal browsing context=].
+
+  <xmp class="idl">
+      partial interface Window {
+          readonly attribute PortalHost? portalHost;
+      };
+  </xmp>
+
+  <section algorithm="window-portalhost">
+    The <dfn attribute for="Window">portalHost</dfn> attribute *must* run the following steps:
+
+    1. Let |windowProxy| be the [=context object=]'s {{WindowProxy}} object.
+
+    1. If there is no [=browsing context=] with |windowProxy| as its {{WindowProxy}} object, then return null.
+
+    1. Let |context| be that [=browsing context=].
+
+    1. If |context| is not a [=portal browsing context=], then return null.
+
+    1. Return the [=portal host object=] of |context|.
   </section>
 
   The following events are dispatched on {{Window}} objects:
