@@ -92,6 +92,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. [=Queue a task=] from the [=DOM manipulation task source=] to the [=event loop=] associated with
         |successorWindow| to run the following steps:
 
+        1. [=PortalHost/hidden|Hide=] the [=portal host object=] of |portalBrowsingContext|.
+
         1. Let |event| be the result of [=creating an event=] using {{PortalActivateEvent}}.
 
         1. Initialize |event|'s {{Event/type}} attribute to {{Window/portalactivate!!event}}.
@@ -122,8 +124,18 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. Set the [=guest browsing context=] of |portalElement| to |predecessorBrowsingContext|. From this point onward,
         |predecessorBrowsingContext| is a [=portal browsing context=], with |portalElement| as its [=host=].
 
+    1. [=Queue a task=] from the [=DOM manipulation task source=] to the [=event loop=] associated with |predecessorBrowsingContext|
+        to run the following steps:
+
+        1. [=PortalHost/Expose=] the [=portal host object=] of |predecessorBrowsingContext|.
+
     1. Return |portalElement|.
   </section>
+
+  <div class="note">
+    Since the task to [=PortalHost/expose=] the {{PortalHost}} is queued before the task to [=complete portal activation=],
+    from the same [=task source=], it is exposed at the time the promise returned from {{HTMLPortalElement/activate()}} is resolved.
+  </div>
 </section>
 
 <section>
@@ -308,6 +320,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   1. Set the [=context object=]'s [=guest browsing context=] to |newBrowsingContext|.
       |newBrowsingContext| is a [=portal browsing context=] from this point onward.
 
+  1. [=PortalHost/Expose=] the [=portal host object=] of |newBrowsingContext|.
+
   1. [=set the source URL of a portal element|Set the source URL=] of the [=context object=].
 
   Whenever a <{portal}> element is [=removing steps|removed=], run the following steps:
@@ -349,7 +363,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   The `PortalHost` interface {#the-portalhost-interface}
   ------------------------------------------------------
 
-  The <dfn>portal host object</dfn> of a [=browsing context=] is a {{PortalHost}}.
+  The <dfn>portal host object</dfn> of a [=browsing context=] is a {{PortalHost}}. It may be either
+  <dfn for="PortalHost">exposed</dfn> or <dfn for="PortalHost">hidden</dfn>; by default it is [=PortalHost/hidden=].
 
   <div class="note">
     The [=portal host object=] can be used to communicate with the [=host=] of a [=portal browsing context=].
@@ -458,9 +473,11 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. Let |context| be that [=browsing context=].
 
-    1. If |context| is not a [=portal browsing context=], then return null.
+    1. Let |portalHostObject| be the [=portal host object=] of |context|.
 
-    1. Return the [=portal host object=] of |context|.
+    1. If |portalHostObject| is [=PortalHost/hidden=], then return null.
+
+    1. Return |portalHostObject|.
   </section>
 
   The following events are dispatched on {{Window}} objects:
