@@ -80,8 +80,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |portalBrowsingContext| in
-    place of |predecessorBrowsingContext| with data |serializedData|, run the
-    following steps [=in parallel=]:
+    place of |predecessorBrowsingContext| with data |serializeWithTransferResult|,
+    run the following steps [=in parallel=]:
 
     1. Let |successorWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
@@ -97,7 +97,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         1. Let |targetRealm| be |successorWindow|'s [=environment settings object/realm=].
 
-        1. Let |dataClone| be [$StructuredDeserialize$](|serializedData|, |targetRealm|).
+        1. Let |dataClone| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
 
             If this throws an exception, catch it, and let |dataClone| be null instead.
 
@@ -181,6 +181,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
       dictionary PortalActivateOptions {
           any data = null;
+          sequence<object> transfer = [];
       };
   </xmp>
 
@@ -206,13 +207,15 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
 
-    1. Let |serializedData| be [$StructuredSerialize$](|options|["{{PortalActivateOptions/data}}"]).
+    1. Let |serializeWithTransferResult| be
+        [$StructuredSerializeWithTransfer$](|options|["{{PortalActivateOptions/data}}"],
+        |options|["{{PortalActivateOptions/transfer}}"]).
         Rethrow any exceptions.
 
     1. Let |promise| be a new [=promise=].
 
     1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
-        in place of |predecessorBrowsingContext| with data |serializedData|.
+        in place of |predecessorBrowsingContext| with data |serializeWithTransferResult|.
 
         To [=complete portal activation=], run these steps:
 
