@@ -80,7 +80,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |portalBrowsingContext| in
-    place of |predecessorBrowsingContext|, run the following steps [=in parallel=]:
+    place of |predecessorBrowsingContext| with data |serializeWithTransferResult|,
+    run the following steps [=in parallel=]:
 
     1. Let |successorWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
@@ -94,9 +95,17 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         1. [=PortalHost/hidden|Hide=] the [=portal host object=] of |portalBrowsingContext|.
 
+        1. Let |targetRealm| be |successorWindow|'s [=environment settings object/realm=].
+
+        1. Let |dataClone| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
+
+            If this throws an exception, catch it, and let |dataClone| be null instead.
+
         1. Let |event| be the result of [=creating an event=] using {{PortalActivateEvent}}.
 
         1. Initialize |event|'s {{Event/type}} attribute to {{Window/portalactivate!!event}}.
+
+        1. Initialize |event|'s {{PortalActivateEvent/data}} attribute to |dataClone|.
 
         1. Set |event|'s [=PortalActivateEvent/predecessor browsing context=] to |predecessorBrowsingContext|.
 
@@ -107,6 +116,11 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         1. [=Queue a task=] to [=complete portal activation=].
   </section>
+
+  <div class="issue">
+    In the case that structured deserialization throws, it may be useful to do something else to indicate it,
+    rather than simply providing null data.
+  </div>
 
   <div class="issue">
     We need to specify how the [=session history=] of each browsing context is
@@ -161,8 +175,13 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
       [HTMLConstructor]
       interface HTMLPortalElement : HTMLElement {
           [CEReactions] attribute USVString src;
-          [NewObject] Promise<void> activate();
+          [NewObject] Promise<void> activate(optional PortalActivateOptions options);
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
+      };
+
+      dictionary PortalActivateOptions {
+          any data = null;
+          sequence<object> transfer = [];
       };
   </xmp>
 
@@ -177,7 +196,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   * <dfn>complete portal activation</dfn>
 
   <section algorithm="htmlportalelement-activate">
-    The <dfn method for="HTMLPortalElement"><code>activate()</code></dfn> method *must* run these steps:
+    The <dfn method for="HTMLPortalElement"><code>activate(|options|)</code></dfn> method *must* run these steps:
 
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of the [=context object=].
 
@@ -188,10 +207,15 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
 
+    1. Let |serializeWithTransferResult| be
+        [$StructuredSerializeWithTransfer$](|options|["{{PortalActivateOptions/data}}"],
+        |options|["{{PortalActivateOptions/transfer}}"]).
+        Rethrow any exceptions.
+
     1. Let |promise| be a new [=promise=].
 
     1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
-        in place of |predecessorBrowsingContext|.
+        in place of |predecessorBrowsingContext| with data |serializeWithTransferResult|.
 
         To [=complete portal activation=], run these steps:
 
@@ -431,6 +455,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   <xmp class="idl">
       interface PortalActivateEvent : Event {
+          readonly attribute any data;
           HTMLPortalElement adoptPredecessor(Document document);
       };
   </xmp>
