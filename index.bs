@@ -3,11 +3,11 @@ Title: Portals
 Shortname: portals
 Level: 1
 Status: DREAM
-URL: https://kenjibaheux.github.io/portals/
+URL: https://wicg.github.io/portals/
 Editor: Jeremy Roman, Google, jbroman@chromium.org
 Editor: Lucas Gadani, Google, lfg@chromium.org
 Abstract: This specification defines a mechanism that allows for rendering of, and seamless navigation to, embedded content.
-Repository: https://github.com/KenjiBaheux/portals/
+Repository: https://github.com/WICG/portals/
 Markup Shorthands: css no, markdown yes
 </pre>
 <pre class="link-defaults">
