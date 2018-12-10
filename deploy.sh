@@ -21,15 +21,11 @@ SHA=`git rev-parse --verify HEAD`
 git clone $REPO out
 cd out
 git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
-cd ..
 
-# Clean out existing contents
-rm -rf out/**/* || exit 0
-cp index.html out/
-
-# Now let's go have some fun with the cloned repo
-cd out
-git add -A .
+# Clean out existing contents and populate the directory.
+git rm -rf .
+cp ../index.html ./
+git add -Av
 
 # If there are no changes to the compiled out (e.g. this is a README update) then just bail.
 if git diff --cached --quiet; then
