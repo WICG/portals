@@ -25,10 +25,7 @@ cd ..
 
 # Clean out existing contents
 rm -rf out/**/* || exit 0
-
-echo PWD = $PWD
-
-bikeshed --print=plain -f spec index.bs out/index.html
+cp index.html out/
 
 # Now let's go have some fun with the cloned repo
 cd out
