@@ -177,6 +177,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
           [CEReactions] attribute USVString src;
           [NewObject] Promise<void> activate(optional PortalActivateOptions options);
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
+          void postMessage(any message, optional WindowPostMessageOptions options);
       };
 
       dictionary PortalActivateOptions {
@@ -184,11 +185,6 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
           sequence<object> transfer = [];
       };
   </xmp>
-
-  <div class="issue">
-    This should also include a `PostMessageOptions` dictionary overload, to reflect the changes due to the
-    [user activation proposal](https://github.com/dtapuska/useractivation).
-  </div>
 
   The following tasks may be [=queue a task|queued=] by this standard. Unless otherwise specified, each
   task *must* be queued from the [=DOM manipulation task source=].
@@ -227,6 +223,12 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   <section algorithm="htmlportalelement-postmessage">
     The <dfn method for="HTMLPortalElement"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
 
+    1. Let |options| be « "{{WindowPostMessageOptions|targetOrigin}}" → |targetOrigin|, "{{PostMessageOptions|transfer}}" → |transfer| ».
+
+    1. Run the steps for {{HTMLPortalElement/postMessage(message, options)|postMessage}}(|message|, |options|).
+
+    The <dfn method for="HTMLPortalElement"><code>postMessage(|message|, |options|)</code></dfn> method *must* run these steps:
+
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of the [=context object=].
 
         If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
@@ -235,8 +237,12 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. Let |origin| be the [=serialization of an origin|serialization=] of |settings|'s [=environment settings object/origin=].
 
+    1. Let |targetOrigin| be |options|["{{WindowPostMessageOptions|targetOrigin}}"].
+
     1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
         [[HTML#concept-settings-object-origin|origin]] of |settings|.
+
+    1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
@@ -398,17 +404,18 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   <xmp class="idl">
       interface PortalHost : EventTarget {
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
+          void postMessage(any message, optional WindowPostMessageOptions options);
       };
   </xmp>
 
-
-  <div class="issue">
-    This should also include a `PostMessageOptions` dictionary overload, to reflect the changes due to the
-    [user activation proposal](https://github.com/dtapuska/useractivation).
-  </div>
-
   <section algorithm="portalhost-postmessage">
     The <dfn method for="PortalHost"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
+
+    1. Let |options| be « "{{WindowPostMessageOptions|targetOrigin}}" → |targetOrigin|, "{{PostMessageOptions|transfer}}" → |transfer| ».
+
+    1. Run the steps for {{PortalHost/postMessage(message, options)|postMessage}}(|message|, |options|).
+
+    The <dfn method for="PortalHost"><code>postMessage(|message|, |options|)</code></dfn> method *must* run these steps:
 
     1. If the [=context object=]'s associated [=browsing context=] is not a [=portal browsing context=],
         throw an "{{InvalidStateError}}" {{DOMException}}.
@@ -417,8 +424,12 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. Let |origin| be the [=serialization of an origin|serialization=] of |settings|'s [=environment settings object/origin=].
 
+    1. Let |targetOrigin| be |options|["{{WindowPostMessageOptions|targetOrigin}}"].
+
     1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
         [[HTML#concept-settings-object-origin|origin]] of |settings|.
+
+    1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
