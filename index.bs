@@ -2,7 +2,8 @@
 Title: Portals
 Shortname: portals
 Level: 1
-Status: DREAM
+Status: ED
+Group: WICG
 URL: https://wicg.github.io/portals/
 Editor: Jeremy Roman, Google, jbroman@chromium.org
 Editor: Lucas Gadani, Google, lfg@chromium.org
