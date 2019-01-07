@@ -1214,7 +1214,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version 6dcb46ba8cae3704b42c05bcd8578c92d239786a" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="1e845160e5aaaa8ce1d514fd408079b5d5f2bf54" name="document-revision">
+  <meta content="d3b43c80da2501f662f1d0b2c92075f09d21e1c5" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1472,7 +1472,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-01-03">3 January 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-01-07">7 January 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1635,6 +1635,9 @@ The user agent <em>should not</em> <a data-link-type="dfn" href="https://html.sp
     [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#NewObject" id="ref-for-NewObject"><c- g>NewObject</c-></a>] <c- b>Promise</c->&lt;<c- b>void</c->> <a class="idl-code" data-link-type="method" href="#dom-htmlportalelement-activate" id="ref-for-dom-htmlportalelement-activate①"><c- g>activate</c-></a>(<c- b>optional</c-> <a class="n" data-link-type="idl-name" href="#dictdef-portalactivateoptions" id="ref-for-dictdef-portalactivateoptions"><c- n>PortalActivateOptions</c-></a> <dfn class="idl-code" data-dfn-for="HTMLPortalElement/activate(options), HTMLPortalElement/activate()" data-dfn-type="argument" data-export id="dom-htmlportalelement-activate-options-options"><code><c- g>options</c-></code><a class="self-link" href="#dom-htmlportalelement-activate-options-options"></a></dfn>);
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-htmlportalelement-postmessage" id="ref-for-dom-htmlportalelement-postmessage"><c- g>postMessage</c-></a>(<c- b>any</c-> <dfn class="idl-code" data-dfn-for="HTMLPortalElement/postMessage(message, targetOrigin, transfer), HTMLPortalElement/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-htmlportalelement-postmessage-message-targetorigin-transfer-message"><code><c- g>message</c-></code><a class="self-link" href="#dom-htmlportalelement-postmessage-message-targetorigin-transfer-message"></a></dfn>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="HTMLPortalElement/postMessage(message, targetOrigin, transfer), HTMLPortalElement/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-htmlportalelement-postmessage-message-targetorigin-transfer-targetorigin"><code><c- g>targetOrigin</c-></code><a class="self-link" href="#dom-htmlportalelement-postmessage-message-targetorigin-transfer-targetorigin"></a></dfn>, <c- b>optional</c-> <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-object" id="ref-for-idl-object"><c- b>object</c-></a>> <dfn class="idl-code" data-dfn-for="HTMLPortalElement/postMessage(message, targetOrigin, transfer), HTMLPortalElement/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-htmlportalelement-postmessage-message-targetorigin-transfer-transfer"><code><c- g>transfer</c-></code><a class="self-link" href="#dom-htmlportalelement-postmessage-message-targetorigin-transfer-transfer"></a></dfn> = []);
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-htmlportalelement-postmessage-message-options" id="ref-for-dom-htmlportalelement-postmessage-message-options"><c- g>postMessage</c-></a>(<c- b>any</c-> <dfn class="idl-code" data-dfn-for="HTMLPortalElement/postMessage(message, options), HTMLPortalElement/postMessage(message)" data-dfn-type="argument" data-export id="dom-htmlportalelement-postmessage-message-options-message"><code><c- g>message</c-></code><a class="self-link" href="#dom-htmlportalelement-postmessage-message-options-message"></a></dfn>, <c- b>optional</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions"><c- n>WindowPostMessageOptions</c-></a> <dfn class="idl-code" data-dfn-for="HTMLPortalElement/postMessage(message, options), HTMLPortalElement/postMessage(message)" data-dfn-type="argument" data-export id="dom-htmlportalelement-postmessage-message-options-options"><code><c- g>options</c-></code><a class="self-link" href="#dom-htmlportalelement-postmessage-message-options-options"></a></dfn>);
+
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler"><c- n>EventHandler</c-></a> <dfn class="idl-code" data-dfn-for="HTMLPortalElement" data-dfn-type="attribute" data-export data-type="EventHandler" id="dom-htmlportalelement-onmessage"><code><c- g>onmessage</c-></code><a class="self-link" href="#dom-htmlportalelement-onmessage"></a></dfn>;
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler①"><c- n>EventHandler</c-></a> <dfn class="idl-code" data-dfn-for="HTMLPortalElement" data-dfn-type="attribute" data-export data-type="EventHandler" id="dom-htmlportalelement-onmessageerror"><code><c- g>onmessageerror</c-></code><a class="self-link" href="#dom-htmlportalelement-onmessageerror"></a></dfn>;
 };
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-portalactivateoptions"><code><c- g>PortalActivateOptions</c-></code></dfn> {
@@ -1834,6 +1837,9 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
 <pre class="idl highlight def"><c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="portalhost"><code><c- g>PortalHost</c-></code></dfn> : <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#eventtarget" id="ref-for-eventtarget"><c- n>EventTarget</c-></a> {
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-portalhost-postmessage" id="ref-for-dom-portalhost-postmessage"><c- g>postMessage</c-></a>(<c- b>any</c-> <dfn class="idl-code" data-dfn-for="PortalHost/postMessage(message, targetOrigin, transfer), PortalHost/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-portalhost-postmessage-message-targetorigin-transfer-message"><code><c- g>message</c-></code><a class="self-link" href="#dom-portalhost-postmessage-message-targetorigin-transfer-message"></a></dfn>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="PortalHost/postMessage(message, targetOrigin, transfer), PortalHost/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-portalhost-postmessage-message-targetorigin-transfer-targetorigin"><code><c- g>targetOrigin</c-></code><a class="self-link" href="#dom-portalhost-postmessage-message-targetorigin-transfer-targetorigin"></a></dfn>, <c- b>optional</c-> <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-object" id="ref-for-idl-object②"><c- b>object</c-></a>> <dfn class="idl-code" data-dfn-for="PortalHost/postMessage(message, targetOrigin, transfer), PortalHost/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-portalhost-postmessage-message-targetorigin-transfer-transfer"><code><c- g>transfer</c-></code><a class="self-link" href="#dom-portalhost-postmessage-message-targetorigin-transfer-transfer"></a></dfn> = []);
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-portalhost-postmessage-message-options" id="ref-for-dom-portalhost-postmessage-message-options"><c- g>postMessage</c-></a>(<c- b>any</c-> <dfn class="idl-code" data-dfn-for="PortalHost/postMessage(message, options), PortalHost/postMessage(message)" data-dfn-type="argument" data-export id="dom-portalhost-postmessage-message-options-message"><code><c- g>message</c-></code><a class="self-link" href="#dom-portalhost-postmessage-message-options-message"></a></dfn>, <c- b>optional</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions④"><c- n>WindowPostMessageOptions</c-></a> <dfn class="idl-code" data-dfn-for="PortalHost/postMessage(message, options), PortalHost/postMessage(message)" data-dfn-type="argument" data-export id="dom-portalhost-postmessage-message-options-options"><code><c- g>options</c-></code><a class="self-link" href="#dom-portalhost-postmessage-message-options-options"></a></dfn>);
+
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler②"><c- n>EventHandler</c-></a> <dfn class="idl-code" data-dfn-for="PortalHost" data-dfn-type="attribute" data-export data-type="EventHandler" id="dom-portalhost-onmessage"><code><c- g>onmessage</c-></code><a class="self-link" href="#dom-portalhost-onmessage"></a></dfn>;
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler③"><c- n>EventHandler</c-></a> <dfn class="idl-code" data-dfn-for="PortalHost" data-dfn-type="attribute" data-export data-type="EventHandler" id="dom-portalhost-onmessageerror"><code><c- g>onmessageerror</c-></code><a class="self-link" href="#dom-portalhost-onmessageerror"></a></dfn>;
 };
 </pre>
     <section class="algorithm" data-algorithm="portalhost-postmessage">
@@ -1907,6 +1913,10 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
     <p>A <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost④">PortalHost</a></code> is exposed at times when the window may be in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing context</a>.</p>
 <pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window"><c- g>Window</c-></a> {
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost⑤"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost"><c- g>portalHost</c-></a>;
+};
+
+<c- b>partial</c-> <c- b>interface</c-> <c- b>mixin</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers" id="ref-for-windoweventhandlers"><c- g>WindowEventHandlers</c-></a> {
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler④"><c- n>EventHandler</c-></a> <dfn class="idl-code" data-dfn-for="WindowEventHandlers" data-dfn-type="attribute" data-export data-type="EventHandler" id="dom-windoweventhandlers-onportalactivate"><code><c- g>onportalactivate</c-></code><a class="self-link" href="#dom-windoweventhandlers-onportalactivate"></a></dfn>;
 };
 </pre>
     <section class="algorithm" data-algorithm="window-portalhost">
@@ -2126,6 +2136,19 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
      <li><a href="#eventdef-portalhost-messageerror">event for PortalHost</a><span>, in §3.2</span>
     </ul>
    <li><a href="#typedefdef-messageeventsource">MessageEventSource</a><span>, in §3.4</span>
+   <li>
+    onmessage
+    <ul>
+     <li><a href="#dom-htmlportalelement-onmessage">attribute for HTMLPortalElement</a><span>, in §3.1</span>
+     <li><a href="#dom-portalhost-onmessage">attribute for PortalHost</a><span>, in §3.2</span>
+    </ul>
+   <li>
+    onmessageerror
+    <ul>
+     <li><a href="#dom-htmlportalelement-onmessageerror">attribute for HTMLPortalElement</a><span>, in §3.1</span>
+     <li><a href="#dom-portalhost-onmessageerror">attribute for PortalHost</a><span>, in §3.2</span>
+    </ul>
+   <li><a href="#dom-windoweventhandlers-onportalactivate">onportalactivate</a><span>, in §3.4</span>
    <li><a href="#elementdef-portal">portal</a><span>, in §3.1</span>
    <li><a href="#eventdef-window-portalactivate">portalactivate</a><span>, in §3.4</span>
    <li><a href="#portalactivateevent">PortalActivateEvent</a><span>, in §3.3</span>
@@ -2274,6 +2297,14 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
     <li><a href="#ref-for-cereactions">3.1. The portal element</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-eventhandler">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-eventhandler">3.1. The portal element</a> <a href="#ref-for-eventhandler①">(2)</a>
+    <li><a href="#ref-for-eventhandler②">3.2. The PortalHost interface</a> <a href="#ref-for-eventhandler③">(2)</a>
+    <li><a href="#ref-for-eventhandler④">3.4. Miscellaneous extensions</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-htmlconstructor">
    <a href="https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor">https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor</a><b>Referenced in:</b>
    <ul>
@@ -2326,6 +2357,12 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#window">https://html.spec.whatwg.org/multipage/window-object.html#window</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-window">3.4. Miscellaneous extensions</a> <a href="#ref-for-window①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-windoweventhandlers">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers">https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-windoweventhandlers">3.4. Miscellaneous extensions</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-windowpostmessageoptions">
@@ -2637,6 +2674,7 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-cereactions" style="color:initial">CEReactions</span>
+     <li><span class="dfn-paneled" id="term-for-eventhandler" style="color:initial">EventHandler</span>
      <li><span class="dfn-paneled" id="term-for-htmlconstructor" style="color:initial">HTMLConstructor</span>
      <li><span class="dfn-paneled" id="term-for-htmlelement" style="color:initial">HTMLElement</span>
      <li><span class="dfn-paneled" id="term-for-messageevent" style="color:initial">MessageEvent</span>
@@ -2645,6 +2683,7 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
      <li><span class="dfn-paneled" id="term-for-structureddeserializewithtransfer" style="color:initial">StructuredDeserializeWithTransfer</span>
      <li><span class="dfn-paneled" id="term-for-structuredserializewithtransfer" style="color:initial">StructuredSerializeWithTransfer</span>
      <li><span class="dfn-paneled" id="term-for-window" style="color:initial">Window</span>
+     <li><span class="dfn-paneled" id="term-for-windoweventhandlers" style="color:initial">WindowEventHandlers</span>
      <li><span class="dfn-paneled" id="term-for-windowpostmessageoptions" style="color:initial">WindowPostMessageOptions</span>
      <li><span class="dfn-paneled" id="term-for-windowproxy" style="color:initial">WindowProxy</span>
      <li><span class="dfn-paneled" id="term-for-active-document" style="color:initial">active document</span>
@@ -2741,6 +2780,9 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
     [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#NewObject" id="ref-for-NewObject①"><c- g>NewObject</c-></a>] <c- b>Promise</c->&lt;<c- b>void</c->> <a class="idl-code" data-link-type="method" href="#dom-htmlportalelement-activate" id="ref-for-dom-htmlportalelement-activate①①"><c- g>activate</c-></a>(<c- b>optional</c-> <a class="n" data-link-type="idl-name" href="#dictdef-portalactivateoptions" id="ref-for-dictdef-portalactivateoptions①"><c- n>PortalActivateOptions</c-></a> <a href="#dom-htmlportalelement-activate-options-options"><code><c- g>options</c-></code></a>);
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-htmlportalelement-postmessage" id="ref-for-dom-htmlportalelement-postmessage①"><c- g>postMessage</c-></a>(<c- b>any</c-> <a href="#dom-htmlportalelement-postmessage-message-targetorigin-transfer-message"><code><c- g>message</c-></code></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><c- b>DOMString</c-></a> <a href="#dom-htmlportalelement-postmessage-message-targetorigin-transfer-targetorigin"><code><c- g>targetOrigin</c-></code></a>, <c- b>optional</c-> <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-object" id="ref-for-idl-object③"><c- b>object</c-></a>> <a href="#dom-htmlportalelement-postmessage-message-targetorigin-transfer-transfer"><code><c- g>transfer</c-></code></a> = []);
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-htmlportalelement-postmessage-message-options" id="ref-for-dom-htmlportalelement-postmessage-message-options②"><c- g>postMessage</c-></a>(<c- b>any</c-> <a href="#dom-htmlportalelement-postmessage-message-options-message"><code><c- g>message</c-></code></a>, <c- b>optional</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions⑧"><c- n>WindowPostMessageOptions</c-></a> <a href="#dom-htmlportalelement-postmessage-message-options-options"><code><c- g>options</c-></code></a>);
+
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler⑤"><c- n>EventHandler</c-></a> <a data-type="EventHandler" href="#dom-htmlportalelement-onmessage"><code><c- g>onmessage</c-></code></a>;
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler①①"><c- n>EventHandler</c-></a> <a data-type="EventHandler" href="#dom-htmlportalelement-onmessageerror"><code><c- g>onmessageerror</c-></code></a>;
 };
 
 <c- b>dictionary</c-> <a href="#dictdef-portalactivateoptions"><code><c- g>PortalActivateOptions</c-></code></a> {
@@ -2751,6 +2793,9 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
 <c- b>interface</c-> <a href="#portalhost"><code><c- g>PortalHost</c-></code></a> : <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#eventtarget" id="ref-for-eventtarget①"><c- n>EventTarget</c-></a> {
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-portalhost-postmessage" id="ref-for-dom-portalhost-postmessage①"><c- g>postMessage</c-></a>(<c- b>any</c-> <a href="#dom-portalhost-postmessage-message-targetorigin-transfer-message"><code><c- g>message</c-></code></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①①"><c- b>DOMString</c-></a> <a href="#dom-portalhost-postmessage-message-targetorigin-transfer-targetorigin"><code><c- g>targetOrigin</c-></code></a>, <c- b>optional</c-> <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-object" id="ref-for-idl-object②①"><c- b>object</c-></a>> <a href="#dom-portalhost-postmessage-message-targetorigin-transfer-transfer"><code><c- g>transfer</c-></code></a> = []);
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-portalhost-postmessage-message-options" id="ref-for-dom-portalhost-postmessage-message-options②"><c- g>postMessage</c-></a>(<c- b>any</c-> <a href="#dom-portalhost-postmessage-message-options-message"><code><c- g>message</c-></code></a>, <c- b>optional</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions④①"><c- n>WindowPostMessageOptions</c-></a> <a href="#dom-portalhost-postmessage-message-options-options"><code><c- g>options</c-></code></a>);
+
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler②①"><c- n>EventHandler</c-></a> <a data-type="EventHandler" href="#dom-portalhost-onmessage"><code><c- g>onmessage</c-></code></a>;
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler③①"><c- n>EventHandler</c-></a> <a data-type="EventHandler" href="#dom-portalhost-onmessageerror"><code><c- g>onmessageerror</c-></code></a>;
 };
 
 <c- b>interface</c-> <a href="#portalactivateevent"><code><c- g>PortalActivateEvent</c-></code></a> : <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#event" id="ref-for-event①"><c- n>Event</c-></a> {
@@ -2762,6 +2807,10 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
 
 <c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②"><c- g>Window</c-></a> {
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost⑤①"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost①"><c- g>portalHost</c-></a>;
+};
+
+<c- b>partial</c-> <c- b>interface</c-> <c- b>mixin</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers" id="ref-for-windoweventhandlers①"><c- g>WindowEventHandlers</c-></a> {
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler④①"><c- n>EventHandler</c-></a> <a data-type="EventHandler" href="#dom-windoweventhandlers-onportalactivate"><code><c- g>onportalactivate</c-></code></a>;
 };
 
 </pre>
