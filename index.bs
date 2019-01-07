@@ -179,6 +179,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
           [NewObject] Promise<void> activate(optional PortalActivateOptions options);
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
           void postMessage(any message, optional WindowPostMessageOptions options);
+
+          attribute EventHandler onmessage;
+          attribute EventHandler onmessageerror;
       };
 
       dictionary PortalActivateOptions {
@@ -406,6 +409,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
       interface PortalHost : EventTarget {
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
           void postMessage(any message, optional WindowPostMessageOptions options);
+
+          attribute EventHandler onmessage;
+          attribute EventHandler onmessageerror;
       };
   </xmp>
 
@@ -498,6 +504,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   <xmp class="idl">
       partial interface Window {
           readonly attribute PortalHost? portalHost;
+      };
+
+      partial interface mixin WindowEventHandlers {
+          attribute EventHandler onportalactivate;
       };
   </xmp>
 
