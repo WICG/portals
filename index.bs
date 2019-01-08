@@ -110,6 +110,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         1. Set |event|'s [=PortalActivateEvent/predecessor browsing context=] to |predecessorBrowsingContext|.
 
+        1. Set |event|'s [=PortalActivateEvent/successor window=] to |successorWindow|.
+
         1. [=Dispatch=] |event| to |successorWindow|.
 
         1. If |predecessorBrowsingContext| is not a [=portal browsing context=], [=close a browsing context|close=] it.
@@ -130,7 +132,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </div>
 
   <section algorithm="portal-browsing-context-adopt-predecessor">
-    To <dfn>adopt the predecessor browsing context</dfn> |predecessorBrowsingContext| in |document|, run the following steps:
+    To <dfn>adopt the predecessor browsing context</dfn> |predecessorBrowsingContext| in |successorWindow|, run the following steps:
+
+    1. Let |document| be the [=associated Document|document=] of |successorWindow|.
 
     1. Let |portalElement| be the result of [=creating an element=] given |document|, `portal`, and the [=HTML namespace=].
 
@@ -349,6 +353,15 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   1. If the [=context object=] has a [=guest browsing context=] or is not [=connected=], abort these steps.
 
+  1. If the the [=document browsing context|browsing context=] of the [=context object=]'s [=node document|document=]
+      is a nested browsing context or there is no such context, then abort these steps.
+
+      <p class="note">
+        The user agent may choose to emit a warning if the author attempts to
+        use a <{portal}> element in a nested browsing context, as this is not
+        supported.
+      </p>
+
   1. [=Create a new browsing context=] with noopener, and let |newBrowsingContext| be the result.
 
   1. Set the [=context object=]'s [=guest browsing context=] to |newBrowsingContext|.
@@ -368,6 +381,19 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     It might be convenient to not immediately detach the portal element, but instead to do so
     in a microtask. This would allow developers to reinsert the <{portal}> element without losing
     its browsing context.
+  </div>
+
+  Whenever a <{portal}> element is [=adopting steps|adopted=], run the following steps:
+
+  1. If the [=context object=] does not have a [=guest browsing context=], abort these steps.
+
+  1. [=close a portal element|Close=] the [=context object=].
+
+  <div class="note">
+    Since <{portal}> elements can have only a [=guest browsing context=] while
+    their [=node document|document=] belongs to a [=top-level browsing
+    context=], it is impossible to embed a [=portal browsing context=] in a
+    [=nested browsing context=].
   </div>
 
   The following events are dispatched on {{HTMLPortalElement}} objects:
@@ -474,19 +500,22 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   <xmp class="idl">
       interface PortalActivateEvent : Event {
           readonly attribute any data;
-          HTMLPortalElement adoptPredecessor(Document document);
+          HTMLPortalElement adoptPredecessor();
       };
   </xmp>
 
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
-  which is a [=top-level browsing context=].
+  which is a [=top-level browsing context=], and a <dfn for="PortalActivateEvent">successor window</dfn>, which is
+  a {{Window}}.
 
   <section algorithm="portalactivateevent-adoptpredecessor">
-    The <dfn method for="PortalActivateEvent"><code>adoptPredecessor(|document|)</code></dfn> method *must* run these steps:
+    The <dfn method for="PortalActivateEvent"><code>adoptPredecessor()</code></dfn> method *must* run these steps:
 
     1. Let |predecessorBrowsingContext| be the [=context object=]'s [=PortalActivateEvent/predecessor browsing context=].
 
-    1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |document|, and return the result.
+    1. Let |successorWindow| be the [=context object=]'s [=PortalActivateEvent/successor window=].
+
+    1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |successorWindow|, and return the result.
   </section>
 
   Miscellaneous extensions {#miscellaneous-extensions}
