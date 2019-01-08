@@ -420,6 +420,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     </tbody>
   </table>
 
+  The <{portal}> element exposes {{HTMLPortalElement/onmessage}} and {{HTMLPortalElement/onmessageerror}}
+  as [=event handler content attributes=].
+
   The `PortalHost` interface {#the-portalhost-interface}
   ------------------------------------------------------
 
@@ -574,6 +577,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
       </tr>
     </tbody>
   </table>
+
+  Like other [=event handler IDL attributes=] in the {{WindowEventHandlers}} interface mixin,
+  {{WindowEventHandlers/onportalactivate}} is exposed on all <{body}> and <{frameset}> elements
+  as a [=event handler content attribute=].
 </section>
 
 <section>
