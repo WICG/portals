@@ -349,6 +349,15 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   1. If the [=context object=] has a [=guest browsing context=] or is not [=connected=], abort these steps.
 
+  1. If the the [=document browsing context|browsing context=] of the [=context object=]'s [=node document|document=]
+      is a nested browsing context or there is no such context, then abort these steps.
+
+      <p class="note">
+        The user agent may choose to emit a warning if the author attempts to
+        use a <{portal}> element in a nested browsing context, as this is not
+        supported.
+      </p>
+
   1. [=Create a new browsing context=] with noopener, and let |newBrowsingContext| be the result.
 
   1. Set the [=context object=]'s [=guest browsing context=] to |newBrowsingContext|.
