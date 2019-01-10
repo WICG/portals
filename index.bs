@@ -10,6 +10,8 @@ Editor: Lucas Gadani, Google, lfg@chromium.org
 Abstract: This specification defines a mechanism that allows for rendering of, and seamless navigation to, embedded content.
 Repository: https://github.com/WICG/portals/
 Markup Shorthands: css no, markdown yes
+WPT Path Prefix: /portals/
+WPT Display: inline
 </pre>
 <pre class="link-defaults">
 spec:html; type:dfn; for:/; text:browsing context
@@ -118,7 +120,12 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
             The user agent *should not* [=refuse to allow the document to be unloaded=].
 
         1. [=Queue a task=] to [=complete portal activation=].
+
   </section>
+
+  <wpt>
+    portal-activate-event.html
+  </wpt>
 
   <div class="issue">
     In the case that structured deserialization throws, it may be useful to do something else to indicate it,
@@ -343,6 +350,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     Is {{no-referrer}} the right referrer policy here, or should we send the document's URL?
   </div>
 
+  <wpt>
+    portals-no-referrer.html
+  </wpt>
+
   Whenever a <{portal}> element's {{HTMLPortalElement/src}} attribute is set, run the following steps:
 
   1. If the [=context object=] does not have a [=guest browsing context=], abort these steps.
@@ -558,6 +569,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. Return |portalHostObject|.
   </section>
+
+  <wpt>
+    portals-host-null.html
+  </wpt>
 
   The following events are dispatched on {{Window}} objects:
 
