@@ -290,6 +290,12 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     element's [=node document|document=]'s [=document browsing context|browsing
     context=] to run the following steps:
 
+    1. If the [=context object=] does not have a [=guest browsing context=], then abort these steps.
+
+        Note: This might happen if this [=event loop=] had a queued task to deliver a message, but
+        it was not executed before the portal was [=activate a portal browsing context|activated=].
+        In such cases, the message is not delivered.
+
     1. Let |settings| be the [=relevant settings object=] of the [=context object=].
 
     1. If |targetOrigin| is not a single literal U+002A ASTERISK character
@@ -428,7 +434,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   <div class="note">
     The [=portal host object=] can be used to communicate with the [=host=] of a [=portal browsing context=].
-    Its operations throw if used while it's context is not a [=portal browsing context=] (i.e. there is no host).
+    Its operations throw if used while its context is not a [=portal browsing context=] (i.e. there is no host).
   </div>
 
   <xmp class="idl">
@@ -450,8 +456,11 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     The <dfn method for="PortalHost"><code>postMessage(|message|, |options|)</code></dfn> method *must* run these steps:
 
-    1. If the [=context object=]'s associated [=browsing context=] is not a [=portal browsing context=],
-        throw an "{{InvalidStateError}}" {{DOMException}}.
+    1. If the [=context object=] is [=PortalHost/hidden=], throw an "{{InvalidStateError}}" {{DOMException}}.
+
+        Note: This roughly means that its associated [=browsing context=] is not a [=portal browsing context=], as far as
+        this [=event loop=] has been told. It is possible that this browsing context will be [=activate a portal browsing
+        context|activated=] in parallel to this message being sent; in such cases, messages may not be delivered.
 
     1. Let |settings| be the [=relevant settings object=] of the [=context object=].
 
