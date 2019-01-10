@@ -1212,9 +1212,9 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 6dcb46ba8cae3704b42c05bcd8578c92d239786a" name="generator">
+  <meta content="Bikeshed version 53d2305928d30790ebcc3b8ea611fb0709647013" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="83494f99e7736b09a3e33e0de884a2df9d49fe81" name="document-revision">
+  <meta content="0bde79b12cc80e589a77bc2e79115907fe773cf7" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1468,11 +1468,37 @@ c-[vg] { color: #0077aa } /* Name.Variable.Global */
 c-[vi] { color: #0077aa } /* Name.Variable.Instance */
 c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 </style>
+<style>/* style-wpt */
+
+.wpt-tests-block {
+	list-style: none;
+	border-left: .5em solid hsl(290, 70%, 60%);
+	background: hsl(290, 70%, 95%);
+	margin: 1em auto;
+	padding: .5em;
+	display: grid;
+	grid-template-columns: 1fr auto auto;
+	grid-column-gap: .5em;
+}
+.wpt-tests-block::before {
+	content: "Tests";
+	grid-column: 1/-1;
+	color: hsl(290, 70%, 30%);
+	text-transform: uppercase;
+}
+.wpt-test {
+	display: contents;
+}
+.wpt-test > a {
+	text-decoration: underline;
+	border: none;
+}
+</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-01-09">9 January 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-01-10">10 January 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1595,6 +1621,9 @@ The user agent <em>should not</em> <a data-link-type="dfn" href="https://html.sp
        </ol>
      </ol>
     </section>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portal-activate-event.html">portal-activate-event.html</a> <a href="http://web-platform-tests.live/portals/portal-activate-event.html" title="portals/portal-activate-event.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portal-activate-event.html"><small>(source)</small></a>
+    </ul>
     <div class="issue" id="issue-b49e4903"><a class="self-link" href="#issue-b49e4903"></a> In the case that structured deserialization throws, it may be useful to do something else to indicate it,
     rather than simply providing null data. </div>
     <div class="issue" id="issue-0d72b101"><a class="self-link" href="#issue-0d72b101"></a> We need to specify how the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/history.html#session-history" id="ref-for-session-history">session history</a> of each browsing context is
@@ -1787,6 +1816,9 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
      </ol>
     </section>
     <div class="issue" id="issue-ecc42745"><a class="self-link" href="#issue-ecc42745"></a> Is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-referrer-policy/#dom-referrerpolicy-no-referrer" id="ref-for-dom-referrerpolicy-no-referrer①">no-referrer</a></code> the right referrer policy here, or should we send the document’s URL? </div>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-no-referrer.html">portals-no-referrer.html</a> <a href="http://web-platform-tests.live/portals/portals-no-referrer.html" title="portals/portals-no-referrer.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-no-referrer.html"><small>(source)</small></a>
+    </ul>
     <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑥">portal</a></code> element’s <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-src" id="ref-for-dom-htmlportalelement-src②">src</a></code> attribute is set, run the following steps:</p>
     <ol>
      <li data-md>
@@ -1959,6 +1991,9 @@ throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.
        <p>Return <var>portalHostObject</var>.</p>
      </ol>
     </section>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-null.html">portals-host-null.html</a> <a href="http://web-platform-tests.live/portals/portals-host-null.html" title="portals/portals-host-null.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-null.html"><small>(source)</small></a>
+    </ul>
     <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②">Window</a></code> objects:</p>
     <table class="data">
      <thead>
