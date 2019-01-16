@@ -171,7 +171,11 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   The `portal` element {#the-portal-element}
   ------------------------------------------
 
-  A <dfn element>portal</dfn> element for a [=portal browsing context=] to be embedded in an HTML document.
+  A <dfn element>portal</dfn> element allows for a [=portal browsing context=] to be embedded in an HTML document.
+
+  <wpt>
+    portals-rendering.html
+  </wpt>
 
   A <{portal}> element may have a <dfn for="HTMLPortalElement">guest browsing context</dfn>, which is a
   [=portal browsing context=]. If so, the element is the [=host=] of its [=guest browsing context=].
