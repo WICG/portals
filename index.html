@@ -1212,9 +1212,9 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 53d2305928d30790ebcc3b8ea611fb0709647013" name="generator">
+  <meta content="Bikeshed version 9c6ae748322940994300e90a77c34437364b40a6" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="0bde79b12cc80e589a77bc2e79115907fe773cf7" name="document-revision">
+  <meta content="e26b0f4145831ab72162165ede9edf42f4e8f08a" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1498,7 +1498,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-01-10">10 January 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-01-16">16 January 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1656,7 +1656,10 @@ The user agent <em>should not</em> <a data-link-type="dfn" href="https://html.sp
    <section>
     <h2 class="heading settled" data-level="3" id="api"><span class="secno">3. </span><span class="content">API</span><a class="self-link" href="#api"></a></h2>
     <h3 class="heading settled" data-level="3.1" id="the-portal-element"><span class="secno">3.1. </span><span class="content">The <code>portal</code> element</span><a class="self-link" href="#the-portal-element"></a></h3>
-    <p>A <dfn class="dfn-paneled" data-dfn-type="element" data-export id="elementdef-portal"><code>portal</code></dfn> element for a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context④">portal browsing context</a> to be embedded in an HTML document.</p>
+    <p>A <dfn class="dfn-paneled" data-dfn-type="element" data-export id="elementdef-portal"><code>portal</code></dfn> element allows for a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context④">portal browsing context</a> to be embedded in an HTML document.</p>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-rendering.html">portals-rendering.html</a> <a href="http://web-platform-tests.live/portals/portals-rendering.html" title="portals/portals-rendering.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-rendering.html"><small>(source)</small></a>
+    </ul>
     <p>A <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal">portal</a></code> element may have a <dfn class="dfn-paneled" data-dfn-for="HTMLPortalElement" data-dfn-type="dfn" data-noexport id="htmlportalelement-guest-browsing-context">guest browsing context</dfn>, which is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑤">portal browsing context</a>. If so, the element is the <a data-link-type="dfn" href="#host" id="ref-for-host③">host</a> of its <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①">guest browsing context</a>.</p>
     <p class="note" role="note"> A <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①">portal</a></code> is similar to an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element">iframe</a></code>, in that it allows another browsing context to be embedded.
     However, the <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑥">portal browsing context</a> hosted by a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal②">portal</a></code> is part of a separate <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-browsing-contexts" id="ref-for-unit-of-related-browsing-contexts">unit of related
