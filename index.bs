@@ -126,6 +126,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   <wpt>
     portal-activate-event.html
+    portals-host-hidden-after-activation.html
   </wpt>
 
   <div class="issue">
@@ -591,6 +592,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </section>
 
   <wpt>
+    portals-host-exposure.sub.html
     portals-host-null.html
   </wpt>
 
