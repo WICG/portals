@@ -217,6 +217,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
 
+        <wpt>
+          portals-activate-no-browsing-context.html
+        </wpt>
+
     1. Let |predecessorBrowsingContext| be the [=document browsing context|browsing context=] of the
         [=context object=]'s [=node document|document=].
 
@@ -355,6 +359,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </div>
 
   <wpt>
+    portals-cross-origin-load.sub.html
     portals-no-referrer.html
   </wpt>
 
