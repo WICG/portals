@@ -38,8 +38,6 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: urls-and-fetching.html
             text: parse a URL; url: parse-a-url
             text: resulting URL record; url: resulting-url-record
-        urlPrefix: web-messaging.html
-            text: posted message task source; url: posted-message-task-source
         urlPrefix: window-object.html
             text: close a browsing context; url: close-a-browsing-context
 spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
@@ -81,6 +79,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     context, but rather that it will be presented only through a [=host=] element.
   </p>
 
+  The <dfn>portal task source</dfn> is a [=task source=] used for tasks related to the
+  portal lifecycle and communication between a [=portal browsing context=] and its [=host=].
+
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |portalBrowsingContext| in
     place of |predecessorBrowsingContext| with data |serializeWithTransferResult|,
@@ -93,8 +94,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         From this point onward, |portalBrowsingContext| is no longer a [=portal browsing context=] and has no [=host=].
 
-    1. [=Queue a task=] from the [=DOM manipulation task source=] to the [=event loop=] associated with
-        |successorWindow| to run the following steps:
+    1. [=Queue a task=] from the [=portal task source=]
+        to the [=event loop=] associated with |successorWindow| to run the following steps:
 
         1. [=PortalHost/hidden|Hide=] the [=portal host object=] of |portalBrowsingContext|.
 
@@ -150,7 +151,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. Set the [=guest browsing context=] of |portalElement| to |predecessorBrowsingContext|. From this point onward,
         |predecessorBrowsingContext| is a [=portal browsing context=], with |portalElement| as its [=host=].
 
-    1. [=Queue a task=] from the [=DOM manipulation task source=] to the [=event loop=] associated with |predecessorBrowsingContext|
+    1. [=Queue a task=] from the [=portal task source=]
+        to the [=event loop=] associated with |predecessorBrowsingContext|
         to run the following steps:
 
         1. [=PortalHost/Expose=] the [=portal host object=] of |predecessorBrowsingContext|.
@@ -206,7 +208,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </xmp>
 
   The following tasks may be [=queue a task|queued=] by this standard. Unless otherwise specified, each
-  task *must* be queued from the [=DOM manipulation task source=].
+  task *must* be queued from the [=portal task source=].
 
   * <dfn>complete portal activation</dfn>
 
@@ -265,7 +267,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
-    1. [=Queue a task=] from the [=posted message task source=] to the [=event loop=] of |portalBrowsingContext| to run the following steps:
+    1. [=Queue a task=] from the [=portal task source=] to the [=event loop=] of |portalBrowsingContext| to run the following steps:
 
         1. If |targetOrigin| is not a single literal U+002A ASTERISK character
             (*) and the [=origin=] of |portalBrowsingContext|'s
@@ -297,7 +299,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   <section algorithm="htmlportalelement-acceptpostedmessage">
     To [=accept a message posted to the host=] for a <{portal}> element with
     |serializeWithTransferResult|, |origin| and |targetOrigin|, [=queue a task=] from the
-    [=posted message task source=] to the [=event loop=] associated with the
+    [=portal task source=] to the [=event loop=] associated with the
     element's [=node document|document=]'s [=document browsing context|browsing
     context=] to run the following steps:
 
