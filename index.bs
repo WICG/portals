@@ -257,6 +257,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. If the [=portal state=] of |predecessorBrowsingContext| is not *none*,
         throw an "{{InvalidStateError}}" {{DOMException}}.
 
+        Note: This means that a <{portal}> element inside a [=portal browsing context=]
+        cannot be activated.
+
     1. Let |serializeWithTransferResult| be
         [$StructuredSerializeWithTransfer$](|options|["{{PortalActivateOptions/data}}"],
         |options|["{{PortalActivateOptions/transfer}}"]).
