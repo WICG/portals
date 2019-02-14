@@ -87,6 +87,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     place of |predecessorBrowsingContext| with data |serializeWithTransferResult|,
     run the following steps [=in parallel=]:
 
+    1. [=Assert=]: |predecessorBrowsingContext| is a [=top-level browsing context=], but not
+        a [=portal browsing context=].
+
     1. Let |successorWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
     1. Update the user interface to replace |predecessorBrowsingContext| with |portalBrowsingContext|
@@ -228,6 +231,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
         [=context object=]'s [=node document|document=].
 
         If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
+
+    1. If |predecessorBrowsingContext| is a [=portal browsing context=], throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Let |serializeWithTransferResult| be
         [$StructuredSerializeWithTransfer$](|options|["{{PortalActivateOptions/data}}"],
