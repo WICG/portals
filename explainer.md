@@ -63,7 +63,7 @@ the host and guest browsing contexts (in implementations, in separate processes)
 even when the active documents may be *same origin-domain*. To make this
 possible, we intend not to expose the `Document` or `WindowProxy` of the guest
 contents, via the IDL attributes on `HTMLIFrameElement`, by using
-access to named windows, or or by indexed access to `window.frames`.
+access to named windows, or by indexed access to `window.frames`.
 Without such access, communication can be be guaranteed to be asynchronous and
 not require shared access to JavaScript objects. Those operations which don't
 apply to portal contexts would all need to be modified to throw an appropriate
