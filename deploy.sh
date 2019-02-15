@@ -24,7 +24,7 @@ git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 
 # Clean out existing contents and populate the directory.
 git rm -rf .
-cp ../index.html ./
+cp ../index.html ../portals-state-transitions.svg ./
 git add -Av
 
 # If there are no changes to the compiled out (e.g. this is a README update) then just bail.
