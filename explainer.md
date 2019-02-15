@@ -45,6 +45,56 @@ We consider the following items out-of-scope:
  - Specifying transitions or defining APIs related to transitions: the proposal assumes that existing animations and DOM manipulations are enough to create compelling user experiences. We might discover important gaps but these should be addressed via separate efforts to avoid overly specific solutions.
  - Hosting arbitrary unmodified web pages with guarantees of privacy and performance. While we are interested in allowing the embedder to apply additional restrictions to a document in a portal context, we anticipate that pages may require modification to work in such modes. Chrome's experience with prerendering suggests that solving this transparently would be very difficult.
 
+## FAQs
+
+### Why do we need a new HTML tag? Why not use `<iframe>`?
+
+This proposal departs from the behavior of `<iframe>` in a number of ways, which
+we believe may be confusing if we use the same HTML tag.
+
+From past experience with `<iframe>` promotion in Chromium, we found that there
+were many hidden assumptions in the browser implementation that the frame
+hierarchy does not change over time. Instead we intend for content to observe
+a universe more similar to being a top-level browsing context from load to
+unload.
+
+We wish to give user agents as much flexibility as possible to isolate
+the host and guest browsing contexts (in implementations, in separate processes),
+even when the active documents may be *same origin-domain*. To make this
+possible, we intend not to expose the `Document` or `WindowProxy` of the guest
+contents, via the IDL attributes on `HTMLIFrameElement`, by using
+access to named windows, or by indexed access to `window.frames`.
+Without such access, communication can be be guaranteed to be asynchronous and
+not require shared access to JavaScript objects. Those operations which don't
+apply to portal contexts would all need to be modified to throw an appropriate
+exception in such cases.
+
+We intend to support operations (first and foremost, *activate*) which
+will not make sense for non-portal `<iframe>`. These operations would need
+additional complexity to handle being called on non-portal frames.
+
+Using a `portal` attribute on iframes would also require defining the behavior
+in the case where the attribute is added or removed from an existing element,
+which may already have a browsing context. In some cases, the `<iframe>` element
+currently silently ignores such changes.
+
+We do expect that some features of `HTMLIFrameElement`, such as sandboxing and
+feature policy attributes, will eventually be wanted for portals as well.
+We haven't yet figured out how they would interact with portals; even if they
+would work the same, implementers would have to make sure all of these
+interactions worked correctly before shipping the portals feature in any form.
+
+### How does this work in browsers that restrict third-party cookies?
+
+We imagine that in such cases, the browser would provide functionality for
+gaining access to first-party cookies (and other storage) at the author's
+request after activation. For instance, the browser could allow using the
+[Storage Access API](https://webkit.org/blog/8124/introducing-storage-access-api/)
+for this purpose.
+
+There are other kinds of privilege afforded to top-level or first-party
+documents. We think they could be handled similarly.
+
 ## Alternatives considered
 ### iframe promotion
 Iframe promotion is the idea of providing an API for promoting an iframe to become the top document. 
