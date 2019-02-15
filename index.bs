@@ -265,6 +265,14 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
         |options|["{{PortalActivateOptions/transfer}}"]).
         Rethrow any exceptions.
 
+    1. Clear the [=guest browsing context=] of the [=context object=].
+        User agents *should*, however, attempt to preserve the rendering of the
+        guest browsing context until |predecessorBrowsingContext| has been replaced
+        with |portalBrowsingContext| in the rendering.
+
+        Note: This is intended to avoid a visual glitch, such as a "white flash", where
+        the guest browsing context briefly disappears.
+
     1. Let |promise| be a new [=promise=].
 
     1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
