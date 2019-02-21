@@ -13,9 +13,6 @@ Markup Shorthands: css no, markdown yes
 WPT Path Prefix: /portals/
 WPT Display: inline
 </pre>
-<pre class="link-defaults">
-spec:html; type:dfn; for:/; text:browsing context
-</pre>
 <pre class="anchors">
 spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: attribute
@@ -26,6 +23,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: data; for: MessageEvent; url: dom-messageevent-data
     type: dfn
         urlPrefix: browsers.html
+            text: browsing context; url: browsing-context
             text: create a new browsing context; url: creating-a-new-browsing-context
             text: document browsing context; url: concept-document-bc
             text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
