@@ -281,6 +281,13 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
         1. Resolve |promise| with undefined.
 
     1. Return |promise|.
+
+    <wpt>
+      portal-activate-data.html
+      portals-activate-inside-iframe.html
+      portals-activate-inside-portal.html
+      portals-activate-twice.html
+    </wpt>
   </section>
 
   <section algorithm="htmlportalelement-postmessage">
@@ -336,6 +343,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
         1. [=Fire an event=] named {{PortalHost/message!!event}} at |portalHost| using {{MessageEvent}}, with the {{MessageEvent/origin}} attribute
             initialized to |origin|, the {{MessageEvent/source}} attribute initialized to |portalHost|, the {{MessageEvent/data}} attribute
             initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
+
+    <wpt>
+      portals-post-message.sub.html
+    </wpt>
   </section>
 
   <section algorithm="htmlportalelement-acceptpostedmessage">
@@ -436,6 +447,11 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   1. Set the [=context object=]'s [=guest browsing context=] to |newBrowsingContext|.
 
   1. [=set the source URL of a portal element|Set the source URL=] of the [=context object=].
+
+  <wpt>
+    portals-create-orphaned.html
+    portals-nested.html
+  </wpt>
 
   Whenever a <{portal}> element is [=removing steps|removed=], run the following steps:
 
@@ -593,6 +609,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. Let |successorWindow| be the [=context object=]'s [=PortalActivateEvent/successor window=].
 
     1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |successorWindow|, and return the result.
+
+    <wpt>
+      portals-adopt-predecessor.html
+    </wpt>
   </section>
 
   Miscellaneous extensions {#miscellaneous-extensions}
