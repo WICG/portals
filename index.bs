@@ -128,7 +128,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
             If this throws an exception, catch it, and let |dataClone| be null instead.
 
-        1. Let |event| be the result of [=creating an event=] using {{PortalActivateEvent}}.
+        1. Let |event| be the result of [=creating an event=] using {{PortalActivateEvent}} and |targetRealm|.
 
         1. Initialize |event|'s {{Event/type}} attribute to {{Window/portalactivate!!event}}.
 
@@ -589,16 +589,28 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   ------------------------------------------------------------------------
 
   <xmp class="idl">
-      [Exposed=Window]
+      [Constructor(DOMString type, optional PortalActivateEventInit eventInitDict), Exposed=Window]
       interface PortalActivateEvent : Event {
           readonly attribute any data;
           HTMLPortalElement adoptPredecessor();
+      };
+
+      dictionary PortalActivateEventInit : EventInit {
+          any data = null;
       };
   </xmp>
 
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
   which is a [=top-level browsing context=], and a <dfn for="PortalActivateEvent">successor window</dfn>, which is
   a {{Window}}.
+
+  <section algorithm="portalactivateevent-event-constructing-steps">
+    The [=event constructing steps=] for {{PortalActivateEvent}}, given an |event|, are as follows:
+
+    1. Set |event|'s [=PortalActivateEvent/predecessor browsing context=] to null.
+
+    1. Set |event|'s [=PortalActivateEvent/successor window=] to null.
+  </section>
 
   <section algorithm="portalactivateevent-adoptpredecessor">
     The <dfn method for="PortalActivateEvent"><code>adoptPredecessor()</code></dfn> method *must* run these steps:
