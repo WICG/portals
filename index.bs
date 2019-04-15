@@ -214,7 +214,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </p>
 
   <xmp class="idl">
-      [HTMLConstructor]
+      [Exposed=Window, HTMLConstructor]
       interface HTMLPortalElement : HTMLElement {
           [CEReactions] attribute USVString src;
           [NewObject] Promise<void> activate(optional PortalActivateOptions options);
@@ -517,6 +517,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </div>
 
   <xmp class="idl">
+      [Exposed=Window]
       interface PortalHost : EventTarget {
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
           void postMessage(any message, optional WindowPostMessageOptions options);
@@ -588,6 +589,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   ------------------------------------------------------------------------
 
   <xmp class="idl">
+      [Exposed=Window]
       interface PortalActivateEvent : Event {
           readonly attribute any data;
           HTMLPortalElement adoptPredecessor();
