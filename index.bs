@@ -124,7 +124,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         1. Let |targetRealm| be |successorWindow|'s [=environment settings object/realm=].
 
-        1. Let |dataClone| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
+        1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|),
+            and let |dataClone| be |deserializeRecord|.\[[Deserialized]].
 
             If this throws an exception, catch it, and let |dataClone| be null instead.
 
