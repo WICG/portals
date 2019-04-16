@@ -620,7 +620,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. Clear [=this=]'s [=PortalActivateEvent/predecessor browsing context=].
 
-    1. Let |successorWindow| be the [=this=]'s [=PortalActivateEvent/successor window=].
+    1. Let |successorWindow| be [=this=]'s [=PortalActivateEvent/successor window=].
 
     1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |successorWindow|, and return the result.
 
