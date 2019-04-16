@@ -122,7 +122,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         1. Set the [=portal state=] of |successorBrowsingContext| to *none*.
 
-        1. Let |targetRealm| be |successorWindow|'s [=environment settings object/realm=].
+        1. Let |targetRealm| be |successorWindow|'s [=global object/realm=].
 
         1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|),
             and let |dataClone| be |deserializeRecord|.\[[Deserialized]].
@@ -328,7 +328,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         1. Let |portalHost| be the |targetWindow|'s [=portal host object=].
 
-        1. Let |targetRealm| be the |targetWindow|'s [=environment settings object/realm=].
+        1. Let |targetRealm| be the |targetWindow|'s [=global object/realm=].
 
         1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
 
