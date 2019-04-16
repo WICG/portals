@@ -612,6 +612,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. Set |event|'s [=PortalActivateEvent/successor window=] to null.
   </section>
 
+  <wpt>
+    portal-activate-event-constructor.html
+  </wpt>
+
   <section algorithm="portalactivateevent-adoptpredecessor">
     The <dfn method for="PortalActivateEvent"><code>adoptPredecessor()</code></dfn> method *must* run these steps:
 
