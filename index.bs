@@ -63,29 +63,29 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   Concepts {#concepts}
   ====================
 
-  Every [=browsing context=] has a <dfn>portal state</dfn>, which may be *none* (the default), *portal* or *orphaned*.
-  A [=nested browsing context=] always has the [=portal state=] *none*.
+  Every [=browsing context=] has a <dfn>portal state</dfn>, which may be "`none`" (the default), "`portal`" or "`orphaned`".
+  A [=nested browsing context=] always has the [=portal state=] "`none`".
 
   <div class="note">
     Briefly, these correspond to:
 
-    * *portal*: top-level browsing contexts embedded in a <{portal}> element
-    * *orphaned*: top-level browsing contexts which have run {{HTMLPortalElement/activate}}
+    * "`portal`": top-level browsing contexts embedded in a <{portal}> element
+    * "`orphaned`": top-level browsing contexts which have run {{HTMLPortalElement/activate}}
         but have not (yet) been [=adopt the predecessor browsing context|adopted=]
-    * *none*: all other browsing contexts
+    * "`none`": all other browsing contexts
 
     <!-- https://docs.google.com/drawings/d/1uh-YiJIqf8OTV0JfJ9TPPK1V0vy0T39b8hECj1I7emg/edit?usp=sharing -->
     <img src="portals-state-transitions.svg" width="100%" alt="Diagram of portal state transitions">
 
-    A top-level *none* context can become *orphaned* by [=activate a portal browsing context|activating=]
-    another context. An *orphaned* context can be [=adopt the predecessor browsing context|adopted=] to
-    become a *portal* context. A *portal* context can become a *none* context by being
+    A top-level "`none`" context can become "`orphaned`" by [=activate a portal browsing context|activating=]
+    another context. An "`orphaned`" context can be [=adopt the predecessor browsing context|adopted=] to
+    become a "`portal`" context. A "`portal`" context can become a "`none`" context by being
     [=activate a portal browsing context|activated=] by its [=host=].
 
     A browsing context can be [=close a browsing context|closed=] while in any of these states.
   </div>
 
-  A <dfn>portal browsing context</dfn> is a [=browsing context=] whose [=portal state=] is *portal*.
+  A <dfn>portal browsing context</dfn> is a [=browsing context=] whose [=portal state=] is "`portal`".
 
   A portal browsing context has a <dfn>host</dfn> which is embeds its rendered output and
   receives messages sent from the portal browsing context. This specification defines
@@ -106,9 +106,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     place of |predecessorBrowsingContext| with data |serializeWithTransferResult|,
     run the following steps [=in parallel=]:
 
-    1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is *none*.
+    1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`none`".
 
-    1. Set the [=portal state=] of |predecessorBrowsingContext| to *orphaned*.
+    1. Set the [=portal state=] of |predecessorBrowsingContext| to "`orphaned`".
 
     1. Update the user interface to replace |predecessorBrowsingContext| with |successorBrowsingContext|
         (e.g., by updating the tab/window contents and browser chrome).
@@ -118,9 +118,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     1. [=Queue a task=] from the [=portal task source=]
         to the [=event loop=] associated with |successorWindow| to run the following steps:
 
-        1. [=Assert=]: The [=portal state=] of |successorBrowsingContext| is *portal*.
+        1. [=Assert=]: The [=portal state=] of |successorBrowsingContext| is "`portal`".
 
-        1. Set the [=portal state=] of |successorBrowsingContext| to *none*.
+        1. Set the [=portal state=] of |successorBrowsingContext| to "`none`".
 
         1. Let |targetRealm| be |successorWindow|'s [=environment settings object/realm=].
 
@@ -176,9 +176,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
         to the [=event loop=] associated with |predecessorBrowsingContext|
         to run the following steps:
 
-        1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is *orphaned*.
+        1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`orphaned`".
 
-        1. Set the [=portal state=] of |predecessorBrowsingContext| to *portal*, and set the [=host=] of |predecessorBrowsingContext| to |portalElement|.
+        1. Set the [=portal state=] of |predecessorBrowsingContext| to "`portal`", and set the [=host=] of |predecessorBrowsingContext| to |portalElement|.
 
     1. Return |portalElement|.
   </section>
@@ -252,7 +252,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
         If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
 
-    1. If the [=portal state=] of |predecessorBrowsingContext| is not *none*,
+    1. If the [=portal state=] of |predecessorBrowsingContext| is not "`none`",
         throw an "{{InvalidStateError}}" {{DOMException}}.
 
         Note: This means that a <{portal}> element inside a [=portal browsing context=]
@@ -441,7 +441,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   1. [=Create a new browsing context=] with noopener, and let |newBrowsingContext| be the result.
 
-  1. Set the [=portal state=] of |newBrowsingContext| to *portal*, and set the [=host=] of
+  1. Set the [=portal state=] of |newBrowsingContext| to "`portal`", and set the [=host=] of
       |newBrowsingContext| to |element|.
 
   1. Set |element|'s [=guest browsing context=] to |newBrowsingContext|.
@@ -540,7 +540,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. Let |browsingContext| be the [=responsible browsing context=] of |settings|.
 
-    1. If |browsingContext| has a [=portal state=] other than *portal*, throw an "{{InvalidStateError}}" {{DOMException}}.
+    1. If |browsingContext| has a [=portal state=] other than "`portal`", throw an "{{InvalidStateError}}" {{DOMException}}.
 
         Note: This roughly means that it has not yet been activated, as far as this [=event loop=] has been told.
         It is possible that this browsing context will be [=activate a portal browsing context|activated=] in parallel
@@ -664,7 +664,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. Let |context| be that [=browsing context=].
 
-    1. If the [=portal state=] of |context| is not *portal*, then return null.
+    1. If the [=portal state=] of |context| is not "`portal`", then return null.
 
     1. Let |portalHostObject| be the [=portal host object=] of |context|.
 
