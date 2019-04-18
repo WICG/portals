@@ -31,6 +31,9 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: refuse to allow the document to be unloaded; url: refused-to-allow-the-document-to-be-unloaded
         urlPrefix: history.html
             text: session history; url: session-history
+        urlPrefix: infrastructure.html
+            text: becomes browsing-context connected; url: becomes-browsing-context-connected
+            text: becomes browsing-context disconnected; url: becomes-browsing-context-disconnected
         urlPrefix: origin.html
             text: origin; url: concept-origin
         urlPrefix: urls-and-fetching.html
@@ -427,12 +430,15 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   1. [=set the source URL of a portal element|Set the source URL=] of |element|.
 
-  Whenever a <{portal}> element |element| is [=insertion steps|inserted=], run the following steps:
+  Whenever a <{portal}> element |element| [=becomes browsing-context connected=], run the following steps:
 
-  1. If |element| has a [=guest browsing context=] or is not [=connected=], abort these steps.
+  1. If |element| has a [=guest browsing context=], abort these steps.
 
-  1. If the the [=document browsing context|browsing context=] of |element|'s [=node document|document=]
-      is a nested browsing context or there is no such context, then abort these steps.
+  1. Let |hostBrowsingContext| be |element|'s [=node document|document=]'s [=browsing context=].
+
+  1. [=Assert=]: |hostBrowsingContext| is not null.
+
+  1. If |hostBrowsingContext| is a nested browsing context, then abort these steps.
 
       <p class="note">
         The user agent may choose to emit a warning if the author attempts to
@@ -454,7 +460,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     portals-nested.html
   </wpt>
 
-  Whenever a <{portal}> element |element| is [=removing steps|removed=], run the following steps:
+  Whenever a <{portal}> element |element| [=becomes browsing-context disconnected=], run the following steps:
 
   1. If |element| does not have a [=guest browsing context=], abort these steps.
 
