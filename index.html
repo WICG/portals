@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version e0f6b8b749fa390ec1e89d64ac471d2710b038a2" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="4c4048267c7c47cc3af4e3bd79781c121d5767d3" name="document-revision">
+  <meta content="3f5de9b1eaa7dfdfb5083c17dae51d8f2a63a182" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1945,7 +1945,7 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
     </table>
     <p>The <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑤">portal</a></code> element exposes <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessage" id="ref-for-dom-htmlportalelement-onmessage">onmessage</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessageerror" id="ref-for-dom-htmlportalelement-onmessageerror">onmessageerror</a></code> as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>.</p>
     <h3 class="heading settled" data-level="3.2" id="the-portalhost-interface"><span class="secno">3.2. </span><span class="content">The <code>PortalHost</code> interface</span><a class="self-link" href="#the-portalhost-interface"></a></h3>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-host-object">portal host object</dfn> of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context②">browsing context</a> is a <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost①">PortalHost</a></code>.</p>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-host-object">portal host object</dfn> of a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> is a <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost①">PortalHost</a></code>.</p>
     <div class="note" role="note"> The <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object①">portal host object</a> can be used to communicate with the <a data-link-type="dfn" href="#host" id="ref-for-host⑥">host</a> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑧">portal browsing context</a>.
     Its operations throw if used while its context is not a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑨">portal browsing context</a> (i.e. there is no host).
     It is not accessible via <code class="idl"><a data-link-type="idl" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost">window.portalHost</a></code> at such times. </div>
@@ -2021,7 +2021,7 @@ to this message being sent; in such cases, messages may not be delivered.</p>
 </pre>
     <p>A <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent①">PortalActivateEvent</a></code> has an associated <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-predecessor-browsing-context">predecessor browsing context</dfn>,
   which is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context③">top-level browsing context</a>, and a <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-successor-window">successor window</dfn>, which is
-  a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code>.</p>
+  a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window①">Window</a></code>.</p>
     <section class="algorithm" data-algorithm="portalactivateevent-event-constructing-steps">
       The <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-constructor-ext" id="ref-for-concept-event-constructor-ext">event constructing steps</a> for <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent②">PortalActivateEvent</a></code>, given an <var>event</var>, are as follows: 
      <ol>
@@ -2057,7 +2057,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
 <pre class="idl highlight def"><c- b>typedef</c-> (<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy" id="ref-for-windowproxy②"><c- n>WindowProxy</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/web-messaging.html#messageport" id="ref-for-messageport②"><c- n>MessagePort</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://w3c.github.io/ServiceWorker/#serviceworker" id="ref-for-serviceworker"><c- n>ServiceWorker</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#htmlportalelement" id="ref-for-htmlportalelement④"><c- n>HTMLPortalElement</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost③"><c- n>PortalHost</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-messageeventsource"><code><c- g>MessageEventSource</c-></code></dfn>;
 </pre>
     <p>A <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost④">PortalHost</a></code> is exposed at times when the window may be in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⓪">portal browsing context</a>.</p>
-<pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window①"><c- g>Window</c-></a> {
+<pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②"><c- g>Window</c-></a> {
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost⑤"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost①"><c- g>portalHost</c-></a>;
 };
 
@@ -2066,27 +2066,21 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
 };
 </pre>
     <section class="algorithm" data-algorithm="window-portalhost">
-      The <dfn class="dfn-paneled idl-code" data-dfn-for="Window" data-dfn-type="attribute" data-export id="dom-window-portalhost"><code>portalHost</code></dfn> attribute <em>must</em> run the following steps: 
+      The <dfn class="dfn-paneled idl-code" data-dfn-for="Window" data-dfn-type="attribute" data-export id="dom-window-portalhost"><code>portalHost</code></dfn> attribute’s getter <em>must</em> run the following steps: 
      <ol>
       <li data-md>
-       <p>Let <var>windowProxy</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this①⓪">this</a>'s <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy" id="ref-for-windowproxy③">WindowProxy</a></code> object.</p>
+       <p>Let <var>context</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this①⓪">this</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#window-bc" id="ref-for-window-bc">browsing context</a>.</p>
       <li data-md>
-       <p>If there is no <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context③">browsing context</a> with <var>windowProxy</var> as its <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy" id="ref-for-windowproxy④">WindowProxy</a></code> object, then return null.</p>
+       <p>If <var>context</var> is null or the <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①②">portal state</a> of <var>context</var> is not "<code>portal</code>", then return null.</p>
       <li data-md>
-       <p>Let <var>context</var> be that <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context④">browsing context</a>.</p>
-      <li data-md>
-       <p>If the <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①②">portal state</a> of <var>context</var> is not "<code>portal</code>", then return null.</p>
-      <li data-md>
-       <p>Let <var>portalHostObject</var> be the <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object②">portal host object</a> of <var>context</var>.</p>
-      <li data-md>
-       <p>Return <var>portalHostObject</var>.</p>
+       <p>Return <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this①①">this</a>'s <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object②">portal host object</a>.</p>
      </ol>
     </section>
     <ul class="wpt-tests-block">
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-exposure.sub.html">portals-host-exposure.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-host-exposure.sub.html" title="portals/portals-host-exposure.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-exposure.sub.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-null.html">portals-host-null.html</a> <a href="http://web-platform-tests.live/portals/portals-host-null.html" title="portals/portals-host-null.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-null.html"><small>(source)</small></a>
     </ul>
-    <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②">Window</a></code> objects:</p>
+    <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code> objects:</p>
     <table class="data">
      <thead>
       <tr>
@@ -2516,8 +2510,9 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
   <aside class="dfn-panel" data-for="term-for-window">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#window">https://html.spec.whatwg.org/multipage/window-object.html#window</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-window">3.3. The PortalActivateEvent interface</a>
-    <li><a href="#ref-for-window①">3.4. Miscellaneous extensions</a> <a href="#ref-for-window②">(2)</a>
+    <li><a href="#ref-for-window">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-window①">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-window②">3.4. Miscellaneous extensions</a> <a href="#ref-for-window③">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-windoweventhandlers">
@@ -2538,7 +2533,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
    <ul>
     <li><a href="#ref-for-windowproxy">2. Concepts</a>
     <li><a href="#ref-for-windowproxy①">3.1. The portal element</a>
-    <li><a href="#ref-for-windowproxy②">3.4. Miscellaneous extensions</a> <a href="#ref-for-windowproxy③">(2)</a> <a href="#ref-for-windowproxy④">(3)</a>
+    <li><a href="#ref-for-windowproxy②">3.4. Miscellaneous extensions</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-active-document">
@@ -2559,12 +2554,10 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
     <li><a href="#ref-for-the-body-element">3.4. Miscellaneous extensions</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-browsing-context">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#browsing-context</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-window-bc">
+   <a href="https://html.spec.whatwg.org/multipage/window-object.html#window-bc">https://html.spec.whatwg.org/multipage/window-object.html#window-bc</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-browsing-context">2. Concepts</a> <a href="#ref-for-browsing-context①">(2)</a>
-    <li><a href="#ref-for-browsing-context②">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-browsing-context③">3.4. Miscellaneous extensions</a> <a href="#ref-for-browsing-context④">(2)</a>
+    <li><a href="#ref-for-window-bc">3.4. Miscellaneous extensions</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-close-a-browsing-context">
@@ -2844,7 +2837,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
     <li><a href="#ref-for-this">3.1. The portal element</a> <a href="#ref-for-this①">(2)</a> <a href="#ref-for-this②">(3)</a> <a href="#ref-for-this③">(4)</a> <a href="#ref-for-this④">(5)</a>
     <li><a href="#ref-for-this⑤">3.2. The PortalHost interface</a> <a href="#ref-for-this⑥">(2)</a>
     <li><a href="#ref-for-this⑦">3.3. The PortalActivateEvent interface</a> <a href="#ref-for-this⑧">(2)</a> <a href="#ref-for-this⑨">(3)</a>
-    <li><a href="#ref-for-this①⓪">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-this①⓪">3.4. Miscellaneous extensions</a> <a href="#ref-for-this①①">(2)</a>
    </ul>
   </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -2898,7 +2891,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
      <li><span class="dfn-paneled" id="term-for-active-document" style="color:initial">active document</span>
      <li><span class="dfn-paneled" id="term-for-concept-document-window" style="color:initial">associated document</span>
      <li><span class="dfn-paneled" id="term-for-the-body-element" style="color:initial">body</span>
-     <li><span class="dfn-paneled" id="term-for-browsing-context" style="color:initial">browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-window-bc" style="color:initial">browsing context <small>(for Window)</small></span>
      <li><span class="dfn-paneled" id="term-for-close-a-browsing-context" style="color:initial">close a browsing context</span>
      <li><span class="dfn-paneled" id="term-for-creating-a-new-browsing-context" style="color:initial">create a new browsing context</span>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-data" style="color:initial">data</span>
@@ -3026,7 +3019,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
 
 <c- b>typedef</c-> (<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy" id="ref-for-windowproxy②①"><c- n>WindowProxy</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/web-messaging.html#messageport" id="ref-for-messageport②①"><c- n>MessagePort</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://w3c.github.io/ServiceWorker/#serviceworker" id="ref-for-serviceworker①"><c- n>ServiceWorker</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#htmlportalelement" id="ref-for-htmlportalelement④①"><c- n>HTMLPortalElement</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost③①"><c- n>PortalHost</c-></a>) <a href="#typedefdef-messageeventsource"><code><c- g>MessageEventSource</c-></code></a>;
 
-<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window①①"><c- g>Window</c-></a> {
+<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②①"><c- g>Window</c-></a> {
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost⑤①"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost①①"><c- g>portalHost</c-></a>;
 };
 
