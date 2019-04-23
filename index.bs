@@ -287,6 +287,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
       portal-activate-data.html
       portals-activate-inside-iframe.html
       portals-activate-inside-portal.html
+      portals-activate-resolution.html
       portals-activate-twice.html
     </wpt>
   </section>
