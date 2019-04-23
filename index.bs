@@ -287,6 +287,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
       portal-activate-data.html
       portals-activate-inside-iframe.html
       portals-activate-inside-portal.html
+      portals-activate-resolution.html
       portals-activate-twice.html
     </wpt>
   </section>
@@ -450,7 +451,6 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   1. [=set the source URL of a portal element|Set the source URL=] of |element|.
 
   <wpt>
-    portals-create-orphaned.html
     portals-nested.html
   </wpt>
 
