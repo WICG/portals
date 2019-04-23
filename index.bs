@@ -450,7 +450,6 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   1. [=set the source URL of a portal element|Set the source URL=] of |element|.
 
   <wpt>
-    portals-create-orphaned.html
     portals-nested.html
   </wpt>
 
@@ -659,7 +658,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   <section algorithm="window-portalhost">
     The <dfn attribute for="Window">portalHost</dfn> attribute's getter *must* run the following steps:
 
-    1. Let |context| be [=this=] {{Window}} object's [=browsing context=].
+    1. Let |context| be [=this=]'s [=browsing context=].
 
     1. If |context| is null or the [=portal state=] of |context| is not "`portal`", then return null.
 
