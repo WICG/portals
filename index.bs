@@ -509,7 +509,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   The `PortalHost` interface {#the-portalhost-interface}
   ------------------------------------------------------
 
-  The <dfn>portal host object</dfn> of a [=browsing context=] is a {{PortalHost}}.
+  The <dfn>portal host object</dfn> of a {{Window}} is a {{PortalHost}}.
 
   <div class="note">
     The [=portal host object=] can be used to communicate with the [=host=] of a [=portal browsing context=].
@@ -657,19 +657,13 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   </xmp>
 
   <section algorithm="window-portalhost">
-    The <dfn attribute for="Window">portalHost</dfn> attribute *must* run the following steps:
+    The <dfn attribute for="Window">portalHost</dfn> attribute's getter *must* run the following steps:
 
-    1. Let |windowProxy| be [=this=]'s {{WindowProxy}} object.
+    1. Let |context| be [=this=]'s [=Window/browsing context=].
 
-    1. If there is no [=browsing context=] with |windowProxy| as its {{WindowProxy}} object, then return null.
+    1. If |context| is null or the [=portal state=] of |context| is not "`portal`", then return null.
 
-    1. Let |context| be that [=browsing context=].
-
-    1. If the [=portal state=] of |context| is not "`portal`", then return null.
-
-    1. Let |portalHostObject| be the [=portal host object=] of |context|.
-
-    1. Return |portalHostObject|.
+    1. Return [=this=]'s [=portal host object=].
   </section>
 
   <wpt>
