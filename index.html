@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version e0f6b8b749fa390ec1e89d64ac471d2710b038a2" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="3f5de9b1eaa7dfdfb5083c17dae51d8f2a63a182" name="document-revision">
+  <meta content="9766d821ad740ec83ff627bc08b7a31b31bd3077" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1499,7 +1499,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-04-23">23 April 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-04-24">24 April 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1885,12 +1885,16 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
      <li data-md>
       <p><a data-link-type="dfn" href="#htmlportalelement-set-the-source-url-of-a-portal-element" id="ref-for-htmlportalelement-set-the-source-url-of-a-portal-element">Set the source URL</a> of <var>element</var>.</p>
     </ol>
-    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑨">portal</a></code> element <var>element</var> is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-insert-ext" id="ref-for-concept-node-insert-ext">inserted</a>, run the following steps:</p>
+    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑨">portal</a></code> element <var>element</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected" id="ref-for-becomes-browsing-context-connected">becomes browsing-context connected</a>, run the following steps:</p>
     <ol>
      <li data-md>
-      <p>If <var>element</var> has a <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①⓪">guest browsing context</a> or is not <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#connected" id="ref-for-connected">connected</a>, abort these steps.</p>
+      <p>If <var>element</var> has a <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①⓪">guest browsing context</a>, abort these steps.</p>
      <li data-md>
-      <p>If the the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-document-bc" id="ref-for-concept-document-bc②">browsing context</a> of <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document②">document</a> is a nested browsing context or there is no such context, then abort these steps.</p>
+      <p>Let <var>hostBrowsingContext</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document②">document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context②">browsing context</a>.</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑤">Assert</a>: <var>hostBrowsingContext</var> is not null.</p>
+     <li data-md>
+      <p>If <var>hostBrowsingContext</var> is a nested browsing context, then abort these steps.</p>
       <p class="note" role="note"> The user agent may choose to emit a warning if the author attempts to
     use a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⓪">portal</a></code> element in a nested browsing context, as this is not
     supported. </p>
@@ -1906,7 +1910,7 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
     <ul class="wpt-tests-block">
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-nested.html">portals-nested.html</a> <a href="http://web-platform-tests.live/portals/portals-nested.html" title="portals/portals-nested.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-nested.html"><small>(source)</small></a>
     </ul>
-    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①①">portal</a></code> element <var>element</var> is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-remove-ext" id="ref-for-concept-node-remove-ext">removed</a>, run the following steps:</p>
+    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①①">portal</a></code> element <var>element</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-disconnected" id="ref-for-becomes-browsing-context-disconnected">becomes browsing-context disconnected</a>, run the following steps:</p>
     <ol>
      <li data-md>
       <p>If <var>element</var> does not have a <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①②">guest browsing context</a>, abort these steps.</p>
@@ -2361,12 +2365,6 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
     <li><a href="#ref-for-concept-node-adopt-ext">3.1. The portal element</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-connected">
-   <a href="https://dom.spec.whatwg.org/#connected">https://dom.spec.whatwg.org/#connected</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-connected">3.1. The portal element</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-create-element">
    <a href="https://dom.spec.whatwg.org/#concept-create-element">https://dom.spec.whatwg.org/#concept-create-element</a><b>Referenced in:</b>
    <ul>
@@ -2397,22 +2395,10 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
     <li><a href="#ref-for-concept-event-fire">3.1. The portal element</a> <a href="#ref-for-concept-event-fire①">(2)</a> <a href="#ref-for-concept-event-fire②">(3)</a> <a href="#ref-for-concept-event-fire③">(4)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-insert-ext">
-   <a href="https://dom.spec.whatwg.org/#concept-node-insert-ext">https://dom.spec.whatwg.org/#concept-node-insert-ext</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-insert-ext">3.1. The portal element</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-node-document">
    <a href="https://dom.spec.whatwg.org/#concept-node-document">https://dom.spec.whatwg.org/#concept-node-document</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-node-document">3.1. The portal element</a> <a href="#ref-for-concept-node-document①">(2)</a> <a href="#ref-for-concept-node-document②">(3)</a> <a href="#ref-for-concept-node-document③">(4)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-concept-node-remove-ext">
-   <a href="https://dom.spec.whatwg.org/#concept-node-remove-ext">https://dom.spec.whatwg.org/#concept-node-remove-ext</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-concept-node-remove-ext">3.1. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-event-type">
@@ -2548,6 +2534,18 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
     <li><a href="#ref-for-concept-document-window">2. Concepts</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-becomes-browsing-context-connected">
+   <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected">https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-becomes-browsing-context-connected">3.1. The portal element</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-becomes-browsing-context-disconnected">
+   <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-disconnected">https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-disconnected</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-becomes-browsing-context-disconnected">3.1. The portal element</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-the-body-element">
    <a href="https://html.spec.whatwg.org/multipage/sections.html#the-body-element">https://html.spec.whatwg.org/multipage/sections.html#the-body-element</a><b>Referenced in:</b>
    <ul>
@@ -2582,7 +2580,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
   <aside class="dfn-panel" data-for="term-for-concept-document-bc">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-document-bc">https://html.spec.whatwg.org/multipage/browsers.html#concept-document-bc</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-document-bc">3.1. The portal element</a> <a href="#ref-for-concept-document-bc①">(2)</a> <a href="#ref-for-concept-document-bc②">(3)</a>
+    <li><a href="#ref-for-concept-document-bc">3.1. The portal element</a> <a href="#ref-for-concept-document-bc①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-handler-content-attributes">
@@ -2753,7 +2751,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
    <a href="https://infra.spec.whatwg.org/#assert">https://infra.spec.whatwg.org/#assert</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-assert">2. Concepts</a> <a href="#ref-for-assert①">(2)</a> <a href="#ref-for-assert②">(3)</a> <a href="#ref-for-assert③">(4)</a>
-    <li><a href="#ref-for-assert④">3.1. The portal element</a>
+    <li><a href="#ref-for-assert④">3.1. The portal element</a> <a href="#ref-for-assert⑤">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-html-namespace">
@@ -2849,15 +2847,12 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
      <li><span class="dfn-paneled" id="term-for-dictdef-eventinit" style="color:initial">EventInit</span>
      <li><span class="dfn-paneled" id="term-for-eventtarget" style="color:initial">EventTarget</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-adopt-ext" style="color:initial">adopting steps</span>
-     <li><span class="dfn-paneled" id="term-for-connected" style="color:initial">connected</span>
      <li><span class="dfn-paneled" id="term-for-concept-create-element" style="color:initial">creating an element</span>
      <li><span class="dfn-paneled" id="term-for-concept-event-create" style="color:initial">creating an event</span>
      <li><span class="dfn-paneled" id="term-for-concept-event-dispatch" style="color:initial">dispatch</span>
      <li><span class="dfn-paneled" id="term-for-concept-event-constructor-ext" style="color:initial">event constructing steps</span>
      <li><span class="dfn-paneled" id="term-for-concept-event-fire" style="color:initial">fire an event</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-insert-ext" style="color:initial">insertion steps</span>
      <li><span class="dfn-paneled" id="term-for-concept-node-document" style="color:initial">node document</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-remove-ext" style="color:initial">removing steps</span>
      <li><span class="dfn-paneled" id="term-for-dom-event-type" style="color:initial">type</span>
     </ul>
    <li>
@@ -2890,6 +2885,8 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
      <li><span class="dfn-paneled" id="term-for-windowproxy" style="color:initial">WindowProxy</span>
      <li><span class="dfn-paneled" id="term-for-active-document" style="color:initial">active document</span>
      <li><span class="dfn-paneled" id="term-for-concept-document-window" style="color:initial">associated document</span>
+     <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-connected" style="color:initial">becomes browsing-context connected</span>
+     <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-disconnected" style="color:initial">becomes browsing-context disconnected</span>
      <li><span class="dfn-paneled" id="term-for-the-body-element" style="color:initial">body</span>
      <li><span class="dfn-paneled" id="term-for-window-bc" style="color:initial">browsing context <small>(for Window)</small></span>
      <li><span class="dfn-paneled" id="term-for-close-a-browsing-context" style="color:initial">close a browsing context</span>
