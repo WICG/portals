@@ -39,6 +39,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: urls-and-fetching.html
             text: parse a URL; url: parse-a-url
             text: resulting URL record; url: resulting-url-record
+            text: valid non-empty URL potentially surrounded by spaces; url: valid-non-empty-url-potentially-surrounded-by-spaces
         urlPrefix: window-object.html
             text: close a browsing context; url: close-a-browsing-context
 spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
@@ -49,6 +50,9 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
         text: request referrer policy; url: concept-request-referrer-policy
         text: request; url: concept-request
         text: request URL; url: concept-request-url
+</pre>
+<pre class="link-defaults">
+spec:url; type:dfn; for:/; text:url
 </pre>
 
 <section class="non-normative">
@@ -210,6 +214,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   A <{portal}> element may have a <dfn for="HTMLPortalElement">guest browsing context</dfn>, which is a
   [=portal browsing context=]. If so, the element is the [=host=] of its [=guest browsing context=].
 
+  The <dfn element-attr for="portal">src</dfn> attribute gives the [=URL=] of a
+  page that the [=guest browsing context=] is to contain. The attribute, if
+  present, must be a [=valid non-empty URL potentially surrounded by spaces=].
+
   <p class="note">
     A <{portal}> is similar to an <{iframe}>, in that it allows another browsing context to be embedded.
     However, the [=portal browsing context=] hosted by a <{portal}> is part of a separate [=unit of related
@@ -239,6 +247,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   task *must* be queued from the [=portal task source=].
 
   * <dfn>complete portal activation</dfn>
+
+  The <dfn attribute for="HTMLPortalElement">src</dfn> IDL attribute must [=reflect=] the <{portal/src}> content attribute.
 
   <section algorithm="htmlportalelement-activate">
     The <dfn method for="HTMLPortalElement"><code>activate(|options|)</code></dfn> method *must* run these steps:
@@ -404,10 +414,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. [=Assert=]: |element| has a [=guest browsing context=].
 
-    1. If |element| has no {{HTMLPortalElement/src}} attribute specified, or its value is the empty string,
+    1. If |element| has no <{portal/src}> attribute specified, or its value is the empty string,
         then [=close a portal element|close=] |element| and abort these steps.
 
-    1. [=Parse a URL|Parse=] the value of the {{HTMLPortalElement/src}} attribute. If that is not successful,
+    1. [=Parse a URL|Parse=] the value of the <{portal/src}> attribute. If that is not successful,
         then [=close a portal element|close=] |element| and abort these steps.
         Otherwise, let |url| be the [=resulting URL record=].
 
@@ -425,7 +435,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     portals-no-referrer.html
   </wpt>
 
-  Whenever a <{portal}> element |element|'s {{HTMLPortalElement/src}} attribute is set, run the following steps:
+  Whenever a <{portal}> element |element| has its <{portal/src}> attribute set,
+  changed, or removed, run the following steps:
 
   1. If |element| does not have a [=guest browsing context=], abort these steps.
 
