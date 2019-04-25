@@ -240,6 +240,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
   * <dfn>complete portal activation</dfn>
 
+  The <dfn attribute for="HTMLPortalElement">src</dfn> attribute must [=reflect=] the "`src`" content attribute.
+
   <section algorithm="htmlportalelement-activate">
     The <dfn method for="HTMLPortalElement"><code>activate(|options|)</code></dfn> method *must* run these steps:
 
@@ -404,10 +406,10 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 
     1. [=Assert=]: |element| has a [=guest browsing context=].
 
-    1. If |element| has no {{HTMLPortalElement/src}} attribute specified, or its value is the empty string,
+    1. If |element| has no "`src`" attribute specified, or its value is the empty string,
         then [=close a portal element|close=] |element| and abort these steps.
 
-    1. [=Parse a URL|Parse=] the value of the {{HTMLPortalElement/src}} attribute. If that is not successful,
+    1. [=Parse a URL|Parse=] the value of the "`src`" attribute. If that is not successful,
         then [=close a portal element|close=] |element| and abort these steps.
         Otherwise, let |url| be the [=resulting URL record=].
 
@@ -425,7 +427,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     portals-no-referrer.html
   </wpt>
 
-  Whenever a <{portal}> element |element|'s {{HTMLPortalElement/src}} attribute is set, run the following steps:
+  Whenever a <{portal}> element |element|'s "`src`" attribute is set, run the following steps:
 
   1. If |element| does not have a [=guest browsing context=], abort these steps.
 
