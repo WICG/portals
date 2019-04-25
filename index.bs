@@ -482,9 +482,15 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
   1. [=close a portal element|Close=] |element|.
 
   <div class="note">
-    Since <{portal}> elements can have only a [=guest browsing context=] while
-    their [=node document|document=] belongs to a [=top-level browsing
-    context=], it is impossible to embed a [=portal browsing context=] in a
+    In particular, this means a <{portal}> element loses its [=guest browsing
+    context=] if it is moved to the [=active document=] of a [=nested browsing
+    context=].
+
+    Similarly, the steps when a <{portal}> element [=becomes browsing-context
+    connected=] prevent elements from creating a new [=guest browsing context=]
+    while inside such documents.
+
+    It is therefore impossible to embed a [=portal browsing context=] in a
     [=nested browsing context=].
   </div>
 
