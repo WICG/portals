@@ -248,7 +248,7 @@ spec:url; type:dfn; for:/; text:url
 
   * <dfn>complete portal activation</dfn>
 
-  The <dfn attribute for="HTMLPortalElement">src</dfn> attribute must [=reflect=] the <{portal/src}> content attribute.
+  The <dfn attribute for="HTMLPortalElement">src</dfn> IDL attribute must [=reflect=] the <{portal/src}> content attribute.
 
   <section algorithm="htmlportalelement-activate">
     The <dfn method for="HTMLPortalElement"><code>activate(|options|)</code></dfn> method *must* run these steps:
