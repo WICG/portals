@@ -427,7 +427,8 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     portals-no-referrer.html
   </wpt>
 
-  Whenever a <{portal}> element |element|'s "`src`" attribute is set, run the following steps:
+  Whenever a <{portal}> element |element| has its "`src`" attribute set,
+  changed, or removed, run the following steps:
 
   1. If |element| does not have a [=guest browsing context=], abort these steps.
 
