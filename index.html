@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version e0f6b8b749fa390ec1e89d64ac471d2710b038a2" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="9766d821ad740ec83ff627bc08b7a31b31bd3077" name="document-revision">
+  <meta content="18b9d1eab9b4d9722ca4154763007f7d88a5d5c5" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1499,7 +1499,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-04-24">24 April 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2019-04-25">25 April 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1927,9 +1927,14 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
      <li data-md>
       <p><a data-link-type="dfn" href="#htmlportalelement-close-a-portal-element" id="ref-for-htmlportalelement-close-a-portal-element③">Close</a> <var>element</var>.</p>
     </ol>
-    <div class="note" role="note"> Since <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①④">portal</a></code> elements can have only a <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①④">guest browsing context</a> while
-    their <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document③">document</a> belongs to a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context②">top-level browsing
-    context</a>, it is impossible to embed a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑦">portal browsing context</a> in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context①">nested browsing context</a>. </div>
+    <div class="note" role="note">
+      In particular, this means a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①④">portal</a></code> element loses its <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①④">guest browsing
+    context</a> if it is moved to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#active-document" id="ref-for-active-document①">active document</a> of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context①">nested browsing
+    context</a>. 
+     <p>Similarly, the steps when a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑤">portal</a></code> element <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected" id="ref-for-becomes-browsing-context-connected①">becomes browsing-context
+    connected</a> prevent elements from creating a new <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①⑤">guest browsing context</a> while inside such documents.</p>
+     <p>It is therefore impossible to embed a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑦">portal browsing context</a> in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context②">nested browsing context</a>.</p>
+    </div>
     <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="#htmlportalelement" id="ref-for-htmlportalelement②">HTMLPortalElement</a></code> objects:</p>
     <table class="data">
      <thead>
@@ -1947,7 +1952,7 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
        <td><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑤">MessageEvent</a></code>
        <td>A message is received by the object, but deserialization throws an exception.
     </table>
-    <p>The <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑤">portal</a></code> element exposes <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessage" id="ref-for-dom-htmlportalelement-onmessage">onmessage</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessageerror" id="ref-for-dom-htmlportalelement-onmessageerror">onmessageerror</a></code> as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>.</p>
+    <p>The <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑥">portal</a></code> element exposes <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessage" id="ref-for-dom-htmlportalelement-onmessage">onmessage</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessageerror" id="ref-for-dom-htmlportalelement-onmessageerror">onmessageerror</a></code> as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>.</p>
     <h3 class="heading settled" data-level="3.2" id="the-portalhost-interface"><span class="secno">3.2. </span><span class="content">The <code>PortalHost</code> interface</span><a class="self-link" href="#the-portalhost-interface"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-host-object">portal host object</dfn> of a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> is a <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost①">PortalHost</a></code>.</p>
     <div class="note" role="note"> The <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object①">portal host object</a> can be used to communicate with the <a data-link-type="dfn" href="#host" id="ref-for-host⑥">host</a> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑧">portal browsing context</a>.
@@ -2024,7 +2029,7 @@ to this message being sent; in such cases, messages may not be delivered.</p>
 };
 </pre>
     <p>A <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent①">PortalActivateEvent</a></code> has an associated <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-predecessor-browsing-context">predecessor browsing context</dfn>,
-  which is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context③">top-level browsing context</a>, and a <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-successor-window">successor window</dfn>, which is
+  which is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context②">top-level browsing context</a>, and a <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-successor-window">successor window</dfn>, which is
   a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window①">Window</a></code>.</p>
     <section class="algorithm" data-algorithm="portalactivateevent-event-constructing-steps">
       The <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-constructor-ext" id="ref-for-concept-event-constructor-ext">event constructing steps</a> for <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent②">PortalActivateEvent</a></code>, given an <var>event</var>, are as follows: 
@@ -2095,7 +2100,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
       <tr>
        <td><dfn class="dfn-paneled idl-code" data-dfn-for="Window" data-dfn-type="event" data-export id="eventdef-window-portalactivate"><code>portalactivate</code></dfn>
        <td><code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent③">PortalActivateEvent</a></code>
-       <td>The window is associated with a new <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context④">top-level browsing context</a> due to activation of its <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing context</a>.
+       <td>The window is associated with a new <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context③">top-level browsing context</a> due to activation of its <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing context</a>.
     </table>
     <p>Like other <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes" id="ref-for-event-handler-idl-attributes">event handler IDL attributes</a> in the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers" id="ref-for-windoweventhandlers①">WindowEventHandlers</a></code> interface mixin, <code class="idl"><a data-link-type="idl" href="#dom-windoweventhandlers-onportalactivate" id="ref-for-dom-windoweventhandlers-onportalactivate">onportalactivate</a></code> is exposed on all <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/sections.html#the-body-element" id="ref-for-the-body-element">body</a></code> and <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/obsolete.html#frameset" id="ref-for-frameset">frameset</a></code> elements
   as a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes①">event handler content attribute</a>.</p>
@@ -2398,7 +2403,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
   <aside class="dfn-panel" data-for="term-for-concept-node-document">
    <a href="https://dom.spec.whatwg.org/#concept-node-document">https://dom.spec.whatwg.org/#concept-node-document</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-node-document">3.1. The portal element</a> <a href="#ref-for-concept-node-document①">(2)</a> <a href="#ref-for-concept-node-document②">(3)</a> <a href="#ref-for-concept-node-document③">(4)</a>
+    <li><a href="#ref-for-concept-node-document">3.1. The portal element</a> <a href="#ref-for-concept-node-document①">(2)</a> <a href="#ref-for-concept-node-document②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-event-type">
@@ -2525,7 +2530,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
   <aside class="dfn-panel" data-for="term-for-active-document">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#active-document">https://html.spec.whatwg.org/multipage/browsers.html#active-document</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-active-document">3.1. The portal element</a>
+    <li><a href="#ref-for-active-document">3.1. The portal element</a> <a href="#ref-for-active-document①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document-window">
@@ -2537,7 +2542,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
   <aside class="dfn-panel" data-for="term-for-becomes-browsing-context-connected">
    <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected">https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-becomes-browsing-context-connected">3.1. The portal element</a>
+    <li><a href="#ref-for-becomes-browsing-context-connected">3.1. The portal element</a> <a href="#ref-for-becomes-browsing-context-connected①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-becomes-browsing-context-disconnected">
@@ -2632,7 +2637,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-nested-browsing-context">2. Concepts</a>
-    <li><a href="#ref-for-nested-browsing-context①">3.1. The portal element</a>
+    <li><a href="#ref-for-nested-browsing-context①">3.1. The portal element</a> <a href="#ref-for-nested-browsing-context②">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-settings-object-origin">
@@ -2736,9 +2741,8 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
    <ul>
     <li><a href="#ref-for-top-level-browsing-context">1. Introduction</a>
     <li><a href="#ref-for-top-level-browsing-context①">2. Concepts</a>
-    <li><a href="#ref-for-top-level-browsing-context②">3.1. The portal element</a>
-    <li><a href="#ref-for-top-level-browsing-context③">3.3. The PortalActivateEvent interface</a>
-    <li><a href="#ref-for-top-level-browsing-context④">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-top-level-browsing-context②">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-top-level-browsing-context③">3.4. Miscellaneous extensions</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-unit-of-related-browsing-contexts">
@@ -3097,13 +3101,13 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
    <b><a href="#elementdef-portal">#elementdef-portal</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-elementdef-portal">2. Concepts</a>
-    <li><a href="#ref-for-elementdef-portal①">3.1. The portal element</a> <a href="#ref-for-elementdef-portal②">(2)</a> <a href="#ref-for-elementdef-portal③">(3)</a> <a href="#ref-for-elementdef-portal④">(4)</a> <a href="#ref-for-elementdef-portal⑤">(5)</a> <a href="#ref-for-elementdef-portal⑥">(6)</a> <a href="#ref-for-elementdef-portal⑦">(7)</a> <a href="#ref-for-elementdef-portal⑧">(8)</a> <a href="#ref-for-elementdef-portal⑨">(9)</a> <a href="#ref-for-elementdef-portal①⓪">(10)</a> <a href="#ref-for-elementdef-portal①①">(11)</a> <a href="#ref-for-elementdef-portal①②">(12)</a> <a href="#ref-for-elementdef-portal①③">(13)</a> <a href="#ref-for-elementdef-portal①④">(14)</a> <a href="#ref-for-elementdef-portal①⑤">(15)</a>
+    <li><a href="#ref-for-elementdef-portal①">3.1. The portal element</a> <a href="#ref-for-elementdef-portal②">(2)</a> <a href="#ref-for-elementdef-portal③">(3)</a> <a href="#ref-for-elementdef-portal④">(4)</a> <a href="#ref-for-elementdef-portal⑤">(5)</a> <a href="#ref-for-elementdef-portal⑥">(6)</a> <a href="#ref-for-elementdef-portal⑦">(7)</a> <a href="#ref-for-elementdef-portal⑧">(8)</a> <a href="#ref-for-elementdef-portal⑨">(9)</a> <a href="#ref-for-elementdef-portal①⓪">(10)</a> <a href="#ref-for-elementdef-portal①①">(11)</a> <a href="#ref-for-elementdef-portal①②">(12)</a> <a href="#ref-for-elementdef-portal①③">(13)</a> <a href="#ref-for-elementdef-portal①④">(14)</a> <a href="#ref-for-elementdef-portal①⑤">(15)</a> <a href="#ref-for-elementdef-portal①⑥">(16)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement-guest-browsing-context">
    <b><a href="#htmlportalelement-guest-browsing-context">#htmlportalelement-guest-browsing-context</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement-guest-browsing-context">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①">(2)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context②">(3)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context③">(4)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context④">(5)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑤">(6)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑥">(7)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑦">(8)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑧">(9)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑨">(10)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①⓪">(11)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①①">(12)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①②">(13)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①③">(14)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①④">(15)</a>
+    <li><a href="#ref-for-htmlportalelement-guest-browsing-context">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①">(2)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context②">(3)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context③">(4)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context④">(5)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑤">(6)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑥">(7)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑦">(8)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑧">(9)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑨">(10)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①⓪">(11)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①①">(12)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①②">(13)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①③">(14)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①④">(15)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①⑤">(16)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement">
