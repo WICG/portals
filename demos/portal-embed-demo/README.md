@@ -50,7 +50,7 @@ The basic structure of the demo is explained below.
 
 Before getting into details... this could be the current experience w/o Portals
 ![withoutportals](https://cdn.glitch.com/98449704-33d8-49b2-88f2-aa6d2aeba5d3%2Fw_o_portals_new.gif?1556394769252)
-- You can embed thrid party contents with **iframes**.
+- You can embed third party contents with **iframes**.
 - But if you want to visit to the content, a browser navigation starts and it needs to render all the content again which often leads to **slow page load experience**.
 - Also in this case even if you are playing the audio, **it just stops** due to page navigation.
 <br/>
