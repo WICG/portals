@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300" rel="stylesheet">
+    <link href="/css/ttt.css" rel="stylesheet">
+    <script type="module" src="js/ttt/writer-follow.js"></script>
+    <script type="module" src="js/ttt/ttt-reco.js"></script>
+    <script type="module" src="js/ttt/audio-controller.js"></script>
+    <script src="js/ttt/portals-controller.js" defer></script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <img src="/img/ttta-logo.png">
+        </div>
+        <div id="hero-img">
+            <img src="/img/tata.png">
+        </div>
+        <div id="detail">
+            <div class="web-font">
+                <h2>Ta Ta for now</h2>
+            </div>
+            <div class="description">
+                <p>
+                    The dynamic duo of Addy and Matt have one last episode before saying a fond farewell to everyone in the final Totally Tooling
+                    Tips episode.
+                </p>
+                <p>
+                    Watch more episodes of Totally Tooling Tips here:
+                    <a href="https://goo.gl/IoXka7">https://goo.gl/IoXka7</a>
+                </p>
+                <p>
+                    Subscribe to the Chrome Developers channel at
+                    <a href="http://goo.gl/LLLNvf">http://goo.gl/LLLNvf</a>
+                </p>
+            </div>
+        </div>
+        <div id="follow"></div>
+        <div id="recommendation">
+            <ttt-reco></ttt-reco>
+        </div>
+    </div>
+    <div id="lightbox" class="hide"></div>
+    <div id="embed"></div>
+    <audio-controller data-audioid="tata"></audio-controllercontroller>
+</body>
+
+</html>
