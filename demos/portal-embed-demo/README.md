@@ -75,7 +75,7 @@ For the Portal content side, you can judge if the page is used inside a Portal a
 ```javascript
 // Check if window.portalHost is available
 if(window.portalHost){
-   // Customize the UI when being
+   // Customize the UI when being embedded as a portal.
    // embedded as portals
 }
 ```
