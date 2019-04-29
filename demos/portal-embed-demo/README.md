@@ -79,7 +79,7 @@ if(window.portalHost){
    // embedded as portals
 }
 ```
-> Demo code reference: [Check if window.portalHost is avaiable](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L198) and [change the style](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L200)
+> Demo code reference: [Check if window.portalHost is available](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L198) and [change the style](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L200)
 
 For now, Portal will not process user input. If you want to interact with the Portal (like playing the audio in the demo), use `postMessage`/`onmessage`.
 ```javascript
