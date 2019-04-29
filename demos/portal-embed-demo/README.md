@@ -1,7 +1,7 @@
 # portal-embed-demo
 This demo demonstrates how Portals can enable a seamless user experience between a website and a third party embed content. Be creative and have fun!!
-<br/>
-<br/>
+
+
 ## TL;DR;
 - This demo consists of two websites (different origin): 
   - **PORTALOG**, a blog service, 
@@ -11,8 +11,8 @@ This demo demonstrates how Portals can enable a seamless user experience between
 
 **[This short explainer video (a YouTube Video less than 2 min)](https://youtu.be/4JkipxFVE9k)** is a great place to start from.
 ![hero img](https://cdn.glitch.com/98449704-33d8-49b2-88f2-aa6d2aeba5d3%2Fhero_img.png?1556394393372)
-<br/>
-<br/>
+
+
 ## Running the demo
 ### 1. Run the app
 ```bash
@@ -39,8 +39,8 @@ As of May 2019, Chrome Canary is the only platform that supports Portals. You ca
 
 ### 4. Play around with it ;-)
 😎😎😎
-<br/>
-<br/>
+
+
 ## Explainer
 This is to show how you can use Portals in cross origin situations. The demo runs a two local express servers for PORTALOG and TTT Archive to simulate cross origin use case. By default, PORTALOG runs in [http://localhost:3000/](http://localhost:3000/) and TTT Archive runs in [http://localhost:3001/](http://localhost:3001/).
 
@@ -53,7 +53,6 @@ Before getting into details... this could be the current experience w/o Portals
 - You can embed third party contents with **iframes**.
 - But if you want to visit to the content, a browser navigation starts and it needs to render all the content again which often leads to **slow page load experience**.
 - Also in this case even if you are playing the audio, **it just stops** due to page navigation.
-<br/>
 
 **...But with having Portals** 🚪🏃💨
 ![withportals](https://cdn.glitch.com/98449704-33d8-49b2-88f2-aa6d2aeba5d3%2Fw_portals.gif?1556394385809)
@@ -69,19 +68,18 @@ OR
 const portal = document.createElement('portal');
 portal.src = 'https://example.com';
 ```
-> Demo code reference: [creating a Portal element](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/portalog/portals-controller.js#L37) 
+> Demo code reference: [creating a portal element](public/js/portalog/portals-controller.js#L37) 
 
-For the Portal content side, you can judge if the page is used inside a Portal and customize the UI.
+For the portal content side, you can judge if the page is used inside a portal and customize the UI.
 ```javascript
 // Check if window.portalHost is available
 if(window.portalHost){
-   // Customize the UI when being embedded as a portal.
-   // embedded as portals
+   // Customize the UI when being embedded as a portal
 }
 ```
-> Demo code reference: [Check if window.portalHost is available](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L198) and [change the style](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L200)
+> Demo code reference: [Check if window.portalHost is available](public/js/ttt/portals-controller.js#L198) and [change the style](public/js/ttt/portals-controller.js#L200)
 
-For now, Portal will not process user input. If you want to interact with the Portal (like playing the audio in the demo), use `postMessage`/`onmessage`.
+For now, portals will not process user input. If you want to interact with portals (like playing the audio in the demo), use `postMessage`.
 ```javascript
 // Send message from the portal element
 const portal = document.querySelector('portal');
@@ -89,22 +87,22 @@ portal.postMessage({someKey: someValue}, ORIGIN);
 
 // Receive message via window.portalHost
 window.portalHost.addEventListener('message', evt => {
-   const data = evt.data;
-   // do the actual following
+   const data = evt.data.someKey;
+   // handle the event
 });
 ```
-> Demo code reference: interacting with the audio player ([sending messages](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/portalog/portals-controller.js#L135) and [receiving messages](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L183))
+> Demo code reference: interacting with the audio player ([sending messages](public/js/portalog/portals-controller.js#L135) and [receiving messages](public/js/ttt/portals-controller.js#L183))
 
-When the user decides to navigate the the Portal content i.e. click, it is a good opportunity to animate the Portal and then call the `activate` function. User will be navigated to the Portal content seamlessly (but the URL changes). You can also see that the session of the Portal content is consistent and the audio keeps playing even after this activation.
+When the user decides to navigate the the portal content i.e. click, it is a good opportunity to animate the portal and then call the `activate` function. User will be navigated to the portal content seamlessly (but the URL changes). You can also see that the session of the portal content is consistent and the audio keeps playing even after this activation.
 ```javascript
 // do some fancy animations and..
-// activate portal
+// activate the portal
 const portal = document.querySelector('portal');
 portal.activate();
 ```
-> Demo code reference: [doing some animation on user click](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/portalog/portals-controller.js#L47) and [activating the Portal](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/portalog/portals-controller.js#L85) (note that you can optionally pass [custom data](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/portalog/portals-controller.js#L86) to the Portal)
+> Demo code reference: [doing some animation on user click](public/js/portalog/portals-controller.js#L47) and [activating the portal](public/js/portalog/portals-controller.js#L85) (note that you can optionally pass [custom data](public/js/portalog/portals-controller.js#L86) to the Portal)
 
-For the Portal content side, you can listen to the `portalactivate` event to check if the page was activated. Also from the event you can retrieve the previous page as a Portal element by calling the `adoptPredecessor` function. By leveraging the predecessor Portal element, you can implement a seamless navigation experience when going back and forth between the two pages (or origins).
+For the portal content side, you can listen to the `portalactivate` event to check if the page was activated. Also from the event you can retrieve the previous page as a portal element by calling the `adoptPredecessor` function. By leveraging the predecessor portal element, you can implement a seamless navigation experience when going back and forth between the two pages (or origins).
 ```javascript
 // Listen to the portalactivate event
 window.addEventListener('portalactivate', evt => {
@@ -113,9 +111,9 @@ window.addEventListener('portalactivate', evt => {
    document.querySelector('someElm').appendChild(portal);
 });
 ```
-> Demo code reference: [listening to `portalactivate`](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L144) and [reusing the predecessor](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/portals-controller.js#L152)
+> Demo code reference: [listening to `portalactivate`](public/js/ttt/portals-controller.js#L144) and [reusing the predecessor](public/js/ttt/portals-controller.js#L152)
 
-On the predecessor side, `activate` will resolve with an `undefined` `Promise` when the Portal activation has completed. If it was adopted as a predecessor, you can start using `window.portalHost`.
+On the predecessor side, `activate` will resolve with an `undefined` `Promise` when the portal activation has completed. If it was adopted as a predecessor, you can start using `window.portalHost`.
 ```javascript
 // The activate function returns a Promise.
 // When the promise resolves, it means that the portal has been activated.
@@ -136,13 +134,14 @@ portal.activate().then(_ => {
    }
 });
 ```
-> Demo code reference: [sending messages to follow](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/ttt/writer-follow.js#L106) the writer of PORTALOG and [handling the event in the article page](https://github.com/WICG/portals/blob/master/demos/portal-embed-demo/public/js/portalog/portals-controller.js#L105)
+> Demo code reference: [sending messages to follow](public/js/ttt/writer-follow.js#L106) the writer of PORTALOG and [handling the event in the article page](public/js/portalog/portals-controller.js#L105)
 
 
 ## Disclaimer
 The code base is built for demo purpose only (non production ready code). The demo is using [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) (Shadow DOM v1, Custom Elements v1), [JS modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) (import/export) and written in ES6 syntax. To make the demo simple, it is not transpiling to ES5 and also not adding any polyfills. If you access the demo with a browser that does not support Portals, it will show a message as below with an iframe fallback (and the UI could break).
 
 ![fallback](https://cdn.glitch.com/98449704-33d8-49b2-88f2-aa6d2aeba5d3%2Ffallback.png?1556379460425)
-<br/>
+
+
 ## License
 [https://github.com/WICG/portals/blob/master/LICENSE.md](https://github.com/WICG/portals/blob/master/LICENSE.md)
