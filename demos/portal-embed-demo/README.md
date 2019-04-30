@@ -127,7 +127,6 @@ portal.activate().then(_ => {
         window.portalHost.addEventListener('message', evt => {
             // handle the event
         });
-
    }
 });
 ```
@@ -139,6 +138,8 @@ The code base is built for demo purpose only (non production ready code). The de
 
 ![fallback](https://cdn.glitch.com/98449704-33d8-49b2-88f2-aa6d2aeba5d3%2Ffallback.png?1556379460425)
 
+## TTT Archive creatives
+Some of the images and mp3 files used in the TTT Archive demo are modifications based on work created and [shared by Google](https://developers.google.com/terms/site-policies) and used according to terms described in the [Creative Commons 3.0 Attribution License](https://creativecommons.org/licenses/by/3.0/).
 
 ## License
 [https://github.com/WICG/portals/blob/master/LICENSE.md](https://github.com/WICG/portals/blob/master/LICENSE.md)
