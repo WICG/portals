@@ -113,13 +113,10 @@ window.addEventListener('portalactivate', evt => {
 ```
 > Demo code reference: [listening to `portalactivate`](public/js/ttt/portals-controller.js#L144) and [reusing the predecessor](public/js/ttt/portals-controller.js#L152)
 
-On the predecessor side, `activate` will resolve with an `undefined` `Promise` when the portal activation has completed. If it was adopted as a predecessor, you can start using `window.portalHost`.
+`activate` returns a promise that resolves when activation has completed.
 ```javascript
 // The activate function returns a Promise.
 // When the promise resolves, it means that the portal has been activated.
-// Note that the promise resolves with undefined
-// i.e. https://wicg.github.io/portals/#complete-portal-activation
-// 
 // If this document was adopted by it, then window.portalHost will exist
 // When the promise resolves, it means the page was adopted as a predecessor
 portal.activate().then(_ => {
