@@ -9,7 +9,7 @@ This demo demonstrates how Portals can enable a seamless user experience between
 - TTT Archive is embedded in one of PORTALOG's articles using **Portals**.
 - Portals enables a **seamless experience** between the two websites.
 
-**[This short explainer video (a YouTube Video less than 2 min)](https://youtu.be/4JkipxFVE9k)** is a great place to start from.
+**[This short explainer video](https://youtu.be/4JkipxFVE9k)** is a great place to start from.
 ![hero img](https://cdn.glitch.com/98449704-33d8-49b2-88f2-aa6d2aeba5d3%2Fhero_img.png?1556394393372)
 
 
