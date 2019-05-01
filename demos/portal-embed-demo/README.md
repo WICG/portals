@@ -6,7 +6,7 @@ This demo demonstrates how Portals can enable a seamless user experience between
 - This demo consists of two websites (different origin): 
   - **PORTALOG**, a blog service, 
   - and **TTT Archive**, a podcast service.
-- TTT Archive is embedded in one of the PORTALOG's article using **Portals**.
+- TTT Archive is embedded in one of PORTALOG's articles using **Portals**.
 - The demo shows how portals enables **seamless experience** between to the two websites.
 
 **[This short explainer video (a YouTube Video less than 2 min)](https://youtu.be/4JkipxFVE9k)** is a great place to start from.
