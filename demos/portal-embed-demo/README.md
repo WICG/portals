@@ -35,7 +35,7 @@ As of May 2019, Chrome Canary is the only platform that supports Portals. You ca
 ### 3. Access [http://localhost:3000/](http://localhost:3000/)
 ...and you will see PORTALOG with TTT Archive embedded.
 
-> Note that HTMLPortalElement has not implemented the auto play policies yet. In the very first access to PORTALOG, audio might not play. In that case try reloading PORTALOG OR access TTT Archive directly and click on any buttons and go back OR disable the chrome://flags/#autoplay-policy while playing around with the demo.
+> Note that HTMLPortalElement has not implemented the autoplay policies yet. The first time you access PORTALOG, audio might not play. In that case, try reloading PORTALOG, access TTT Archive directly and click on any buttons and go back, or disable the chrome://flags/#autoplay-policy while playing around with the demo.
 
 ### 4. Play around with it ;-)
 😎😎😎
