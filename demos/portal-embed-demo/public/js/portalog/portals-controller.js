@@ -88,17 +88,6 @@ class PortalsController {
     }
 
     /**
-     * Reinstalls the embedded portal after returning to PORTALOG.
-     * @param {HTMLPortalElement} predecessor 
-     *     - A portal element containing the embedded page.
-     */
-    returnFromEmbed(predecessor) {
-        this.playerUI.style.display = '';
-        this.portal.replaceWith(predecessor);
-        this.portal = predecessor;
-    }
-
-    /**
      * Activating the portal
      */
     activateAfterAnimation() {
@@ -139,6 +128,17 @@ class PortalsController {
 
         // Reset the position of the container after the portal activates
         this._resetPositionOfEmbedContainer();
+    }
+
+    /**
+     * Reinstalls the embedded portal after returning to PORTALOG.
+     * @param {HTMLPortalElement} predecessor 
+     *     - A portal element containing the embedded page.
+     */
+    returnFromEmbed(predecessor) {
+        this.playerUI.style.display = '';
+        this.portal.replaceWith(predecessor);
+        this.portal = predecessor;
     }
 
     /**
