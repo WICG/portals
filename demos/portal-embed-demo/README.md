@@ -42,7 +42,7 @@ As of May 2019, Chrome Canary is the only platform that supports Portals. You ca
 
 
 ## Explainer
-This is to show how you can use Portals in cross origin situations. The demo runs a two local express servers for PORTALOG and TTT Archive to simulate cross origin use case. By default, PORTALOG runs in [http://localhost:3000/](http://localhost:3000/) and TTT Archive runs in [http://localhost:3001/](http://localhost:3001/).
+This is to show how you can use Portals in cross origin situations. The demo runs a two local express servers for PORTALOG and TTT Archive to simulate a cross origin use case. By default, PORTALOG is available at [http://localhost:3000/](http://localhost:3000/) and TTT Archive is available at [http://localhost:3001/](http://localhost:3001/).
 
 The basic structure of the demo is explained below.
 
