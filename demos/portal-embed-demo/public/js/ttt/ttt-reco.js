@@ -1,19 +1,19 @@
-import {audioList} from './audio-list.js'
+import { audioList } from './audio-list.js'
 
 /**
  * An element for TTT recommendations
  */
 class TTTReco extends HTMLElement {
-    
+
     /**
      * Initiate the element
      */
     connectedCallback() {
         // The list of recommendations
         this.recommendationList = ['ssr', 'lighthouse', 'github'];
-        
+
         // Attach to Shadow DOM
-        this.root = this.attachShadow({mode: 'open'});
+        this.root = this.attachShadow({ mode: 'open' });
         this.root.innerHTML = `<style>${this.style}</style>${this.template}`;
 
         // Add event listeners
@@ -110,10 +110,10 @@ class TTTReco extends HTMLElement {
         return `
                 <div class='header web-font'>Listen more of TTT</div>
                 ${this.recommendationList.map(key => {
-                    const imgURL = audioList[key].imgURL;
-                    const title = audioList[key].title;
-                    return this._createItemTemplate(key, imgURL, title);
-                }).join('')}
+                const imgURL = audioList[key].imgURL;
+                const title = audioList[key].title;
+                return this._createItemTemplate(key, imgURL, title);
+            }).join('')}
         `
     }
 
@@ -146,9 +146,9 @@ class TTTReco extends HTMLElement {
      * Adding event listeners for the buttons
      */
     _hookEvents() {
-        [...this.root.querySelectorAll('.add-button')].map(elm => {
+        for (let elm of this.root.querySelectorAll('.add-button')) {
             elm.addEventListener('click', evt => {
-                if(evt.target.getAttribute('added')==='false'){
+                if (evt.target.getAttribute('added') === 'false') {
                     evt.target.parentNode.querySelector('img').src = '/img/added.png';
                     evt.target.setAttribute('added', true);
                     const id = evt.target.getAttribute('id');
@@ -162,7 +162,7 @@ class TTTReco extends HTMLElement {
                     document.querySelector('audio-controller').removeFromPlaylist(id)
                 }
             });
-        })
+        }
     }
 
 }

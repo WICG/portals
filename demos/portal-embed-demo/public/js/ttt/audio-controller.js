@@ -1,17 +1,17 @@
-import {audioList} from './audio-list.js'
+import { audioList } from './audio-list.js'
 
 /**
  * Audio Controller
  * Controlling all the audio related features
  */
 class AudioController extends HTMLElement {
-    
+
     /**
      * Initiate the element
      */
     connectedCallback() {
         // Attach to Shadow DOM
-        this.root = this.attachShadow({mode: 'open'});
+        this.root = this.attachShadow({ mode: 'open' });
         this.root.innerHTML = `<style>${this.css}</style>${this.template}`;
 
         // All the UI references
@@ -130,8 +130,8 @@ class AudioController extends HTMLElement {
             // Start the progress bar
             this.isPlaying = true;
             this.audio.addEventListener('timeupdate', evt => {
-                this.progressBar.style.left = 
-                    `${this.timeline.offsetWidth * this.audio.currentTime/this.audio.duration}px`;
+                this.progressBar.style.left =
+                    `${this.timeline.offsetWidth * this.audio.currentTime / this.audio.duration}px`;
             });
         }
         // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted

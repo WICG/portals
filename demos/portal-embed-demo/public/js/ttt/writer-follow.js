@@ -2,7 +2,7 @@
  * An element for following/unfollowing
  */
 class WriterFollow extends HTMLElement {
-    
+
     /**
      * Initiate the element
      */
@@ -12,7 +12,7 @@ class WriterFollow extends HTMLElement {
         this.name = this.getAttribute('writer-name');
 
         // Attach to Shadow DOM
-        this.root = this.attachShadow({mode: 'open'});
+        this.root = this.attachShadow({ mode: 'open' });
         this.root.innerHTML = `<style>${this.style}</style>${this.template}`;
 
         // Add event listeners
@@ -96,19 +96,19 @@ class WriterFollow extends HTMLElement {
      */
     _hookEvents() {
         const follow = this.root.querySelector('.follow');
-        const ORIGIN = 'http://localhost:3000';
+        const origin = 'http://localhost:3000';
         // On-click event for the follow button
         follow.addEventListener('click', evt => {
             const isFollowed = follow.classList.contains('followed');
             const portal = document.querySelector('portal');
-            if(isFollowed){
+            if (isFollowed) {
                 // Send message to the predecessor: unfollow
-                portal.postMessage({isFollowed: false}, ORIGIN);
+                portal.postMessage({ isFollowed: false }, origin);
                 follow.classList.remove('followed');
-                follow.textContent = 'Follow in PORTALOG';                
+                follow.textContent = 'Follow in PORTALOG';
             } else {
                 // Send message to the predecessor: follow
-                portal.postMessage({isFollowed: true}, ORIGIN)
+                portal.postMessage({ isFollowed: true }, origin)
                 follow.classList.add('followed');
                 follow.textContent = 'Following';
             }
