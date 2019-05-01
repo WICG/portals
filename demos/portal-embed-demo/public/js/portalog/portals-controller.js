@@ -7,8 +7,8 @@ class PortalsController {
     /**
      * Initiating paratmeter
      * @constructor
-     * @param {HTMLElement} root - the root element
-     * @param {String} origin - origin of portal
+     * @param {HTMLElement} embedContainer - the parent element of the embedded content
+     * @param {URL} src - URL to embed in the container
      * @param {String} path - path of portal
      * @param {Number} anmiateY - A target position to animate in px
      */
@@ -21,7 +21,7 @@ class PortalsController {
 
     /**
      * Embedding portal element to the root.
-     * @param {HTMLPortalElement} predecessor - optional
+     * @param {HTMLPortalElement=} predecessor - optional
      */
     embed(predecessor) {
 
@@ -94,7 +94,7 @@ class PortalsController {
                 }).then((_) => {
                     // Resolves with undefined when adoped as a predecessor
                     // Check if window.portalHost is present (just in case)
-                    if(!window.portalHost){
+                    if (!window.portalHost) {
                         return;
                     }
 
@@ -202,7 +202,7 @@ if(location.search) {
     }
 }
 
-if('HTMLPortalElement' in window){
+if ('HTMLPortalElement' in window) {
     // Create instance
     const portalsController = new PortalsController(
         document.querySelector('#embed'),
