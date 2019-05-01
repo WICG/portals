@@ -30,49 +30,11 @@ class PortalsController {
 
         // Event fires after the portal on-click animation finishes
         this.embedContainer.addEventListener('transitionend', (evt) => {
-
             // We wait until the top transition finishes
             if (evt.propertyName !== 'top') {
                 return;
             }
-
-            const isFollowed = document.querySelector('#follow')
-                .classList.contains('followed');
-
-            // Activate portal with data used in the activated page
-            this.portal.activate({
-                data: {
-                    followed: isFollowed,
-                    name: 'Yusuke Utsunomiya',
-                    photoSrc: '/img/profile.png',
-                    initialY: this.initialY,
-                    activatedWidth: this.embedContainer.getBoundingClientRect().width,
-                    initialWidth: this.initialWidth,
-                }
-            }).then((_) => {
-                // Check if this page was adopted by the embedded content.
-                if (!window.portalHost) {
-                    return;
-                }
-
-                // hide the scroll bar so that it won't show when used as a predecessor 
-                document.body.classList.add('hide-scroll-bars');
-
-                // don't add event listeners if it was already added
-                if (this.isPortalHostListenerAdded) {
-                    return;
-                }
-
-                // Listen to messages (follow/unfollow)
-                window.portalHost.addEventListener('message', (evt) => {
-                    const isFollowed = evt.data.isFollowed;
-                    this._changeFollowStatus(!isFollowed);
-                });
-                this.isPortalHostListenerAdded = true;
-            });
-
-            // Reset the position of the container after the portal activates
-            this._resetPositionOfEmbedContainer();
+            this.activateAfterAnimation();
         });
 
         // TODO: Separate the follow operations from the PortalsController
@@ -132,6 +94,49 @@ class PortalsController {
         this.playerUI.style.display = '';
         this.portal.replaceWith(predecessor);
         this.portal = predecessor;
+    }
+
+    /**
+     * Activating the portal
+     */
+    activateAfterAnimation() {
+        const isFollowed = document.querySelector('#follow')
+            .classList.contains('followed');
+
+        // Activate portal with data used in the activated page
+        this.portal.activate({
+            data: {
+                followed: isFollowed,
+                name: 'Yusuke Utsunomiya',
+                photoSrc: '/img/profile.png',
+                initialY: this.initialY,
+                activatedWidth: this.embedContainer.getBoundingClientRect().width,
+                initialWidth: this.initialWidth,
+            }
+        }).then((_) => {
+            // Check if this page was adopted by the embedded content.
+            if (!window.portalHost) {
+                return;
+            }
+
+            // hide the scroll bar so that it won't show when used as a predecessor 
+            document.body.classList.add('hide-scroll-bars');
+
+            // don't add event listeners if it was already added
+            if (this.isPortalHostListenerAdded) {
+                return;
+            }
+
+            // Listen to messages (follow/unfollow)
+            window.portalHost.addEventListener('message', (evt) => {
+                const isFollowed = evt.data.isFollowed;
+                this._changeFollowStatus(!isFollowed);
+            });
+            this.isPortalHostListenerAdded = true;
+        });
+
+        // Reset the position of the container after the portal activates
+        this._resetPositionOfEmbedContainer();
     }
 
     /**
