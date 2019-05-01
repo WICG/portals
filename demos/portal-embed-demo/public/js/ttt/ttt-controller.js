@@ -20,7 +20,48 @@ class TTTController {
         this.audioController = document.querySelector('audio-controller');
 
         // Add event listeners
-        this._hookEvents();
+        let initialY = 0;
+        let initialWidth = 0;
+        window.addEventListener('portalactivate', evt => {
+            initialY = evt.data.initialY;
+            initialWidth = evt.data.initialWidth;
+            // animate the audio controller
+            this.audioController.show();
+            this.setPortalActivatedUI(
+                evt.data.followed,
+                evt.data.name,
+                evt.data.photoSrc,
+                evt.data.activatedWidth,
+                evt.adoptPredecessor()
+            )
+        })
+
+        this.lightbox.addEventListener('click', evt => {
+            this.setPredecessorActivateUI(initialY, initialWidth);
+        })
+
+        this.heroImg.addEventListener('transitionend', evt => {
+            if (evt.propertyName !== 'top') {
+                return;
+            }
+            const predecessor = document.querySelector('portal');
+            predecessor.activate().then(_ => {
+                this.audioController.show();
+                this.setDefaultUI();
+                this.setEmbedUI();
+            });
+        })
+
+        // Controlling the audio on message
+        window.portalHost.addEventListener('message', evt => {
+            switch (evt.data.control) {
+                case 'prev': this.audioController.prev(); break;
+                case 'play': this.audioController.play(); break;
+                case 'pause': this.audioController.pause(); break;
+                case 'next': this.audioController.next(); break;
+                case 'hide': this.audioController.hide(); break;
+            }
+        })
     }
 
     /**
@@ -132,59 +173,6 @@ class TTTController {
         this.main.style.transition = 'width 0.3s'
         this.main.style.width = `${initialWidth}px`;
         this.audioController.hide();
-    }
-
-    /**
-     * Adding event listeners
-     */
-    _hookEvents() {
-        let initialY = 0;
-        let initialWidth = 0;
-
-        // Display Mode: ACTIVATE on portalactivate
-        window.addEventListener('portalactivate', evt => {
-            initialY = evt.data.initialY;
-            initialWidth = evt.data.initialWidth;
-            // animate the audio controller
-            this.audioController.show();
-            this.setPortalActivatedUI(
-                evt.data.followed,
-                evt.data.name,
-                evt.data.photoSrc,
-                evt.data.activatedWidth,
-                evt.adoptPredecessor()
-            )
-        })
-
-        // Display Mode: PREDECESSOR_ACTIVATE on lighbox on-click
-        this.lightbox.addEventListener('click', evt => {
-            this.setPredecessorActivateUI(initialY, initialWidth);
-        })
-
-        // Display Mode: RESET && EMEBED on predecessor activate
-        this.heroImg.addEventListener('transitionend', evt => {
-            if (evt.propertyName !== 'top') {
-                return;
-            }
-            const predecessor = document.querySelector('portal');
-            predecessor.activate().then(_ => {
-                this.audioController.show();
-                this.setDefaultUI();
-                this.setEmbedUI();
-            });
-        })
-
-        // Controlling the audio on message
-        window.portalHost.addEventListener('message', evt => {
-            switch (evt.data.control) {
-                case 'prev': this.audioController.prev(); break;
-                case 'play': this.audioController.play(); break;
-                case 'pause': this.audioController.pause(); break;
-                case 'next': this.audioController.next(); break;
-                case 'hide': this.audioController.hide(); break;
-            }
-        })
-
     }
 
 }
