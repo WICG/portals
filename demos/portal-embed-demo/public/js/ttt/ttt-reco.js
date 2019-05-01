@@ -132,7 +132,7 @@ class TTTReco extends HTMLElement {
                 </div>
                 <div class="description">
                     <div class="title">${title}</div>
-                    <div class="series">Tottaly Tooling Tips</div>
+                    <div class="series">Totally Tooling Tips</div>
                 </div>
                 <div class="add ripple">
                     <img src="/img/add.png">
