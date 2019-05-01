@@ -68,7 +68,7 @@ OR
 const portal = document.createElement('portal');
 portal.src = 'https://example.com';
 ```
-> Demo code reference: [creating a portal element](public/js/portalog/portals-controller.js#L37) 
+> Demo code reference: [creating a portal element](public/js/portalog/portals-controller.js#L53) 
 
 A page can detect if it is inside a portal and, if so, modify its UI accordingly.
 ```javascript
@@ -77,7 +77,7 @@ if (window.portalHost) {
   // Customize the UI when being embedded as a portal
 }
 ```
-> Demo code reference: [Check if window.portalHost is available](public/js/ttt/portals-controller.js#L198) and [change the style](public/js/ttt/portals-controller.js#L200)
+> Demo code reference: [Check if window.portalHost is available](public/js/ttt/ttt-controller.js#L181) and [change the style](public/js/ttt/ttt-controller.js#L183)
 
 For now, portals do not respond to user input. If you want to interact with portals (like playing the audio in the demo), use `postMessage`.
 ```javascript
@@ -91,7 +91,7 @@ window.portalHost.addEventListener('message', evt => {
   // handle the event
 });
 ```
-> Demo code reference: interacting with the audio player ([sending messages](public/js/portalog/portals-controller.js#L135) and [receiving messages](public/js/ttt/portals-controller.js#L183))
+> Demo code reference: interacting with the audio player ([sending messages](public/js/portalog/portals-controller.js#L160) and [receiving messages](public/js/ttt/ttt-controller.js#L56))
 
 When the user decides to navigate the the portal content i.e. click, it is a good opportunity to animate the portal and then call the `activate` function. User will be navigated to the portal content seamlessly (but the URL changes). The content continues running uninterrupted, and the audio even keeps playing after activation.
 ```javascript
@@ -99,7 +99,7 @@ When the user decides to navigate the the portal content i.e. click, it is a goo
 const portal = document.querySelector('portal');
 portal.activate();
 ```
-> Demo code reference: [animating the portal on click](public/js/portalog/portals-controller.js#L47) and [activating the portal](public/js/portalog/portals-controller.js#L85) (note that you can optionally pass [custom data](public/js/portalog/portals-controller.js#L86) to the portal)
+> Demo code reference: [animating the portal on click](public/js/portalog/portals-controller.js#L61) and [activating the portal](public/js/portalog/portals-controller.js#L98) (note that you can optionally pass [custom data](public/js/portalog/portals-controller.js#L99) to the portal)
 
 Inside the portal content, you can listen to the `portalactivate` event to be notified when the page is activated. You can retrieve the previous page as a `<portal>` element by calling the `adoptPredecessor` function on the event. By leveraging the predecessor portal element, you can implement a seamless navigation experience when going back and forth between the two pages.
 ```javascript
@@ -110,7 +110,7 @@ window.addEventListener('portalactivate', evt => {
   document.querySelector('someElm').appendChild(portal);
 });
 ```
-> Demo code reference: [listening to `portalactivate`](public/js/ttt/portals-controller.js#L144) and [reusing the predecessor](public/js/ttt/portals-controller.js#L152)
+> Demo code reference: [listening to `portalactivate`](public/js/ttt/portals-controller.js#L25) and [reusing the predecessor](public/js/ttt/portals-controller.js#L35)
 
 `activate` returns a promise that resolves when activation has completed.
 ```javascript
@@ -128,7 +128,7 @@ portal.activate().then(_ => {
   }
 });
 ```
-> Demo code reference: [sending messages to follow](public/js/ttt/writer-follow.js#L106) the writer of PORTALOG and [handling the event in the article page](public/js/portalog/portals-controller.js#L105)
+> Demo code reference: [sending messages to follow](public/js/ttt/writer-follow.js#L106) the writer of PORTALOG and [handling the event in the article page](public/js/portalog/portals-controller.js#L122)
 
 
 ## Disclaimer
