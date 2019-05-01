@@ -169,7 +169,7 @@ class TTTController {
         this.recommendation.style.opacity = 0;
         // animate
         this.heroImg.style.transition = 'top 0.6s'
-        this.heroImg.style.top = (initialY - 170) + 'px';
+        this.heroImg.style.top = (window.pageYOffset + initialY - 170) + 'px';
         this.main.style.transition = 'width 0.3s'
         this.main.style.width = `${initialWidth}px`;
         this.audioController.hide();
