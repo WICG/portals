@@ -1,4 +1,9 @@
 /**
+ * Default port used for the portal
+ */
+const DEFAULT_PORTAL_PORT = 3001;
+
+/**
  * Portals Controller
  * Controlling all the portal related features
  */
@@ -9,112 +14,124 @@ class PortalsController {
      * @constructor
      * @param {HTMLElement} embedContainer - the parent element of the embedded content
      * @param {URL} src - URL to embed in the container
-     * @param {String} path - path of portal
-     * @param {Number} anmiateY - A target position to animate in px
      */
-    constructor(root, origin, path, anmiateY) {
-        this.root = root;
-        this.origin = origin;
-        this.path = path;
-        this.anmiateY = anmiateY;
-    }
+    constructor(embedContainer, src) {
+        this.embedContainer = embedContainer;
+        this.src = src;
+        this.isPortalHostListenerAdded = false;
 
-    /**
-     * Embedding portal element to the root.
-     * @param {HTMLPortalElement=} predecessor - optional
-     */
-    embed(predecessor) {
-
-        // clean up the root
-        this._remove(this.root.querySelector('portal'));
-
-        if (predecessor) {
-            // If the optional predecessor parameter was set
-            // add the predecessor to the root
-            this.portal = predecessor;
-        } else {
-            // Or else, create new portal
-            this.portal = document.createElement('portal');
-            this.portal.src = this.origin + this.path;
-            // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
-            // TODO: autoplay workaround
-        }
-        const messageUI = this._genPortalMessageUI();
-        this.root.appendChild(this.portal);
-        this.root.appendChild(messageUI);
-
-        // Add animation on-click
-        this.portal.addEventListener('click', (evt) => {
-            this.initialY = this.root.getBoundingClientRect().y;
-            this.initialWidth = this.root.getBoundingClientRect().width;
-            this._remove(this.root.querySelector('.message-controller'));
-            this.root.style.transition =
-                `top 0.6s cubic-bezier(.49,.86,.37,1.01),
-                 left 0.3s cubic-bezier(.49,.86,.37,1.01), 
-                width 0.3s cubic-bezier(.49,.86,.37,1.01),
-                padding-top 0.3s cubic-bezier(.49,.86,.37,1.01)`;
-            this.root.style.top = `${this.anmiateY - this.initialY}px`;
-            this.root.style.width = '95%';
-            this.root.style.paddingTop = 'calc(95% * 0.65)';
-            this.root.style.left = 'calc((100% - 95%)/2)';
-            this.portal.postMessage({ control: 'hide' }, this.origin);
-        });
-
-    }
-
-    /**
-     * Adding event listeners
-     */
-    hookEvents() {
-        
         // Event fires when coming back from TTT Archive
         window.addEventListener('portalactivate', (evt) => {
-            // reset the overflow style to default
-            document.body.style.overflow = '';
+            // show the scroll bar when coming back
+            document.body.classList.remove('hide-scroll-bars');
             // embed predecessor
-            this.embed(evt.adoptPredecessor());
+            this.returnFromEmbed(evt.adoptPredecessor());
         });
 
         // Event fires after the portal on-click animation finishes
-        this.root.addEventListener('transitionend', (evt) => {
-            if (evt.propertyName === 'top') {
-                const isFollowed = document.querySelector('#follow')
-                    .classList.contains('followed');
+        this.embedContainer.addEventListener('transitionend', (evt) => {
 
-                // Activate portal with data used in the activated page
-                this.portal.activate({
-                    data: {
-                        followed: isFollowed,
-                        name: 'Yusuke Utsunomiya',
-                        photoSrc: '/img/profile.png',
-                        initialY: this.initialY,
-                        activatedWidth: this.root.getBoundingClientRect().width,
-                        initialWidth: this.initialWidth,
-                    }
-                }).then((_) => {
-                    // Resolves with undefined when adoped as a predecessor
-                    // Check if window.portalHost is present (just in case)
-                    if (!window.portalHost) {
-                        return;
-                    }
-
-                    // hide the scroll bar
-                    document.body.style.overflow = 'hidden';
-
-                    // Listen to messages (follow/unfollow)
-                    window.portalHost.addEventListener('message', (evt) => {
-                        const isFollowed = evt.data.isFollowed;
-                        this._changeFollowStatus(!isFollowed);
-                    });
-                });
-
-                this._resetRoot();
+            // We wait until the top transition finishes
+            if (evt.propertyName !== 'top') {
+                return;
             }
+
+            const isFollowed = document.querySelector('#follow')
+                .classList.contains('followed');
+
+            // Activate portal with data used in the activated page
+            this.portal.activate({
+                data: {
+                    followed: isFollowed,
+                    name: 'Yusuke Utsunomiya',
+                    photoSrc: '/img/profile.png',
+                    initialY: this.initialY,
+                    activatedWidth: this.embedContainer.getBoundingClientRect().width,
+                    initialWidth: this.initialWidth,
+                }
+            }).then((_) => {
+                // Check if window.portalHost is present (just in case)
+                if (!window.portalHost) {
+                    return;
+                }
+
+                // hide the scroll bar so that it won't show when used as a predecessor 
+                document.body.classList.add('hide-scroll-bars');
+
+                // don't add event listeners if it was already added
+                if (this.isPortalHostListenerAdded) {
+                    return;
+                }
+
+                // Listen to messages (follow/unfollow)
+                window.portalHost.addEventListener('message', (evt) => {
+                    const isFollowed = evt.data.isFollowed;
+                    this._changeFollowStatus(!isFollowed);
+                });
+                this.isPortalHostListenerAdded = true;
+            });
+
+            // Reset the position of the container after the portal activates
+            this._resetPositionOfEmbedContainer();
         });
+
+        // TODO: Separate the follow operations from the PortalsController
+        // https://github.com/WICG/portals/pull/105/files#r279998963
         document.querySelector('#follow').addEventListener('click', (evt) => {
             const isFollowed = evt.target.classList.contains('followed');
             this._changeFollowStatus(isFollowed);
         });
+    }
+
+    /**
+     * Creates a new <portal> element and player UI.
+     */
+    populateEmbedContainer() {
+        this.portal = document.createElement('portal');
+        this.portal.src = this.src;
+        this.playerUI = this._genPortalMessageUI();
+        this.embedContainer.append(this.portal, this.playerUI);
+
+        // When the portal is clicked, start animating it.
+        this.embedContainer.addEventListener('click', evt => {
+            if (evt.target === this.portal)
+                this.animateAndActivate();
+        });
+    }
+
+    /**
+     * Animates the embedded content to smoothly activate it.
+     */
+    animateAndActivate() {
+        // The Y poistion that needs to be animated to
+        // TODO: retrieve this value from the portal via postMessage
+        // in the future
+        const TARGET_Y = 170;
+
+        // Animate the embed container
+        this.playerUI.style.display = 'none';
+        this.initialY = this.embedContainer.getBoundingClientRect().y;
+        this.initialWidth = this.embedContainer.getBoundingClientRect().width;
+        this.embedContainer.style.transition =
+            `top 0.6s cubic-bezier(.49,.86,.37,1.01),
+             left 0.3s cubic-bezier(.49,.86,.37,1.01), 
+             width 0.3s cubic-bezier(.49,.86,.37,1.01),
+             padding-top 0.3s cubic-bezier(.49,.86,.37,1.01)`;
+        this.embedContainer.style.top = `${TARGET_Y - this.initialY}px`;
+        this.embedContainer.style.width = '95%';
+        this.embedContainer.style.paddingTop = 'calc(95% * 0.65)';
+        this.embedContainer.style.left = 'calc((100% - 95%)/2)';
+        this.portal.postMessage({ control: 'hide' }, this.src.origin);
+    }
+
+    /**
+     * Reinstalls the embedded portal after returning to PORTALOG.
+     * @param {HTMLPortalElement} predecessor A portal element containing the embedded page.
+     */
+    returnFromEmbed(predecessor) {
+        this.playerUI.style.display = '';
+        this.portal.replaceWith(predecessor);
+        this.portal = predecessor;
     }
 
     /**
@@ -133,20 +150,20 @@ class PortalsController {
         next.classList.add('message-button');
 
         prev.addEventListener('click', (evt) => {
-            this.portal.postMessage({ control: 'prev' }, this.origin);
+            this.portal.postMessage({ control: 'prev' }, this.src.origin);
         });
         play.addEventListener('click', (evt) => {
             const isPlaying = play.getAttribute('playing');
             if (isPlaying === 'true') {
-                this.portal.postMessage({ control: 'pause' }, this.origin);
+                this.portal.postMessage({ control: 'pause' }, this.src.origin);
                 play.setAttribute('playing', false);
             } else {
-                this.portal.postMessage({ control: 'play' }, this.origin);
+                this.portal.postMessage({ control: 'play' }, this.src.origin);
                 play.setAttribute('playing', true);
             }
         });
         next.addEventListener('click', (evt) => {
-            this.portal.postMessage({ control: 'next' }, this.origin);
+            this.portal.postMessage({ control: 'next' }, this.src.origin);
         });
 
         controller.appendChild(prev);
@@ -157,24 +174,14 @@ class PortalsController {
     }
 
     /**
-     * Removing an element
-     * @param {HTMLElement} elm 
+     * Resetting embedContainer's position after activating the portal
      */
-    _remove(elm) {
-        if (elm) {
-            elm.parentNode.removeChild(elm);
-        }
-    }
-
-    /**
-     * Resetting root's style
-     */
-    _resetRoot() {
-        this.root.style.transition = '';
-        this.root.style.width = '100%';
-        this.root.style.paddingTop = '65%';
-        this.root.style.top = '0px';
-        this.root.style.left = '0px';
+    _resetPositionOfEmbedContainer() {
+        this.embedContainer.style.transition = '';
+        this.embedContainer.style.width = '100%';
+        this.embedContainer.style.paddingTop = '65%';
+        this.embedContainer.style.top = '0px';
+        this.embedContainer.style.left = '0px';
     }
 
     /**
@@ -194,26 +201,17 @@ class PortalsController {
 
 }
 
-let portalPort = 3001;
-if(location.search) {
-    const matchResult = location.search.match(/portalport=(\d{4})/);
-    if(matchResult[1]){
-        portalPort = matchResult[1];
-    }
-}
-
+let portalPort = parseInt(new URL(location).searchParams.get('portalport')) || DEFAULT_PORTAL_PORT;
+let embedContainer = document.querySelector('#embed');
 if ('HTMLPortalElement' in window) {
     // Create instance
     const portalsController = new PortalsController(
-        document.querySelector('#embed'),
-        `http://localhost:${portalPort}`,
-        '/',
-        170
+        embedContainer,
+        new URL(`http://localhost:${portalPort}/`)
     );
 
     // Embed portals and hook events
-    portalsController.embed();
-    portalsController.hookEvents();
+    portalsController.populateEmbedContainer();
 } else {
     // iframe fallback
     const embedURL = `http://localhost:${portalPort}`;
@@ -230,8 +228,7 @@ if ('HTMLPortalElement' in window) {
         location.href = embedURL;
     });
     iframe.src = embedURL;
-    document.querySelector('#embed').appendChild(iframe);
-    document.querySelector('#embed').appendChild(link);
+    embedContainer.appendChild(iframe, link);
     // show fallback message
     document.querySelector('#fallback-message').style.display = "block";
 

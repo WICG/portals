@@ -32,7 +32,7 @@ $ npm run demo
 ### 2. Open a browser that supports Portals
 As of May 2019, Chrome Canary is the only platform that supports Portals. You can try out Portals in Chrome Canary by flipping an experimental flag (chrome://flags/#enable-portals).
 
-### 3. Access [http://localhost:3000/](http://localhost:3000/)
+### 3. Access [ http://localhost:3000/?portalport=3001]( http://localhost:3000/?portalport=3001)
 ...and you will see PORTALOG with TTT Archive embedded.
 
 > Note that HTMLPortalElement has not implemented the autoplay policies yet. The first time you access PORTALOG, audio might not play. In that case, try reloading PORTALOG, access TTT Archive directly and click on any buttons and go back, or disable the chrome://flags/#autoplay-policy while playing around with the demo.
@@ -72,9 +72,9 @@ portal.src = 'https://example.com';
 
 A page can detect if it is inside a portal and, if so, modify its UI accordingly.
 ```javascript
-// Check if window.portalHost is available
+// Detect whether this page is hosted in a portal
 if (window.portalHost) {
-   // Customize the UI when being embedded as a portal
+  // Customize the UI when being embedded as a portal
 }
 ```
 > Demo code reference: [Check if window.portalHost is available](public/js/ttt/portals-controller.js#L198) and [change the style](public/js/ttt/portals-controller.js#L200)
@@ -87,16 +87,15 @@ portal.postMessage({someKey: someValue}, ORIGIN);
 
 // Receive message via window.portalHost
 window.portalHost.addEventListener('message', evt => {
-   const data = evt.data.someKey;
-   // handle the event
+  const data = evt.data.someKey;
+  // handle the event
 });
 ```
 > Demo code reference: interacting with the audio player ([sending messages](public/js/portalog/portals-controller.js#L135) and [receiving messages](public/js/ttt/portals-controller.js#L183))
 
 When the user decides to navigate the the portal content i.e. click, it is a good opportunity to animate the portal and then call the `activate` function. User will be navigated to the portal content seamlessly (but the URL changes). The content continues running uninterrupted, and the audio even keeps playing after activation.
 ```javascript
-// do some fancy animations and..
-// activate the portal
+// do some fancy animations and after animations are complete, activate the portal.
 const portal = document.querySelector('portal');
 portal.activate();
 ```
@@ -106,9 +105,9 @@ Inside the portal content, you can listen to the `portalactivate` event to be no
 ```javascript
 // Listen to the portalactivate event
 window.addEventListener('portalactivate', evt => {
-   // ... and creatively use the predecessor
-   const portal = evt.adoptPredecessor();
-   document.querySelector('someElm').appendChild(portal);
+  // ... and creatively use the predecessor
+  const portal = evt.adoptPredecessor();
+  document.querySelector('someElm').appendChild(portal);
 });
 ```
 > Demo code reference: [listening to `portalactivate`](public/js/ttt/portals-controller.js#L144) and [reusing the predecessor](public/js/ttt/portals-controller.js#L152)
@@ -120,14 +119,13 @@ window.addEventListener('portalactivate', evt => {
 // If this document was adopted by it, then window.portalHost will exist.
 // When the promise resolves, it means the page was adopted as a predecessor
 portal.activate().then(_ => {
-   // Check if this document was adopted into a portal element.
-   if (window.portalHost) {
-        // The page was adopted as a predecessor. You can start
-        // communicating with the portal element i.e. listen to messages
-        window.portalHost.addEventListener('message', evt => {
-            // handle the event
-        });
-   }
+  // Check if this document was adopted into a portal element.
+  if (window.portalHost) {
+    // You can start communicating with the portal element i.e. listen to messages
+    window.portalHost.addEventListener('message', evt => {
+      // handle the event
+    });
+  }
 });
 ```
 > Demo code reference: [sending messages to follow](public/js/ttt/writer-follow.js#L106) the writer of PORTALOG and [handling the event in the article page](public/js/portalog/portals-controller.js#L105)
