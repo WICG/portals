@@ -77,15 +77,15 @@ class WriterFollow extends HTMLElement {
      */
     get template() {
         return `
-            <div class='writer'>
-                <div class='photo'>
+            <div class="writer">
+                <div class="photo">
                     <img src=${this.photo}>
                 </div>
-                <div class='details'>
-                    <div class='name'>Shared by 
-                        <span class='bold'>${this.name}</span>
+                <div class="details">
+                    <div class="name">Shared by 
+                        <span class="bold">${this.name}</span>
                     </div>
-                    <div class='follow'>Follow in PORTALOG</div>
+                    <div class="follow">Follow in PORTALOG</div>
                 </div>
             </div>
         `

@@ -153,7 +153,6 @@ class PortalsController {
             }
             // animate the audio controller
             this.audioController.show();
-            this.audioController.handleActivation();
             this.setDisplayMode(this.ACTIVATE, option);
         })
 

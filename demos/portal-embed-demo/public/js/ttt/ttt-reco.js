@@ -126,17 +126,17 @@ class TTTReco extends HTMLElement {
      */
     _createItemTemplate(key, imgURL, title) {
         return `
-            <div class='pod'>
-                <div class='thumbnail'>
+            <div class="pod">
+                <div class="thumbnail">
                     <img src=${imgURL}>
                 </div>
-                <div class='description'>
-                    <div class='title'>${title}</div>
-                    <div class='series'>Tottaly Tooling Tips</div>
+                <div class="description">
+                    <div class="title">${title}</div>
+                    <div class="series">Tottaly Tooling Tips</div>
                 </div>
-                <div class='add ripple'>
-                    <img src='/img/add.png'>
-                    <div class='add-button' added='false' id=${key}></div>
+                <div class="add ripple">
+                    <img src="/img/add.png">
+                    <div class="add-button" added="false" id=${key}></div>
                 </div>
             </div>
         `;
@@ -153,13 +153,13 @@ class TTTReco extends HTMLElement {
                     evt.target.setAttribute('added', true);
                     const id = evt.target.getAttribute('id');
                     // Add selected audio to the playlist
-                    document.querySelector('audio-controller').addPlaylist(id)
+                    document.querySelector('audio-controller').addToPlaylist(id)
                 } else {
                     evt.target.parentNode.querySelector('img').src = '/img/add.png';
                     evt.target.setAttribute('added', false);
                     const id = evt.target.getAttribute('id');
                     // Remove selected audio to the playlist
-                    document.querySelector('audio-controller').removePlaylist(id)
+                    document.querySelector('audio-controller').removeFromPlaylist(id)
                 }
             });
         })
