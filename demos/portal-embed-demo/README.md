@@ -1,5 +1,5 @@
 # portal-embed-demo
-This demo demonstrates how Portals can enable a seamless user experience between a website and a third party embed content. Be creative and have fun!!
+This demo demonstrates how Portals can enable a seamless user experience between a website and third-party embedded content. Be creative and have fun!!
 
 
 ## TL;DR;
