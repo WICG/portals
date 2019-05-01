@@ -112,3 +112,7 @@ portal {
         opacity: 0.6;
     }
 }
+
+.hide-scroll-bars {
+    overflow: hidden;
+}
