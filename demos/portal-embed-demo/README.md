@@ -73,7 +73,7 @@ portal.src = 'https://example.com';
 A page can detect if it is inside a portal and, if so, modify its UI accordingly.
 ```javascript
 // Check if window.portalHost is available
-if(window.portalHost){
+if (window.portalHost) {
    // Customize the UI when being embedded as a portal
 }
 ```
