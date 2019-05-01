@@ -50,7 +50,7 @@ class PortalsController {
                     initialWidth: this.initialWidth,
                 }
             }).then((_) => {
-                // Check if window.portalHost is present (just in case)
+                // Check if this page was adopted by the embedded content.
                 if (!window.portalHost) {
                     return;
                 }
