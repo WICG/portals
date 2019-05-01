@@ -12,7 +12,8 @@ class PortalsController {
     /**
      * Initiating paratmeter
      * @constructor
-     * @param {HTMLElement} embedContainer - the parent element of the embedded content
+     * @param {HTMLElement} embedContainer
+     *     - the parent element of the embedded content
      * @param {URL} src - URL to embed in the container
      */
     constructor(embedContainer, src) {
@@ -88,7 +89,8 @@ class PortalsController {
 
     /**
      * Reinstalls the embedded portal after returning to PORTALOG.
-     * @param {HTMLPortalElement} predecessor A portal element containing the embedded page.
+     * @param {HTMLPortalElement} predecessor 
+     *     - A portal element containing the embedded page.
      */
     returnFromEmbed(predecessor) {
         this.playerUI.style.display = '';
@@ -206,7 +208,9 @@ class PortalsController {
 
 }
 
-let portalPort = parseInt(new URL(location).searchParams.get('portalport')) || DEFAULT_PORTAL_PORT;
+let portalPort =
+    parseInt(new URL(location).searchParams.get('portalport'))
+    || DEFAULT_PORTAL_PORT;
 let embedContainer = document.querySelector('#embed');
 if ('HTMLPortalElement' in window) {
     // Create instance

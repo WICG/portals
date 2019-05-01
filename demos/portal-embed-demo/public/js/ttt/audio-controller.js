@@ -131,7 +131,8 @@ class AudioController extends HTMLElement {
             this.isPlaying = true;
             this.audio.addEventListener('timeupdate', evt => {
                 this.progressBar.style.left =
-                    `${this.timeline.offsetWidth * this.audio.currentTime / this.audio.duration}px`;
+                    `${this.timeline.offsetWidth
+                        * this.audio.currentTime / this.audio.duration}px`;
             });
         }
         // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
