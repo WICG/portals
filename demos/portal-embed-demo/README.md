@@ -110,7 +110,7 @@ window.addEventListener('portalactivate', evt => {
   document.querySelector('someElm').appendChild(portal);
 });
 ```
-> Demo code reference: [listening to `portalactivate`](public/js/ttt/portals-controller.js#L25) and [reusing the predecessor](public/js/ttt/portals-controller.js#L35)
+> Demo code reference: [listening to `portalactivate`](public/js/ttt/ttt-controller.js#L25) and [reusing the predecessor](public/js/ttt/portals-controller.js#L35)
 
 `activate` returns a promise that resolves when activation has completed.
 ```javascript
