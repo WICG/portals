@@ -1,0 +1,148 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", "Noto Sans Japanese", "ヒラギノ角ゴ ProN W3", Meiryo, sans-serif;
+}
+.shell {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.header {
+    width: 100%;
+    height: 50px;
+    background-color: white;
+    text-align: center;
+}
+
+.header img {
+    height: 80%;
+    margin-top: 5px;
+}
+
+.main {
+    width: 90%;
+    margin: 0 auto;
+    color: #222;
+}
+
+.main .line {
+    width: 100%;
+    height: 30px;
+    background-color: #999;
+    margin-top: 20px;
+}
+
+.main .date {
+    margin-bottom: 30px;
+}
+
+.writer {
+    height: 55px;
+    margin-top:30px;
+    margin-bottom:30px;
+}
+
+.writer .writer-photo {
+    height: 100%;
+    float:left;
+}
+
+.writer .writer-photo img {
+    height: 100%;
+    border-radius: 50%;
+}
+
+.writer .writer-details {
+    float:left;
+    margin-left: 15px;
+}
+
+.writer .writer-details .basic .name {
+    float:left;
+    font-size: 1.2em;
+    line-height:1.5;
+    height: 35px;
+}
+
+.writer .writer-details .basic #follow {
+    float:left;
+    border: 1px solid #000;
+    padding: 5px 15px;
+    border-radius: 3px;
+    margin-left: 10px;
+}
+.writer .writer-details .date {
+    font-size: 0.8em;
+    clear: both;
+}
+.followed {
+    background-color: #27AA8A;
+    border: none !important;
+    color: #FFF;
+}
+
+.placeholder {
+    width: 100%;
+    padding-top: 65%;
+    margin: 40px auto;
+    position: relative;
+}
+
+#embed {
+    top: 0px;
+    margin: 0px auto;
+    width: 100%;
+    padding-top:65%;
+    position: absolute;                
+    border-radius: 3px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    background-color: #999;
+    overflow: hidden;
+    left: 0px;
+}
+
+portal, iframe{
+    width:100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    border-radius: 3px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    cursor: pointer;
+}
+
+.message-controller {
+    margin: 0 auto;
+    height:40px;
+    width:180px;
+    z-index:10000;
+    position:absolute;
+    bottom: 0px;
+    left: calc(50% - 90px);
+    cursor: pointer;
+}
+
+.message-button {
+    width: 60px;
+    height: 80%;
+    text-align: center;
+    float: left;
+}
+
+#fallback-message {
+    margin-top: 20px;
+    margin-bottom: -30px;
+    color: red;
+    font-style: italic;
+    display: none;
+}
+
+.hide-scroll-bars {
+    overflow: hidden;
+}
