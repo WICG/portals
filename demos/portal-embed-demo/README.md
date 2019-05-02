@@ -117,7 +117,6 @@ window.addEventListener('portalactivate', evt => {
 // The activate function returns a Promise.
 // When the promise resolves, it means that the portal has been activated.
 // If this document was adopted by it, then window.portalHost will exist.
-// When the promise resolves, it means the page was adopted as a predecessor
 portal.activate().then(_ => {
   // Check if this document was adopted into a portal element.
   if (window.portalHost) {

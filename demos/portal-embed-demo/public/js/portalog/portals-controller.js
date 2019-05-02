@@ -237,7 +237,7 @@ if ('HTMLPortalElement' in window) {
         location.href = embedURL;
     });
     iframe.src = embedURL;
-    embedContainer.appendChild(iframe, link);
+    embedContainer.append(iframe, link);
     // show fallback message
     document.querySelector('#fallback-message').style.display = "block";
 
