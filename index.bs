@@ -2,7 +2,7 @@
 Title: Portals
 Shortname: portals
 Level: 1
-Status: ED
+Status: CG-DRAFT
 Group: WICG
 URL: https://wicg.github.io/portals/
 Editor: Jeremy Roman, Google, jbroman@chromium.org
