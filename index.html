@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ee4d7efc3ed6155392d49e10a542e2351fd5792d" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="665046f6697cb3536e1719c486d1673aeebb04e1" name="document-revision">
+  <meta content="8a6d8c9a812acc0e893a770adacea94a71e7b3f8" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1907,7 +1907,7 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
     use a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⓪">portal</a></code> element in a nested browsing context, as this is not
     supported. </p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-browsing-context" id="ref-for-creating-a-new-browsing-context">Create a new browsing context</a> with noopener, and let <var>newBrowsingContext</var> be the result.</p>
+      <p>Let <var>newBrowsingContext</var> be the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-top-level-browsing-context" id="ref-for-creating-a-new-top-level-browsing-context">creating a new top-level browsing context</a>.</p>
      <li data-md>
       <p>Set the <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①⓪">portal state</a> of <var>newBrowsingContext</var> to "<code>portal</code>", and set the <a data-link-type="dfn" href="#host" id="ref-for-host⑤">host</a> of <var>newBrowsingContext</var> to <var>element</var>.</p>
      <li data-md>
@@ -2601,10 +2601,10 @@ to deliver the message.</p>
     <li><a href="#ref-for-close-a-browsing-context②">3.1. The portal element</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-creating-a-new-browsing-context">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-browsing-context</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-creating-a-new-top-level-browsing-context">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-top-level-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-top-level-browsing-context</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-creating-a-new-browsing-context">3.1. The portal element</a>
+    <li><a href="#ref-for-creating-a-new-top-level-browsing-context">3.1. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-messageevent-data">
@@ -2946,7 +2946,7 @@ to deliver the message.</p>
      <li><span class="dfn-paneled" id="term-for-the-body-element" style="color:initial">body</span>
      <li><span class="dfn-paneled" id="term-for-window-bc" style="color:initial">browsing context <small>(for Window)</small></span>
      <li><span class="dfn-paneled" id="term-for-close-a-browsing-context" style="color:initial">close a browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-creating-a-new-browsing-context" style="color:initial">create a new browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-creating-a-new-top-level-browsing-context" style="color:initial">create a new top-level browsing context</span>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-data" style="color:initial">data</span>
      <li><span class="dfn-paneled" id="term-for-concept-document-bc" style="color:initial">document browsing context</span>
      <li><span class="dfn-paneled" id="term-for-event-handler-content-attributes" style="color:initial">event handler content attribute</span>
