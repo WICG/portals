@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version ee4d7efc3ed6155392d49e10a542e2351fd5792d" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="951367a2f99f7bbda1d54496c1649332c6b007d5" name="document-revision">
+  <meta content="15768dc40653fec66fea53674f6f84777c8c352f" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1499,7 +1499,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-13">13 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-16">16 May 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1871,6 +1871,8 @@ then <a data-link-type="dfn" href="#htmlportalelement-close-a-portal-element" id
        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#parse-a-url" id="ref-for-parse-a-url">Parse</a> the value of the <code><a data-link-type="element-sub" href="#element-attrdef-portal-src" id="ref-for-element-attrdef-portal-src②">src</a></code> attribute. If that is not successful,
 then <a data-link-type="dfn" href="#htmlportalelement-close-a-portal-element" id="ref-for-htmlportalelement-close-a-portal-element①">close</a> <var>element</var> and abort these steps.
 Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#resulting-url-record" id="ref-for-resulting-url-record">resulting URL record</a>.</p>
+      <li data-md>
+       <p>If the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme">scheme</a> of <var>url</var> is not an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-scheme" id="ref-for-http-scheme">HTTP(S) scheme</a>, then abort these steps.</p>
       <li data-md>
        <p>Let <var>resource</var> be a new <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request" id="ref-for-concept-request">request</a> whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url" id="ref-for-concept-request-url">URL</a> is <var>url</var> and whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-referrer-policy" id="ref-for-concept-request-referrer-policy">referrer policy</a> is "<code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-referrer-policy/#dom-referrerpolicy-no-referrer" id="ref-for-dom-referrerpolicy-no-referrer">no-referrer</a></code>".</p>
       <li data-md>
@@ -2434,6 +2436,12 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
     <li><a href="#ref-for-sec-promise-objects">3.1. The portal element</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-http-scheme">
+   <a href="https://fetch.spec.whatwg.org/#http-scheme">https://fetch.spec.whatwg.org/#http-scheme</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-http-scheme">3.1. The portal element</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request">
    <a href="https://fetch.spec.whatwg.org/#concept-request">https://fetch.spec.whatwg.org/#concept-request</a><b>Referenced in:</b>
    <ul>
@@ -2798,6 +2806,12 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
     <li><a href="#ref-for-serviceworker">3.4. Miscellaneous extensions</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-url-scheme">
+   <a href="https://url.spec.whatwg.org/#concept-url-scheme">https://url.spec.whatwg.org/#concept-url-scheme</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-url-scheme">3.1. The portal element</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-url">
    <a href="https://url.spec.whatwg.org/#concept-url">https://url.spec.whatwg.org/#concept-url</a><b>Referenced in:</b>
    <ul>
@@ -2896,6 +2910,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-http-scheme" style="color:initial">http(s) scheme</span>
      <li><span class="dfn-paneled" id="term-for-concept-request" style="color:initial">request</span>
      <li><span class="dfn-paneled" id="term-for-concept-request-referrer-policy" style="color:initial">request referrer policy</span>
      <li><span class="dfn-paneled" id="term-for-concept-request-url" style="color:initial">request url</span>
@@ -2972,6 +2987,7 @@ If it has none, throw an "<code class="idl"><a data-link-type="idl" href="https:
    <li>
     <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-concept-url-scheme" style="color:initial">scheme</span>
      <li><span class="dfn-paneled" id="term-for-concept-url" style="color:initial">url</span>
     </ul>
    <li>
