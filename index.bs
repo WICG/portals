@@ -657,7 +657,7 @@ spec:url; type:dfn; for:/; text:url
 
     1. [=Queue a task=] to [=complete portal activation=].
 
-        Note: Queuing this immediately makes it possible to send messages to the
+        Note: Queuing this immediately makes it possible to send messages to the adopted
         portal during dispatch of the {{Window/portalactivate!!event}} event without
         ordering issues between the task to complete portal activation and the task
         to deliver the message.
