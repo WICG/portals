@@ -152,7 +152,10 @@ spec:url; type:dfn; text:scheme
         1. If |predecessorBrowsingContext| is not a [=portal browsing context=], [=close a browsing context|close=] it.
             The user agent *should not* [=refuse to allow the document to be unloaded=].
 
-        1. [=Queue a task=] to [=complete portal activation=].
+        1. If |event|'s [=PortalActivateEvent/predecessor browsing context=] is not null, then
+            [=queue a task=] to [=complete portal activation=].
+
+            Note: This happens only if the predecessor was not adopted by this point.
 
   </section>
 
@@ -654,6 +657,13 @@ spec:url; type:dfn; text:scheme
     1. Let |successorWindow| be [=this=]'s [=PortalActivateEvent/successor window=].
 
     1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |successorWindow|, and return the result.
+
+    1. [=Queue a task=] to [=complete portal activation=].
+
+        Note: Queuing this immediately makes it possible to send messages to the adopted
+        portal during dispatch of the {{Window/portalactivate!!event}} event without
+        ordering issues between the task to complete portal activation and the task
+        to deliver the message.
 
     <wpt>
       portals-adopt-predecessor.html
