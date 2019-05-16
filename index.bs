@@ -112,8 +112,8 @@ spec:url; type:dfn; for:/; text:url
 
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |successorBrowsingContext| in
-    place of |predecessorBrowsingContext| with data |serializeWithTransferResult|,
-    run the following steps [=in parallel=]:
+    place of |predecessorBrowsingContext| with data |serializeWithTransferResult|
+    and promise |promise|, run the following steps [=in parallel=]:
 
     1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`none`".
 
@@ -150,10 +150,12 @@ spec:url; type:dfn; for:/; text:url
 
         1. [=Dispatch=] |event| to |successorWindow|.
 
+        1. [=Queue a task=] from the [=portal task source=] to the
+            [=event loop=] associated with |predecessorBrowsingContext| to
+            resolve |promise| with undefined.
+
         1. If |predecessorBrowsingContext| is not a [=portal browsing context=], [=close a browsing context|close=] it.
             The user agent *should not* [=refuse to allow the document to be unloaded=].
-
-        1. [=Queue a task=] to [=complete portal activation=].
 
   </section>
 
@@ -247,11 +249,6 @@ spec:url; type:dfn; for:/; text:url
       };
   </xmp>
 
-  The following tasks may be [=queue a task|queued=] by this standard. Unless otherwise specified, each
-  task *must* be queued from the [=portal task source=].
-
-  * <dfn>complete portal activation</dfn>
-
   The <dfn attribute for="HTMLPortalElement">src</dfn> IDL attribute must [=reflect=] the <{portal/src}> content attribute.
 
   <section algorithm="htmlportalelement-activate">
@@ -292,11 +289,8 @@ spec:url; type:dfn; for:/; text:url
     1. Let |promise| be a new [=promise=].
 
     1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
-        in place of |predecessorBrowsingContext| with data |serializeWithTransferResult|.
-
-        To [=complete portal activation=], run these steps:
-
-        1. Resolve |promise| with undefined.
+        in place of |predecessorBrowsingContext| with data |serializeWithTransferResult| and
+        promise |promise|.
 
     1. Return |promise|.
 
