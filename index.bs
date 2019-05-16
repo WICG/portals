@@ -53,6 +53,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 </pre>
 <pre class="link-defaults">
 spec:url; type:dfn; for:/; text:url
+spec:url; type:dfn; text:scheme
 </pre>
 
 <section class="non-normative">
@@ -420,6 +421,8 @@ spec:url; type:dfn; for:/; text:url
     1. [=Parse a URL|Parse=] the value of the <{portal/src}> attribute. If that is not successful,
         then [=close a portal element|close=] |element| and abort these steps.
         Otherwise, let |url| be the [=resulting URL record=].
+
+    1. If the [=scheme=] of |url| is not an [=HTTP(S) scheme=], then abort these steps.
 
     1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
 
