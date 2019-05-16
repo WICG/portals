@@ -53,6 +53,7 @@ spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
 </pre>
 <pre class="link-defaults">
 spec:url; type:dfn; for:/; text:url
+spec:url; type:dfn; text:scheme
 </pre>
 
 <section class="non-normative">
@@ -148,15 +149,17 @@ spec:url; type:dfn; for:/; text:url
 
         1. Set |event|'s [=PortalActivateEvent/successor window=] to |successorWindow|.
 
+        1. Set |event|'s [=PortalActivateEvent/activation promise=] to |promise|.
+
         1. [=Dispatch=] |event| to |successorWindow|.
 
-        1. [=Queue a task=] from the [=portal task source=] to the
+        1. If |event|'s [=PortalActivateEvent/predecessor browsing context=] is not null, then
+            [=queue a task=] from the [=portal task source=] to the
             [=event loop=] associated with |predecessorBrowsingContext| to
             resolve |promise| with undefined.
 
         1. If |predecessorBrowsingContext| is not a [=portal browsing context=], [=close a browsing context|close=] it.
             The user agent *should not* [=refuse to allow the document to be unloaded=].
-
   </section>
 
   <wpt>
@@ -197,9 +200,10 @@ spec:url; type:dfn; for:/; text:url
   </section>
 
   <div class="note">
-    Since the task to set the [=portal state=], and thus expose the {{PortalHost}} object,
-    is queued before the task to [=complete portal activation=], from the same [=task source=],
-    it is exposed at the time the promise returned from {{HTMLPortalElement/activate()}} is resolved.
+    Since the task to set the [=portal state=], and thus expose the
+    {{PortalHost}} object, is queued first, and from the same [=task source=],
+    it is exposed at the time the promise returned from
+    {{HTMLPortalElement/activate()}} is resolved.
   </div>
 </section>
 
@@ -382,6 +386,8 @@ spec:url; type:dfn; for:/; text:url
     1. [=Parse a URL|Parse=] the value of the <{portal/src}> attribute. If that is not successful,
         then [=close a portal element|close=] |element| and abort these steps.
         Otherwise, let |url| be the [=resulting URL record=].
+
+    1. If the [=scheme=] of |url| is not an [=HTTP(S) scheme=], then abort these steps.
 
     1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
 
@@ -619,8 +625,8 @@ spec:url; type:dfn; for:/; text:url
   </xmp>
 
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
-  which is a [=top-level browsing context=], and a <dfn for="PortalActivateEvent">successor window</dfn>, which is
-  a {{Window}}.
+  which is a [=top-level browsing context=], a <dfn for="PortalActivateEvent">successor window</dfn>, which is
+  a {{Window}}, and an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=].
 
   <section algorithm="portalactivateevent-event-constructing-steps">
     The [=event constructing steps=] for {{PortalActivateEvent}}, given an |event|, are as follows:
@@ -645,6 +651,14 @@ spec:url; type:dfn; for:/; text:url
     1. Let |successorWindow| be [=this=]'s [=PortalActivateEvent/successor window=].
 
     1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |successorWindow|, and return the result.
+
+    1. [=Queue a task=] from the [=portal task source=] to the [=event loop=] associated with
+        |predecessorBrowsingContext| to resolve [=this=]'s [=activation promise=] with undefined.
+
+        Note: Queuing this immediately makes it possible to send messages to the adopted
+        portal during dispatch of the {{Window/portalactivate!!event}} event without
+        ordering issues between the task to resolve the activation promise and the task
+        to deliver the message.
 
     <wpt>
       portals-adopt-predecessor.html
