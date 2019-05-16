@@ -87,26 +87,30 @@ spec:url; type:dfn; for:/; text:url
     A top-level "`none`" context can become "`orphaned`" by [=activate a portal browsing context|activating=]
     another context. An "`orphaned`" context can be [=adopt the predecessor browsing context|adopted=] to
     become a "`portal`" context. A "`portal`" context can become a "`none`" context by being
-    [=activate a portal browsing context|activated=] by its [=host=].
+    [=activate a portal browsing context|activated=] by its [=host browsing context=].
 
     A browsing context can be [=close a browsing context|closed=] while in any of these states.
   </div>
 
   A <dfn>portal browsing context</dfn> is a [=browsing context=] whose [=portal state=] is "`portal`".
 
-  A portal browsing context has a <dfn>host</dfn> which is embeds its rendered output and
-  receives messages sent from the portal browsing context. This specification defines
-  {{HTMLPortalElement}}, which hosts a portal browsing context inside an HTML document.
+  The <dfn>host element</dfn> of a [=portal browsing context=] is a <{portal}>
+  element which embeds its rendered output and receives messages sent from the
+  portal browsing context.
+
+  The <dfn>host browsing context</dfn> of a [=portal browsing context=] is its
+  [=host element=]'s [=node document|document=]'s [=browsing context=].
+
   A host defines steps to <dfn>accept a message posted to the host</dfn>.
 
   <p class="note">
     This implies that every [=portal browsing context=] is a [=top-level browsing context=].
     It is expected that a Web browser will not present a tab or window to display a portal browsing
-    context, but rather that it will be presented only through a [=host=] element.
+    context, but rather that it will be presented only through a [=host element=].
   </p>
 
   The <dfn>portal task source</dfn> is a [=task source=] used for tasks related to the
-  portal lifecycle and communication between a [=portal browsing context=] and its [=host=].
+  portal lifecycle and communication between a [=portal browsing context=] and its [=host browsing context=].
 
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |successorBrowsingContext| in
@@ -186,7 +190,8 @@ spec:url; type:dfn; for:/; text:url
 
         1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`orphaned`".
 
-        1. Set the [=portal state=] of |predecessorBrowsingContext| to "`portal`", and set the [=host=] of |predecessorBrowsingContext| to |portalElement|.
+        1. Set the [=portal state=] of |predecessorBrowsingContext| to "`portal`", and
+            set the [=host element=] of |predecessorBrowsingContext| to |portalElement|.
 
     1. Return |portalElement|.
   </section>
@@ -211,8 +216,9 @@ spec:url; type:dfn; for:/; text:url
     portals-rendering.html
   </wpt>
 
-  A <{portal}> element may have a <dfn for="HTMLPortalElement">guest browsing context</dfn>, which is a
-  [=portal browsing context=]. If so, the element is the [=host=] of its [=guest browsing context=].
+  A <{portal}> element has a <dfn for="HTMLPortalElement">guest browsing context</dfn>, which is
+  the [=portal browsing context=] whose [=host element=] it is, or null if no such browsing context
+  exists.
 
   The <dfn element-attr for="portal">src</dfn> attribute gives the [=URL=] of a
   page that the [=guest browsing context=] is to contain. The attribute, if
@@ -460,8 +466,8 @@ spec:url; type:dfn; for:/; text:url
 
   1. [=Create a new browsing context=] with noopener, and let |newBrowsingContext| be the result.
 
-  1. Set the [=portal state=] of |newBrowsingContext| to "`portal`", and set the [=host=] of
-      |newBrowsingContext| to |element|.
+  1. Set the [=portal state=] of |newBrowsingContext| to "`portal`", and set
+     the [=host element=] of |newBrowsingContext| to |element|.
 
   1. Set |element|'s [=guest browsing context=] to |newBrowsingContext|.
 
@@ -535,7 +541,7 @@ spec:url; type:dfn; for:/; text:url
   The <dfn>portal host object</dfn> of a {{Window}} is a {{PortalHost}}.
 
   <div class="note">
-    The [=portal host object=] can be used to communicate with the [=host=] of a [=portal browsing context=].
+    The [=portal host object=] can be used to communicate with the [=host browsing context=].
     Its operations throw if used while its context is not a [=portal browsing context=] (i.e. there is no host).
     It is not accessible via {{Window/portalHost|window.portalHost}} at such times.
   </div>
