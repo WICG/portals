@@ -88,31 +88,33 @@ spec:url; type:dfn; text:scheme
     A top-level "`none`" context can become "`orphaned`" by [=activate a portal browsing context|activating=]
     another context. An "`orphaned`" context can be [=adopt the predecessor browsing context|adopted=] to
     become a "`portal`" context. A "`portal`" context can become a "`none`" context by being
-    [=activate a portal browsing context|activated=] by its [=host=].
+    [=activate a portal browsing context|activated=] by its [=host browsing context=].
 
     A browsing context can be [=close a browsing context|closed=] while in any of these states.
   </div>
 
   A <dfn>portal browsing context</dfn> is a [=browsing context=] whose [=portal state=] is "`portal`".
 
-  A portal browsing context has a <dfn>host</dfn> which is embeds its rendered output and
-  receives messages sent from the portal browsing context. This specification defines
-  {{HTMLPortalElement}}, which hosts a portal browsing context inside an HTML document.
-  A host defines steps to <dfn>accept a message posted to the host</dfn>.
+  The <dfn>host element</dfn> of a [=portal browsing context=] is a <{portal}>
+  element which embeds its rendered output and receives messages sent from the
+  portal browsing context.
+
+  The <dfn>host browsing context</dfn> of a [=portal browsing context=] is its
+  [=host element=]'s [=node document|document=]'s [=browsing context=].
 
   <p class="note">
     This implies that every [=portal browsing context=] is a [=top-level browsing context=].
     It is expected that a Web browser will not present a tab or window to display a portal browsing
-    context, but rather that it will be presented only through a [=host=] element.
+    context, but rather that it will be presented only through a [=host element=].
   </p>
 
   The <dfn>portal task source</dfn> is a [=task source=] used for tasks related to the
-  portal lifecycle and communication between a [=portal browsing context=] and its [=host=].
+  portal lifecycle and communication between a [=portal browsing context=] and its [=host browsing context=].
 
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |successorBrowsingContext| in
-    place of |predecessorBrowsingContext| with data |serializeWithTransferResult|,
-    run the following steps [=in parallel=]:
+    place of |predecessorBrowsingContext| with data |serializeWithTransferResult|
+    and promise |promise|, run the following steps [=in parallel=]:
 
     1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`none`".
 
@@ -147,16 +149,17 @@ spec:url; type:dfn; text:scheme
 
         1. Set |event|'s [=PortalActivateEvent/successor window=] to |successorWindow|.
 
+        1. Set |event|'s [=PortalActivateEvent/activation promise=] to |promise|.
+
         1. [=Dispatch=] |event| to |successorWindow|.
+
+        1. If |event|'s [=PortalActivateEvent/predecessor browsing context=] is not null, then
+            [=queue a task=] from the [=portal task source=] to the
+            [=event loop=] associated with |predecessorBrowsingContext| to
+            resolve |promise| with undefined.
 
         1. If |predecessorBrowsingContext| is not a [=portal browsing context=], [=close a browsing context|close=] it.
             The user agent *should not* [=refuse to allow the document to be unloaded=].
-
-        1. If |event|'s [=PortalActivateEvent/predecessor browsing context=] is not null, then
-            [=queue a task=] to [=complete portal activation=].
-
-            Note: This happens only if the predecessor was not adopted by this point.
-
   </section>
 
   <wpt>
@@ -190,15 +193,17 @@ spec:url; type:dfn; text:scheme
 
         1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`orphaned`".
 
-        1. Set the [=portal state=] of |predecessorBrowsingContext| to "`portal`", and set the [=host=] of |predecessorBrowsingContext| to |portalElement|.
+        1. Set the [=portal state=] of |predecessorBrowsingContext| to "`portal`", and
+            set the [=host element=] of |predecessorBrowsingContext| to |portalElement|.
 
     1. Return |portalElement|.
   </section>
 
   <div class="note">
-    Since the task to set the [=portal state=], and thus expose the {{PortalHost}} object,
-    is queued before the task to [=complete portal activation=], from the same [=task source=],
-    it is exposed at the time the promise returned from {{HTMLPortalElement/activate()}} is resolved.
+    Since the task to set the [=portal state=], and thus expose the
+    {{PortalHost}} object, is queued first, and from the same [=task source=],
+    it is exposed at the time the promise returned from
+    {{HTMLPortalElement/activate()}} is resolved.
   </div>
 </section>
 
@@ -215,8 +220,9 @@ spec:url; type:dfn; text:scheme
     portals-rendering.html
   </wpt>
 
-  A <{portal}> element may have a <dfn for="HTMLPortalElement">guest browsing context</dfn>, which is a
-  [=portal browsing context=]. If so, the element is the [=host=] of its [=guest browsing context=].
+  A <{portal}> element |portalElement| has a <dfn for="HTMLPortalElement">guest
+  browsing context</dfn>, which is the [=portal browsing context=] whose [=host
+  element=] is |portalElement|, or null if no such browsing context exists.
 
   The <dfn element-attr for="portal">src</dfn> attribute gives the [=URL=] of a
   page that the [=guest browsing context=] is to contain. The attribute, if
@@ -246,11 +252,6 @@ spec:url; type:dfn; text:scheme
           sequence<object> transfer = [];
       };
   </xmp>
-
-  The following tasks may be [=queue a task|queued=] by this standard. Unless otherwise specified, each
-  task *must* be queued from the [=portal task source=].
-
-  * <dfn>complete portal activation</dfn>
 
   The <dfn attribute for="HTMLPortalElement">src</dfn> IDL attribute must [=reflect=] the <{portal/src}> content attribute.
 
@@ -292,11 +293,8 @@ spec:url; type:dfn; text:scheme
     1. Let |promise| be a new [=promise=].
 
     1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
-        in place of |predecessorBrowsingContext| with data |serializeWithTransferResult|.
-
-        To [=complete portal activation=], run these steps:
-
-        1. Resolve |promise| with undefined.
+        in place of |predecessorBrowsingContext| with data |serializeWithTransferResult| and
+        promise |promise|.
 
     1. Return |promise|.
 
@@ -368,42 +366,6 @@ spec:url; type:dfn; text:scheme
     </wpt>
   </section>
 
-  <section algorithm="htmlportalelement-acceptpostedmessage">
-    To [=accept a message posted to the host=] for a <{portal}> element |element| with
-    |serializeWithTransferResult|, |browsingContext|, |origin| and |targetOrigin|,
-    [=queue a task=] from the [=portal task source=] to the [=event loop=] associated with
-    the element's [=node document|document=]'s [=document browsing context|browsing context=]
-    to run the following steps:
-
-    1. If |browsingContext| is not the [=guest browsing context=] of |element|, then abort these steps.
-
-        Note: This might happen if this [=event loop=] had a queued task to deliver a message, but
-        it was not executed before the portal was [=activate a portal browsing context|activated=].
-        In such cases, the message is not delivered.
-
-    1. Let |settings| be the [=relevant settings object=] of |element|.
-
-    1. If |targetOrigin| is not a single literal U+002A ASTERISK character
-        (*) and |settings|'s [=environment settings object/origin=] is not
-        [=same origin=] with |targetOrigin|, then abort these steps.
-
-    1. Let |targetRealm| be |settings|'s [=environment settings object/realm=].
-
-    1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
-
-        If this throws an exception, catch it, [=fire an event=] named {{HTMLPortalElement/messageerror!!event}} at |element| using {{MessageEvent}}
-        with the {{MessageEvent/origin}} attribute initialized to |origin| and the {{MessageEvent/source}} attribute initialized to |element|.
-
-    1. Let |messageClone| be |deserializeRecord|.\[[Deserialized]].
-
-    1. Let |newPorts| be a new [=frozen array type|frozen array=] consisting of all {{MessagePort}} objects in
-        |deserializeRecord|.\[[TransferredValues]], if any, maintaining their relative order.
-
-    1. [=Fire an event=] named {{HTMLPortalElement/message!!event}} at the |element| using {{MessageEvent}}, with the {{MessageEvent/origin}} attribute
-        initialized to |origin|, the {{MessageEvent/source}} attribute initialized to |element|, the {{MessageEvent/data}} attribute
-        initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
-  </section>
-
   <section algorithm="htmlportalelement-close">
     To <dfn for="HTMLPortalElement">close a <{portal}> element</dfn> |element|, run the following steps:
 
@@ -466,8 +428,8 @@ spec:url; type:dfn; text:scheme
 
   1. Let |newBrowsingContext| be the result of [=create a new top-level browsing context|creating a new top-level browsing context=].
 
-  1. Set the [=portal state=] of |newBrowsingContext| to "`portal`", and set the [=host=] of
-      |newBrowsingContext| to |element|.
+  1. Set the [=portal state=] of |newBrowsingContext| to "`portal`", and set
+     the [=host element=] of |newBrowsingContext| to |element|.
 
   1. Set |element|'s [=guest browsing context=] to |newBrowsingContext|.
 
@@ -541,7 +503,7 @@ spec:url; type:dfn; text:scheme
   The <dfn>portal host object</dfn> of a {{Window}} is a {{PortalHost}}.
 
   <div class="note">
-    The [=portal host object=] can be used to communicate with the [=host=] of a [=portal browsing context=].
+    The [=portal host object=] can be used to communicate with the [=host browsing context=].
     Its operations throw if used while its context is not a [=portal browsing context=] (i.e. there is no host).
     It is not accessible via {{Window/portalHost|window.portalHost}} at such times.
   </div>
@@ -587,8 +549,40 @@ spec:url; type:dfn; text:scheme
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
-    1. Run the steps to [=accept a message posted to the host=] for the [=host=] associated with [=this=]
-        with |serializeWithTransferResult|, |browsingContext|, |origin| and |targetOrigin|.
+    1. Let |hostElement| be the [=host element=] of |browsingContext|.
+
+    1. Let |hostBrowsingContext| be the [=host browsing context=] of |browsingContext|.
+
+    1. [=Queue a task=] from the [=portal task source=] to the [=event loop=]
+        associated with |hostBrowsingContext| to run the following steps:
+
+        1. If |browsingContext| is not the [=guest browsing context=] of |hostElement|, then abort these steps.
+
+            Note: This might happen if this [=event loop=] had a queued task to deliver a message, but
+            it was not executed before the portal was [=activate a portal browsing context|activated=].
+            In such cases, the message is not delivered.
+
+        1. Let |targetSettings| be the [=relevant settings object=] of |hostElement|.
+
+        1. If |targetOrigin| is not a single literal U+002A ASTERISK character
+            (*) and |targetSettings|'s [=environment settings object/origin=]
+            is not [=same origin=] with |targetOrigin|, then abort these steps.
+
+        1. Let |targetRealm| be |targetSettings|'s [=environment settings object/realm=].
+
+        1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
+
+            If this throws an exception, catch it, [=fire an event=] named {{HTMLPortalElement/messageerror!!event}} at |element| using {{MessageEvent}}
+            with the {{MessageEvent/origin}} attribute initialized to |origin| and the {{MessageEvent/source}} attribute initialized to |element|.
+
+        1. Let |messageClone| be |deserializeRecord|.\[[Deserialized]].
+
+        1. Let |newPorts| be a new [=frozen array type|frozen array=] consisting of all {{MessagePort}} objects in
+            |deserializeRecord|.\[[TransferredValues]], if any, maintaining their relative order.
+
+        1. [=Fire an event=] named {{HTMLPortalElement/message!!event}} at the |element| using {{MessageEvent}}, with the {{MessageEvent/origin}} attribute
+            initialized to |origin|, the {{MessageEvent/source}} attribute initialized to |element|, the {{MessageEvent/data}} attribute
+            initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
   </section>
 
   The following events are dispatched on {{PortalHost}} objects:
@@ -631,8 +625,8 @@ spec:url; type:dfn; text:scheme
   </xmp>
 
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
-  which is a [=top-level browsing context=], and a <dfn for="PortalActivateEvent">successor window</dfn>, which is
-  a {{Window}}.
+  which is a [=top-level browsing context=], a <dfn for="PortalActivateEvent">successor window</dfn>, which is
+  a {{Window}}, and an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=].
 
   <section algorithm="portalactivateevent-event-constructing-steps">
     The [=event constructing steps=] for {{PortalActivateEvent}}, given an |event|, are as follows:
@@ -658,11 +652,12 @@ spec:url; type:dfn; text:scheme
 
     1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |successorWindow|, and return the result.
 
-    1. [=Queue a task=] to [=complete portal activation=].
+    1. [=Queue a task=] from the [=portal task source=] to the [=event loop=] associated with
+        |predecessorBrowsingContext| to resolve [=this=]'s [=activation promise=] with undefined.
 
         Note: Queuing this immediately makes it possible to send messages to the adopted
         portal during dispatch of the {{Window/portalactivate!!event}} event without
-        ordering issues between the task to complete portal activation and the task
+        ordering issues between the task to resolve the activation promise and the task
         to deliver the message.
 
     <wpt>
