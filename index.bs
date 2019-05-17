@@ -220,9 +220,9 @@ spec:url; type:dfn; text:scheme
     portals-rendering.html
   </wpt>
 
-  A <{portal}> element has a <dfn for="HTMLPortalElement">guest browsing context</dfn>, which is
-  the [=portal browsing context=] whose [=host element=] it is, or null if no such browsing context
-  exists.
+  A <{portal}> element |portalElement| has a <dfn for="HTMLPortalElement">guest
+  browsing context</dfn>, which is the [=portal browsing context=] whose [=host
+  element=] is |portalElement|, or null if no such browsing context exists.
 
   The <dfn element-attr for="portal">src</dfn> attribute gives the [=URL=] of a
   page that the [=guest browsing context=] is to contain. The attribute, if
