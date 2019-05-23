@@ -443,7 +443,7 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| [=becomes browsing-context disconnected=], run the following steps:
 
-  1. If |element| does not have a [=guest browsing context=], abort these steps.
+  1. If |element|'s [=guest browsing context=] is null, abort these steps.
 
   1. [=close a portal element|Close=] |element|.
 
@@ -455,7 +455,7 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| is [=adopting steps|adopted=], run the following steps:
 
-  1. If |element| does not have a [=guest browsing context=], abort these steps.
+  1. If |element|'s [=guest browsing context=] is null, abort these steps.
 
   1. [=close a portal element|Close=] |element|.
 
