@@ -260,7 +260,7 @@ spec:url; type:dfn; text:scheme
 
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of [=this=].
 
-        If it is null, throw an "{{InvalidStateError}}" {{DOMException}}.
+    1. If |portalBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
         <wpt>
           portals-activate-no-browsing-context.html
@@ -269,7 +269,7 @@ spec:url; type:dfn; text:scheme
     1. Let |predecessorBrowsingContext| be the [=document browsing context|browsing context=] of
         [=this=]'s [=node document|document=].
 
-        If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
+    1. If |predecessorBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. If the [=portal state=] of |predecessorBrowsingContext| is not "`none`",
         throw an "{{InvalidStateError}}" {{DOMException}}.
@@ -318,7 +318,7 @@ spec:url; type:dfn; text:scheme
 
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of [=this=].
 
-        If it is null, throw an "{{InvalidStateError}}" {{DOMException}}.
+    1. If |portalBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Let |settings| be the [=relevant settings object=] of [=this=].
 
@@ -627,7 +627,7 @@ spec:url; type:dfn; text:scheme
   </xmp>
 
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
-  which is a [=top-level browsing context=], a <dfn for="PortalActivateEvent">successor window</dfn>, which is
+  which is a [=top-level browsing context=] or null, a <dfn for="PortalActivateEvent">successor window</dfn>, which is
   a {{Window}}, and an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=].
 
   <section algorithm="portalactivateevent-event-constructing-steps">
@@ -646,7 +646,8 @@ spec:url; type:dfn; text:scheme
     The <dfn method for="PortalActivateEvent"><code>adoptPredecessor()</code></dfn> method *must* run these steps:
 
     1. Let |predecessorBrowsingContext| be [=this=]'s [=PortalActivateEvent/predecessor browsing context=].
-        If it has none, throw an "{{InvalidStateError}}" {{DOMException}}.
+
+    1. If |predecessorBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Clear [=this=]'s [=PortalActivateEvent/predecessor browsing context=].
 
