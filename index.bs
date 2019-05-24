@@ -103,12 +103,6 @@ spec:url; type:dfn; text:scheme
   The <dfn>host browsing context</dfn> of a [=portal browsing context=] is its
   [=host element=]'s [=node document|document=]'s [=browsing context=].
 
-  <p class="note">
-    This implies that every [=portal browsing context=] is a [=top-level browsing context=].
-    It is expected that a Web browser will not present a tab or window to display a portal browsing
-    context, but rather that it will be presented only through a [=host element=].
-  </p>
-
   The <dfn>portal task source</dfn> is a [=task source=] used for tasks related to the
   portal lifecycle and communication between a [=portal browsing context=] and its [=host browsing context=].
 
