@@ -206,8 +206,23 @@ spec:url; type:dfn; text:scheme
   <div class="note">
     Since the task to set the [=portal state=], and thus expose the
     {{PortalHost}} object, is queued first, and from the same [=task source=],
-    it is exposed at the time the promise returned from
+    it is exposed at the time the [=PortalActivateEvent/activation promise=] returned from
     {{HTMLPortalElement/activate()}} is resolved.
+
+    <xmp highlight="javascript">
+    // In the successor document.
+    onportalactivate = event => {
+      // The predecessor document is adopted into a <portal> element...
+      document.body.appendChild(event.adoptPredecessor());
+    });
+
+    // In the predecessor document.
+    portalElement.activate().then(() => {
+      // ...and it is guaranteed to observe that change by the time the
+      // activation promise resolves.
+      console.assert(window.portalHost instanceof PortalHost);
+    });
+    </xmp>
   </div>
 </section>
 
