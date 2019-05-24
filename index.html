@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 6dcfb71280c822ba1243caec7a720fa926b21c7e" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="cebe701c92580f7a7f823369d2955478e6355b5d" name="document-revision">
+  <meta content="e0d59c4c27793ee07440837d817497012278f73c" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1643,8 +1643,8 @@ and let <var>dataClone</var> be <var>deserializeRecord</var>.[[Deserialized]].</
          <p>If <var>event</var>’s <a data-link-type="dfn" href="#portalactivateevent-predecessor-browsing-context" id="ref-for-portalactivateevent-predecessor-browsing-context①">predecessor browsing context</a> is not null, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task①">queue a task</a> from the <a data-link-type="dfn" href="#portal-task-source" id="ref-for-portal-task-source①">portal task source</a> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop①">event loop</a> associated with <var>predecessorBrowsingContext</var> to
 resolve <var>promise</var> with undefined.</p>
         <li data-md>
-         <p>If <var>predecessorBrowsingContext</var> is not a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context④">portal browsing context</a>, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context①">close</a> it.
-The user agent <em>should not</em> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#refused-to-allow-the-document-to-be-unloaded" id="ref-for-refused-to-allow-the-document-to-be-unloaded">refuse to allow the document to be unloaded</a>.</p>
+         <p>If <var>predecessorBrowsingContext</var> is not a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context④">portal browsing context</a>, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context①">close</a> it.</p>
+         <p>The user agent <em>should not</em> ask the user for confirmation during the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#prompt-to-unload-a-document" id="ref-for-prompt-to-unload-a-document">prompt to unload</a> step (and so the browsing context should be <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded" id="ref-for-a-browsing-context-is-discarded">discarded</a>).</p>
        </ol>
      </ol>
     </section>
@@ -1821,8 +1821,8 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
       To <dfn class="dfn-paneled" data-dfn-for="HTMLPortalElement" data-dfn-type="dfn" data-noexport id="htmlportalelement-close-a-portal-element">close a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑥">portal</a></code> element</dfn> <var>element</var>, run the following steps: 
      <ol>
       <li data-md>
-       <p>If <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context④">guest browsing context</a> is not null, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context②">close</a> it.
-The user agent <em>should not</em> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#refused-to-allow-the-document-to-be-unloaded" id="ref-for-refused-to-allow-the-document-to-be-unloaded①">refuse to allow the document to be unloaded</a>.</p>
+       <p>If <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context④">guest browsing context</a> is not null, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context②">close</a> it.</p>
+       <p>The user agent <em>should not</em> ask the user for confirmation during the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#prompt-to-unload-a-document" id="ref-for-prompt-to-unload-a-document①">prompt to unload</a> step (and so the browsing context should be <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded" id="ref-for-a-browsing-context-is-discarded①">discarded</a>).</p>
       <li data-md>
        <p>Set <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context⑤">guest browsing context</a> to null.</p>
      </ol>
@@ -1848,13 +1848,20 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
       <li data-md>
        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate" id="ref-for-navigate">Navigate</a> <var>guestBrowsingContext</var> to <var>resource</var>.</p>
      </ol>
+     <div class="note" role="note">
+       Unlike an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element①">iframe</a></code> element, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑧">portal</a></code> element supports a state where
+      it has no associated browsing context. This is the initial state of a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑨">portal</a></code> element (i.e., it has no initial <code>about:blank</code> document;
+      instead it navigates directly to the first parsable URL assigned to it). 
+      <p>Similarly, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⓪">portal</a></code> element responds to an unparsable <code><a data-link-type="element-sub" href="#element-attrdef-portal-src" id="ref-for-element-attrdef-portal-src③">src</a></code> URL by <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context③">closing</a> its browsing context, rather
+      than by navigating to <code>about:blank</code>.</p>
+     </div>
     </section>
     <div class="issue" id="issue-ecc42745"><a class="self-link" href="#issue-ecc42745"></a> Is <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-referrer-policy/#dom-referrerpolicy-no-referrer" id="ref-for-dom-referrerpolicy-no-referrer①">no-referrer</a></code> the right referrer policy here, or should we send the document’s URL? </div>
     <ul class="wpt-tests-block">
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-cross-origin-load.sub.html">portals-cross-origin-load.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-cross-origin-load.sub.html" title="portals/portals-cross-origin-load.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-cross-origin-load.sub.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-no-referrer.html">portals-no-referrer.html</a> <a href="http://web-platform-tests.live/portals/portals-no-referrer.html" title="portals/portals-no-referrer.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-no-referrer.html"><small>(source)</small></a>
     </ul>
-    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑧">portal</a></code> element <var>element</var> has its <code><a data-link-type="element-sub" href="#element-attrdef-portal-src" id="ref-for-element-attrdef-portal-src③">src</a></code> attribute set,
+    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①①">portal</a></code> element <var>element</var> has its <code><a data-link-type="element-sub" href="#element-attrdef-portal-src" id="ref-for-element-attrdef-portal-src④">src</a></code> attribute set,
   changed, or removed, run the following steps:</p>
     <ol>
      <li data-md>
@@ -1862,7 +1869,7 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
      <li data-md>
       <p><a data-link-type="dfn" href="#htmlportalelement-set-the-source-url-of-a-portal-element" id="ref-for-htmlportalelement-set-the-source-url-of-a-portal-element">Set the source URL</a> of <var>element</var>.</p>
     </ol>
-    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑨">portal</a></code> element <var>element</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected" id="ref-for-becomes-browsing-context-connected">becomes browsing-context connected</a>, run the following steps:</p>
+    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①②">portal</a></code> element <var>element</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected" id="ref-for-becomes-browsing-context-connected">becomes browsing-context connected</a>, run the following steps:</p>
     <ol>
      <li data-md>
       <p>If <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context⑧">guest browsing context</a> is null, abort these steps.</p>
@@ -1873,7 +1880,7 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
      <li data-md>
       <p>If <var>hostBrowsingContext</var> is a nested browsing context, then abort these steps.</p>
       <p class="note" role="note"> The user agent may choose to emit a warning if the author attempts to
-    use a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⓪">portal</a></code> element in a nested browsing context, as this is not
+    use a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①③">portal</a></code> element in a nested browsing context, as this is not
     supported. </p>
      <li data-md>
       <p>Let <var>newBrowsingContext</var> be the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-top-level-browsing-context" id="ref-for-creating-a-new-top-level-browsing-context">creating a new top-level browsing context</a>.</p>
@@ -1888,29 +1895,37 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
     <ul class="wpt-tests-block">
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-nested.html">portals-nested.html</a> <a href="http://web-platform-tests.live/portals/portals-nested.html" title="portals/portals-nested.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-nested.html"><small>(source)</small></a>
     </ul>
-    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①①">portal</a></code> element <var>element</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-disconnected" id="ref-for-becomes-browsing-context-disconnected">becomes browsing-context disconnected</a>, run the following steps:</p>
+    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①④">portal</a></code> element <var>element</var> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-disconnected" id="ref-for-becomes-browsing-context-disconnected">becomes browsing-context disconnected</a>, run the following steps:</p>
     <ol>
      <li data-md>
-      <p>If <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①⓪">guest browsing context</a> is null, abort these steps.</p>
+      <p>Let <var>guestBrowsingContext</var> be <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①⓪">guest browsing context</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#htmlportalelement-close-a-portal-element" id="ref-for-htmlportalelement-close-a-portal-element②">Close</a> <var>element</var>.</p>
+      <p>If <var>guestBrowsingContext</var> is null, then abort these steps.</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded" id="ref-for-a-browsing-context-is-discarded②">Discard</a> <var>guestBrowsingContext</var>.</p>
+     <li data-md>
+      <p>Set <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①①">guest browsing context</a> to null.</p>
     </ol>
     <div class="issue" id="issue-833dc9f1"><a class="self-link" href="#issue-833dc9f1"></a> It might be convenient to not immediately detach the portal element, but instead to do so
-    in a microtask. This would allow developers to reinsert the <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①②">portal</a></code> element without losing
+    in a microtask. This would allow developers to reinsert the <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑤">portal</a></code> element without losing
     its browsing context. </div>
-    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①③">portal</a></code> element <var>element</var> is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-adopt-ext" id="ref-for-concept-node-adopt-ext">adopted</a>, run the following steps:</p>
+    <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑥">portal</a></code> element <var>element</var> is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-adopt-ext" id="ref-for-concept-node-adopt-ext">adopted</a>, run the following steps:</p>
     <ol>
      <li data-md>
-      <p>If <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①①">guest browsing context</a> is null, abort these steps.</p>
+      <p>Let <var>guestBrowsingContext</var> be <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①②">guest browsing context</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#htmlportalelement-close-a-portal-element" id="ref-for-htmlportalelement-close-a-portal-element③">Close</a> <var>element</var>.</p>
+      <p>If <var>guestBrowsingContext</var> is null, then abort these steps.</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded" id="ref-for-a-browsing-context-is-discarded③">Discard</a> <var>guestBrowsingContext</var>.</p>
+     <li data-md>
+      <p>Set <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①③">guest browsing context</a> to null.</p>
     </ol>
     <div class="note" role="note">
-      In particular, this means a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①④">portal</a></code> element loses its <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①②">guest browsing
+      In particular, this means a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑦">portal</a></code> element loses its <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①④">guest browsing
     context</a> if it is moved to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#active-document" id="ref-for-active-document①">active document</a> of a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context①">nested browsing
     context</a>. 
-     <p>Similarly, the steps when a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑤">portal</a></code> element <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected" id="ref-for-becomes-browsing-context-connected①">becomes browsing-context
-    connected</a> prevent elements from creating a new <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①③">guest browsing context</a> while inside such documents.</p>
+     <p>Similarly, the steps when a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑧">portal</a></code> element <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected" id="ref-for-becomes-browsing-context-connected①">becomes browsing-context
+    connected</a> prevent elements from creating a new <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①⑤">guest browsing context</a> while inside such documents.</p>
      <p>It is therefore impossible to embed a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑨">portal browsing context</a> in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context②">nested browsing context</a>.</p>
     </div>
     <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="#htmlportalelement" id="ref-for-htmlportalelement①">HTMLPortalElement</a></code> objects:</p>
@@ -1930,7 +1945,7 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
        <td><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent③">MessageEvent</a></code>
        <td>A message is received by the object, but deserialization throws an exception.
     </table>
-    <p>The <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑥">portal</a></code> element exposes <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessage" id="ref-for-dom-htmlportalelement-onmessage">onmessage</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessageerror" id="ref-for-dom-htmlportalelement-onmessageerror">onmessageerror</a></code> as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>.</p>
+    <p>The <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑨">portal</a></code> element exposes <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessage" id="ref-for-dom-htmlportalelement-onmessage">onmessage</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessageerror" id="ref-for-dom-htmlportalelement-onmessageerror">onmessageerror</a></code> as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>.</p>
     <h3 class="heading settled" data-level="3.2" id="the-portalhost-interface"><span class="secno">3.2. </span><span class="content">The <code>PortalHost</code> interface</span><a class="self-link" href="#the-portalhost-interface"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-host-object">portal host object</dfn> of a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> is a <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost①">PortalHost</a></code>.</p>
     <div class="note" role="note"> The <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object①">portal host object</a> can be used to communicate with the <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context②">host browsing context</a>.
@@ -1982,7 +1997,7 @@ to this message being sent; in such cases, messages may not be delivered.</p>
        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task④">Queue a task</a> from the <a data-link-type="dfn" href="#portal-task-source" id="ref-for-portal-task-source④">portal task source</a> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop⑥">event loop</a> associated with <var>hostBrowsingContext</var> to run the following steps:</p>
        <ol>
         <li data-md>
-         <p>If <var>browsingContext</var> is not the <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①④">guest browsing context</a> of <var>hostElement</var>, then abort these steps.</p>
+         <p>If <var>browsingContext</var> is not the <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①⑥">guest browsing context</a> of <var>hostElement</var>, then abort these steps.</p>
          <p class="note" role="note"><span>Note:</span> This might happen if this <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop⑦">event loop</a> had a queued task to deliver a message, but
 it was not executed before the portal was <a data-link-type="dfn" href="#activate-a-portal-browsing-context" id="ref-for-activate-a-portal-browsing-context④">activated</a>.
 In such cases, the message is not delivered.</p>
@@ -2603,7 +2618,7 @@ to deliver the message.</p>
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context">https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-close-a-browsing-context">2. Concepts</a> <a href="#ref-for-close-a-browsing-context①">(2)</a>
-    <li><a href="#ref-for-close-a-browsing-context②">3.1. The portal element</a>
+    <li><a href="#ref-for-close-a-browsing-context②">3.1. The portal element</a> <a href="#ref-for-close-a-browsing-context③">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-creating-a-new-top-level-browsing-context">
@@ -2617,6 +2632,13 @@ to deliver the message.</p>
    <ul>
     <li><a href="#ref-for-dom-messageevent-data">3.1. The portal element</a>
     <li><a href="#ref-for-dom-messageevent-data①">3.2. The PortalHost interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-a-browsing-context-is-discarded">
+   <a href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded">https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-a-browsing-context-is-discarded">2. Concepts</a>
+    <li><a href="#ref-for-a-browsing-context-is-discarded①">3.1. The portal element</a> <a href="#ref-for-a-browsing-context-is-discarded②">(2)</a> <a href="#ref-for-a-browsing-context-is-discarded③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document-bc">
@@ -2656,7 +2678,7 @@ to deliver the message.</p>
   <aside class="dfn-panel" data-for="term-for-the-iframe-element">
    <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-the-iframe-element">3.1. The portal element</a>
+    <li><a href="#ref-for-the-iframe-element">3.1. The portal element</a> <a href="#ref-for-the-iframe-element①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-in-parallel">
@@ -2698,6 +2720,13 @@ to deliver the message.</p>
     <li><a href="#ref-for-dom-messageevent-ports①">3.2. The PortalHost interface</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-prompt-to-unload-a-document">
+   <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#prompt-to-unload-a-document">https://html.spec.whatwg.org/multipage/browsing-the-web.html#prompt-to-unload-a-document</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-prompt-to-unload-a-document">2. Concepts</a>
+    <li><a href="#ref-for-prompt-to-unload-a-document①">3.1. The portal element</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-queue-a-task">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task">https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task</a><b>Referenced in:</b>
    <ul>
@@ -2712,13 +2741,6 @@ to deliver the message.</p>
    <ul>
     <li><a href="#ref-for-concept-global-object-realm">2. Concepts</a>
     <li><a href="#ref-for-concept-global-object-realm①">3.1. The portal element</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-refused-to-allow-the-document-to-be-unloaded">
-   <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#refused-to-allow-the-document-to-be-unloaded">https://html.spec.whatwg.org/multipage/browsing-the-web.html#refused-to-allow-the-document-to-be-unloaded</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-refused-to-allow-the-document-to-be-unloaded">2. Concepts</a>
-    <li><a href="#ref-for-refused-to-allow-the-document-to-be-unloaded①">3.1. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-relevant-settings-object">
@@ -2960,6 +2982,7 @@ to deliver the message.</p>
      <li><span class="dfn-paneled" id="term-for-close-a-browsing-context" style="color:initial">close a browsing context</span>
      <li><span class="dfn-paneled" id="term-for-creating-a-new-top-level-browsing-context" style="color:initial">create a new top-level browsing context</span>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-data" style="color:initial">data</span>
+     <li><span class="dfn-paneled" id="term-for-a-browsing-context-is-discarded" style="color:initial">discard a browsing context</span>
      <li><span class="dfn-paneled" id="term-for-concept-document-bc" style="color:initial">document browsing context</span>
      <li><span class="dfn-paneled" id="term-for-event-handler-content-attributes" style="color:initial">event handler content attribute</span>
      <li><span class="dfn-paneled" id="term-for-event-handler-idl-attributes" style="color:initial">event handler idl attribute</span>
@@ -2972,9 +2995,9 @@ to deliver the message.</p>
      <li><span class="dfn-paneled" id="term-for-concept-settings-object-origin" style="color:initial">origin <small>(for environment settings object)</small></span>
      <li><span class="dfn-paneled" id="term-for-parse-a-url" style="color:initial">parse a url</span>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-ports" style="color:initial">ports</span>
+     <li><span class="dfn-paneled" id="term-for-prompt-to-unload-a-document" style="color:initial">prompt to unload</span>
      <li><span class="dfn-paneled" id="term-for-queue-a-task" style="color:initial">queue a task</span>
      <li><span class="dfn-paneled" id="term-for-concept-global-object-realm" style="color:initial">realm <small>(for global object)</small></span>
-     <li><span class="dfn-paneled" id="term-for-refused-to-allow-the-document-to-be-unloaded" style="color:initial">refuse to allow the document to be unloaded</span>
      <li><span class="dfn-paneled" id="term-for-relevant-settings-object" style="color:initial">relevant settings object</span>
      <li><span class="dfn-paneled" id="term-for-responsible-browsing-context" style="color:initial">responsible browsing context</span>
      <li><span class="dfn-paneled" id="term-for-resulting-url-record" style="color:initial">resulting url record</span>
@@ -3176,20 +3199,20 @@ to deliver the message.</p>
    <b><a href="#elementdef-portal">#elementdef-portal</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-elementdef-portal">2. Concepts</a> <a href="#ref-for-elementdef-portal①">(2)</a>
-    <li><a href="#ref-for-elementdef-portal②">3.1. The portal element</a> <a href="#ref-for-elementdef-portal③">(2)</a> <a href="#ref-for-elementdef-portal④">(3)</a> <a href="#ref-for-elementdef-portal⑤">(4)</a> <a href="#ref-for-elementdef-portal⑥">(5)</a> <a href="#ref-for-elementdef-portal⑦">(6)</a> <a href="#ref-for-elementdef-portal⑧">(7)</a> <a href="#ref-for-elementdef-portal⑨">(8)</a> <a href="#ref-for-elementdef-portal①⓪">(9)</a> <a href="#ref-for-elementdef-portal①①">(10)</a> <a href="#ref-for-elementdef-portal①②">(11)</a> <a href="#ref-for-elementdef-portal①③">(12)</a> <a href="#ref-for-elementdef-portal①④">(13)</a> <a href="#ref-for-elementdef-portal①⑤">(14)</a> <a href="#ref-for-elementdef-portal①⑥">(15)</a>
+    <li><a href="#ref-for-elementdef-portal②">3.1. The portal element</a> <a href="#ref-for-elementdef-portal③">(2)</a> <a href="#ref-for-elementdef-portal④">(3)</a> <a href="#ref-for-elementdef-portal⑤">(4)</a> <a href="#ref-for-elementdef-portal⑥">(5)</a> <a href="#ref-for-elementdef-portal⑦">(6)</a> <a href="#ref-for-elementdef-portal⑧">(7)</a> <a href="#ref-for-elementdef-portal⑨">(8)</a> <a href="#ref-for-elementdef-portal①⓪">(9)</a> <a href="#ref-for-elementdef-portal①①">(10)</a> <a href="#ref-for-elementdef-portal①②">(11)</a> <a href="#ref-for-elementdef-portal①③">(12)</a> <a href="#ref-for-elementdef-portal①④">(13)</a> <a href="#ref-for-elementdef-portal①⑤">(14)</a> <a href="#ref-for-elementdef-portal①⑥">(15)</a> <a href="#ref-for-elementdef-portal①⑦">(16)</a> <a href="#ref-for-elementdef-portal①⑧">(17)</a> <a href="#ref-for-elementdef-portal①⑨">(18)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement-guest-browsing-context">
    <b><a href="#htmlportalelement-guest-browsing-context">#htmlportalelement-guest-browsing-context</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement-guest-browsing-context">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①">(2)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context②">(3)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context③">(4)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context④">(5)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑤">(6)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑥">(7)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑦">(8)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑧">(9)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑨">(10)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①⓪">(11)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①①">(12)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①②">(13)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①③">(14)</a>
-    <li><a href="#ref-for-htmlportalelement-guest-browsing-context①④">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-htmlportalelement-guest-browsing-context">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①">(2)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context②">(3)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context③">(4)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context④">(5)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑤">(6)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑥">(7)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑦">(8)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑧">(9)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑨">(10)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①⓪">(11)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①①">(12)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①②">(13)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①③">(14)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①④">(15)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①⑤">(16)</a>
+    <li><a href="#ref-for-htmlportalelement-guest-browsing-context①⑥">3.2. The PortalHost interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-attrdef-portal-src">
    <b><a href="#element-attrdef-portal-src">#element-attrdef-portal-src</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-attrdef-portal-src">3.1. The portal element</a> <a href="#ref-for-element-attrdef-portal-src①">(2)</a> <a href="#ref-for-element-attrdef-portal-src②">(3)</a> <a href="#ref-for-element-attrdef-portal-src③">(4)</a>
+    <li><a href="#ref-for-element-attrdef-portal-src">3.1. The portal element</a> <a href="#ref-for-element-attrdef-portal-src①">(2)</a> <a href="#ref-for-element-attrdef-portal-src②">(3)</a> <a href="#ref-for-element-attrdef-portal-src③">(4)</a> <a href="#ref-for-element-attrdef-portal-src④">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement">
@@ -3259,7 +3282,7 @@ to deliver the message.</p>
   <aside class="dfn-panel" data-for="htmlportalelement-close-a-portal-element">
    <b><a href="#htmlportalelement-close-a-portal-element">#htmlportalelement-close-a-portal-element</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement-close-a-portal-element">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-close-a-portal-element①">(2)</a> <a href="#ref-for-htmlportalelement-close-a-portal-element②">(3)</a> <a href="#ref-for-htmlportalelement-close-a-portal-element③">(4)</a>
+    <li><a href="#ref-for-htmlportalelement-close-a-portal-element">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-close-a-portal-element①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement-set-the-source-url-of-a-portal-element">
