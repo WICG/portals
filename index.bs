@@ -402,12 +402,12 @@ spec:url; type:dfn; text:scheme
     <div class="note">
       Unlike an <{iframe}> element, a <{portal}> element supports a state where
       it has no associated browsing context. This is the initial state of a
-      <{portal}> element (i.e., it has no initial `about:blank` document, but
-      navigates directly to the first legal URL assigned to it).
+      <{portal}> element (i.e., it has no initial `about:blank` document;
+      instead it navigates directly to the first parsable URL assigned to it).
 
-      Similarly, a <{portal}> element responds to an illegal <{portal/src}> URL
-      by closing its browsing context, rather than by navigating to
-      `about:blank`.
+      Similarly, a <{portal}> element responds to an unparsable <{portal/src}>
+      URL by [=close a browsing context|closing=] its browsing context, rather
+      than by navigating to `about:blank`.
     </div>
   </section>
 
