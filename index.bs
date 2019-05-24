@@ -260,7 +260,7 @@ spec:url; type:dfn; text:scheme
 
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of [=this=].
 
-        If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
+    1. If |portalBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
         <wpt>
           portals-activate-no-browsing-context.html
@@ -269,7 +269,7 @@ spec:url; type:dfn; text:scheme
     1. Let |predecessorBrowsingContext| be the [=document browsing context|browsing context=] of
         [=this=]'s [=node document|document=].
 
-        If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
+    1. If |predecessorBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. If the [=portal state=] of |predecessorBrowsingContext| is not "`none`",
         throw an "{{InvalidStateError}}" {{DOMException}}.
@@ -282,7 +282,7 @@ spec:url; type:dfn; text:scheme
         |options|["{{PortalActivateOptions/transfer}}"]).
         Rethrow any exceptions.
 
-    1. Clear the [=guest browsing context=] of [=this=].
+    1. Set the [=guest browsing context=] of [=this=] to null.
         User agents *should*, however, attempt to preserve the rendering of the
         guest browsing context until |predecessorBrowsingContext| has been replaced
         with |portalBrowsingContext| in the rendering.
@@ -318,7 +318,7 @@ spec:url; type:dfn; text:scheme
 
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of [=this=].
 
-        If no such context exists, throw an "{{InvalidStateError}}" {{DOMException}}.
+    1. If |portalBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Let |settings| be the [=relevant settings object=] of [=this=].
 
@@ -369,16 +369,18 @@ spec:url; type:dfn; text:scheme
   <section algorithm="htmlportalelement-close">
     To <dfn for="HTMLPortalElement">close a <{portal}> element</dfn> |element|, run the following steps:
 
-    1. If |element| has a [=guest browsing context=], then [=close a browsing context|close=] it.
+    1. If |element|'s [=guest browsing context=] is not null, then [=close a browsing context|close=] it.
         The user agent *should not* [=refuse to allow the document to be unloaded=].
 
-    1. Clear |element|'s [=guest browsing context=].
+    1. Set |element|'s [=guest browsing context=] to null.
   </section>
 
   <section algorithm="htmlportalelement-setsourceurl">
     To <dfn for="HTMLPortalElement">set the source URL of a <{portal}> element</dfn> |element|, run the following steps:
 
-    1. [=Assert=]: |element| has a [=guest browsing context=].
+    1. Let |guestBrowsingContext| be |element|'s [=guest browsing context=].
+
+    1. [=Assert=]: |guestBrowsingContext| is not null.
 
     1. If |element| has no <{portal/src}> attribute specified, or its value is the empty string,
         then [=close a portal element|close=] |element| and abort these steps.
@@ -391,7 +393,7 @@ spec:url; type:dfn; text:scheme
 
     1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
 
-    1. [=Navigate=] the [=guest browsing context=] to |resource|.
+    1. [=Navigate=] |guestBrowsingContext| to |resource|.
   </section>
 
   <div class="issue">
@@ -406,13 +408,13 @@ spec:url; type:dfn; text:scheme
   Whenever a <{portal}> element |element| has its <{portal/src}> attribute set,
   changed, or removed, run the following steps:
 
-  1. If |element| does not have a [=guest browsing context=], abort these steps.
+  1. If |element|'s [=guest browsing context=] is null, abort these steps.
 
   1. [=set the source URL of a portal element|Set the source URL=] of |element|.
 
   Whenever a <{portal}> element |element| [=becomes browsing-context connected=], run the following steps:
 
-  1. If |element| has a [=guest browsing context=], abort these steps.
+  1. If |element|'s [=guest browsing context=] is null, abort these steps.
 
   1. Let |hostBrowsingContext| be |element|'s [=node document|document=]'s [=browsing context=].
 
@@ -441,7 +443,7 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| [=becomes browsing-context disconnected=], run the following steps:
 
-  1. If |element| does not have a [=guest browsing context=], abort these steps.
+  1. If |element|'s [=guest browsing context=] is null, abort these steps.
 
   1. [=close a portal element|Close=] |element|.
 
@@ -453,7 +455,7 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| is [=adopting steps|adopted=], run the following steps:
 
-  1. If |element| does not have a [=guest browsing context=], abort these steps.
+  1. If |element|'s [=guest browsing context=] is null, abort these steps.
 
   1. [=close a portal element|Close=] |element|.
 
@@ -625,7 +627,7 @@ spec:url; type:dfn; text:scheme
   </xmp>
 
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
-  which is a [=top-level browsing context=], a <dfn for="PortalActivateEvent">successor window</dfn>, which is
+  which is a [=top-level browsing context=] or null, a <dfn for="PortalActivateEvent">successor window</dfn>, which is
   a {{Window}}, and an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=].
 
   <section algorithm="portalactivateevent-event-constructing-steps">
@@ -644,7 +646,8 @@ spec:url; type:dfn; text:scheme
     The <dfn method for="PortalActivateEvent"><code>adoptPredecessor()</code></dfn> method *must* run these steps:
 
     1. Let |predecessorBrowsingContext| be [=this=]'s [=PortalActivateEvent/predecessor browsing context=].
-        If it has none, throw an "{{InvalidStateError}}" {{DOMException}}.
+
+    1. If |predecessorBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
     1. Clear [=this=]'s [=PortalActivateEvent/predecessor browsing context=].
 
