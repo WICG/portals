@@ -28,7 +28,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: document browsing context; url: concept-document-bc
             text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
         urlPrefix: browsing-the-web.html
-            text: refuse to allow the document to be unloaded; url: refused-to-allow-the-document-to-be-unloaded
+            text: prompt to unload; url: prompt-to-unload-a-document
         urlPrefix: history.html
             text: session history; url: session-history
         urlPrefix: infrastructure.html
@@ -42,6 +42,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: valid non-empty URL potentially surrounded by spaces; url: valid-non-empty-url-potentially-surrounded-by-spaces
         urlPrefix: window-object.html
             text: close a browsing context; url: close-a-browsing-context
+            text: discard a browsing context; url: a-browsing-context-is-discarded
 spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     type: dfn
         text: promise; url: sec-promise-objects
@@ -159,7 +160,10 @@ spec:url; type:dfn; text:scheme
             resolve |promise| with undefined.
 
         1. If |predecessorBrowsingContext| is not a [=portal browsing context=], [=close a browsing context|close=] it.
-            The user agent *should not* [=refuse to allow the document to be unloaded=].
+
+            The user agent *should not* ask the user for confirmation during the
+            [=prompt to unload=] step (and so the browsing context should be
+            [=discard a browsing context|discarded=]).
   </section>
 
   <wpt>
@@ -370,7 +374,10 @@ spec:url; type:dfn; text:scheme
     To <dfn for="HTMLPortalElement">close a <{portal}> element</dfn> |element|, run the following steps:
 
     1. If |element|'s [=guest browsing context=] is not null, then [=close a browsing context|close=] it.
-        The user agent *should not* [=refuse to allow the document to be unloaded=].
+
+        The user agent *should not* ask the user for confirmation during the
+        [=prompt to unload=] step (and so the browsing context should be
+        [=discard a browsing context|discarded=]).
 
     1. Set |element|'s [=guest browsing context=] to null.
   </section>
@@ -394,6 +401,17 @@ spec:url; type:dfn; text:scheme
     1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
 
     1. [=Navigate=] |guestBrowsingContext| to |resource|.
+
+    <div class="note">
+      Unlike an <{iframe}> element, a <{portal}> element supports a state where
+      it has no associated browsing context. This is the initial state of a
+      <{portal}> element (i.e., it has no initial `about:blank` document;
+      instead it navigates directly to the first parsable URL assigned to it).
+
+      Similarly, a <{portal}> element responds to an unparsable <{portal/src}>
+      URL by [=close a browsing context|closing=] its browsing context, rather
+      than by navigating to `about:blank`.
+    </div>
   </section>
 
   <div class="issue">
@@ -443,9 +461,13 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| [=becomes browsing-context disconnected=], run the following steps:
 
-  1. If |element|'s [=guest browsing context=] is null, abort these steps.
+  1. Let |guestBrowsingContext| be |element|'s [=guest browsing context=].
 
-  1. [=close a portal element|Close=] |element|.
+  1. If |guestBrowsingContext| is null, then abort these steps.
+
+  1. [=discard a browsing context|Discard=] |guestBrowsingContext|.
+
+  1. Set |element|'s [=guest browsing context=] to null.
 
   <div class="issue">
     It might be convenient to not immediately detach the portal element, but instead to do so
@@ -455,9 +477,13 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| is [=adopting steps|adopted=], run the following steps:
 
-  1. If |element|'s [=guest browsing context=] is null, abort these steps.
+  1. Let |guestBrowsingContext| be |element|'s [=guest browsing context=].
 
-  1. [=close a portal element|Close=] |element|.
+  1. If |guestBrowsingContext| is null, then abort these steps.
+
+  1. [=discard a browsing context|Discard=] |guestBrowsingContext|.
+
+  1. Set |element|'s [=guest browsing context=] to null.
 
   <div class="note">
     In particular, this means a <{portal}> element loses its [=guest browsing
