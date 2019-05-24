@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
   <meta content="Bikeshed version 6dcfb71280c822ba1243caec7a720fa926b21c7e" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="e0d59c4c27793ee07440837d817497012278f73c" name="document-revision">
+  <meta content="d297d7d337eda737e5ed6e3ab0f8a7cf889fd1e5" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1679,8 +1679,23 @@ set the <a data-link-type="dfn" href="#host-element" id="ref-for-host-element②
        <p>Return <var>portalElement</var>.</p>
      </ol>
     </section>
-    <div class="note" role="note"> Since the task to set the <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state⑧">portal state</a>, and thus expose the <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost">PortalHost</a></code> object, is queued first, and from the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source" id="ref-for-task-source①">task source</a>,
-    it is exposed at the time the promise returned from <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-activate" id="ref-for-dom-htmlportalelement-activate①">activate()</a></code> is resolved. </div>
+    <div class="note" role="note">
+      Since the task to set the <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state⑧">portal state</a>, and thus expose the <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost">PortalHost</a></code> object, is queued first, and from the same <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source" id="ref-for-task-source①">task source</a>,
+    it is exposed at the time the <a data-link-type="dfn" href="#portalactivateevent-activation-promise" id="ref-for-portalactivateevent-activation-promise①">activation promise</a> returned from <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-activate" id="ref-for-dom-htmlportalelement-activate①">activate()</a></code> is resolved. 
+<pre class="highlight"><c- c1>// In the successor document.</c->
+onportalactivate <c- o>=</c-> event <c- p>=></c-> <c- p>{</c->
+  <c- c1>// The predecessor document is adopted into a &lt;portal> element...</c->
+  document<c- p>.</c->body<c- p>.</c->appendChild<c- p>(</c->event<c- p>.</c->adoptPredecessor<c- p>());</c->
+<c- p>});</c->
+
+<c- c1>// In the predecessor document.</c->
+portalElement<c- p>.</c->activate<c- p>().</c->then<c- p>(()</c-> <c- p>=></c-> <c- p>{</c->
+  <c- c1>// ...and it is guaranteed to observe that change by the time the</c->
+  <c- c1>// activation promise resolves.</c->
+  console<c- p>.</c->assert<c- p>(</c->window<c- p>.</c->portalHost <c- k>instanceof</c-> PortalHost<c- p>);</c->
+<c- p>});</c->
+</pre>
+    </div>
    </section>
    <section>
     <h2 class="heading settled" data-level="3" id="api"><span class="secno">3. </span><span class="content">API</span><a class="self-link" href="#api"></a></h2>
@@ -2079,7 +2094,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
       <li data-md>
        <p>Run the steps to <a data-link-type="dfn" href="#adopt-the-predecessor-browsing-context" id="ref-for-adopt-the-predecessor-browsing-context②">adopt the predecessor browsing context</a> <var>predecessorBrowsingContext</var> in <var>successorWindow</var>, and return the result.</p>
       <li data-md>
-       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task⑤">Queue a task</a> from the <a data-link-type="dfn" href="#portal-task-source" id="ref-for-portal-task-source⑤">portal task source</a> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop⑧">event loop</a> associated with <var>predecessorBrowsingContext</var> to resolve <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑨">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-activation-promise" id="ref-for-portalactivateevent-activation-promise①">activation promise</a> with undefined.</p>
+       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task⑤">Queue a task</a> from the <a data-link-type="dfn" href="#portal-task-source" id="ref-for-portal-task-source⑤">portal task source</a> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop⑧">event loop</a> associated with <var>predecessorBrowsingContext</var> to resolve <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑨">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-activation-promise" id="ref-for-portalactivateevent-activation-promise②">activation promise</a> with undefined.</p>
        <p class="note" role="note"><span>Note:</span> Queuing this immediately makes it possible to send messages to the adopted
 portal during dispatch of the <code class="idl"><a class="idl-code" data-link-type="event" href="#eventdef-window-portalactivate" id="ref-for-eventdef-window-portalactivate①">portalactivate</a></code> event without
 ordering issues between the task to resolve the activation promise and the task
@@ -3380,8 +3395,8 @@ to deliver the message.</p>
   <aside class="dfn-panel" data-for="portalactivateevent-activation-promise">
    <b><a href="#portalactivateevent-activation-promise">#portalactivateevent-activation-promise</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-portalactivateevent-activation-promise">2. Concepts</a>
-    <li><a href="#ref-for-portalactivateevent-activation-promise①">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-portalactivateevent-activation-promise">2. Concepts</a> <a href="#ref-for-portalactivateevent-activation-promise①">(2)</a>
+    <li><a href="#ref-for-portalactivateevent-activation-promise②">3.3. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-portalactivateevent-adoptpredecessor">
