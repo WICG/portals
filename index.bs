@@ -394,9 +394,19 @@ spec:url; type:dfn; text:scheme
   <section algorithm="htmlportalelement-setsourceurl">
     To <dfn for="HTMLPortalElement">set the source URL of a <{portal}> element</dfn> |element|, run the following steps:
 
-    1. Let |guestBrowsingContext| be |element|'s [=guest browsing context=].
+    1. [=Assert=]: |element| is [=browsing-context connected=].
 
-    1. [=Assert=]: |guestBrowsingContext| is not null.
+    1. Let |hostBrowsingContext| be |element|'s [=node document|document=]'s [=browsing context=].
+
+    1. [=Assert=]: |hostBrowsingContext| is not null.
+
+    1. If |hostBrowsingContext| is a nested browsing context, then abort these steps.
+
+        <p class="note">
+          The user agent may choose to emit a warning if the author attempts to
+          use a <{portal}> element in a nested browsing context, as this is not
+          supported.
+        </p>
 
     1. If |element| has no <{portal/src}> attribute specified, or its value is the empty string,
         then [=close a portal element|close=] |element| and abort these steps.
@@ -406,6 +416,24 @@ spec:url; type:dfn; text:scheme
         Otherwise, let |url| be the [=resulting URL record=].
 
     1. If the [=scheme=] of |url| is not an [=HTTP(S) scheme=], then abort these steps.
+
+        <div class="issue">
+          Would it be more consistent to treat this like an invalid URL, and close?
+        </div>
+
+    1. If |element|'s [=guest browsing context=] is null, then run the following steps:
+
+        1. Let |newBrowsingContext| be the result of
+            [=create a new top-level browsing context|creating a new top-level browsing context=].
+
+        1. Set the [=portal state=] of |newBrowsingContext| to "`portal`", and set
+            the [=host element=] of |newBrowsingContext| to |element|.
+
+        1. Set |element|'s [=guest browsing context=] to |newBrowsingContext|.
+
+    1. Let |guestBrowsingContext| be |element|'s [=guest browsing context=].
+
+    1. [=Assert=]: |guestBrowsingContext| is not null.
 
     1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
 
@@ -435,32 +463,19 @@ spec:url; type:dfn; text:scheme
   Whenever a <{portal}> element |element| has its <{portal/src}> attribute set,
   changed, or removed, run the following steps:
 
-  1. If |element|'s [=guest browsing context=] is null, abort these steps.
+  1. If |element| is not [=browsing-context connected=], then abort these steps.
 
   1. [=set the source URL of a portal element|Set the source URL=] of |element|.
 
   Whenever a <{portal}> element |element| [=becomes browsing-context connected=], run the following steps:
 
-  1. If |element|'s [=guest browsing context=] is null, abort these steps.
+  1. If |element|'s [=guest browsing context=] is not null, then abort these steps.
 
-  1. Let |hostBrowsingContext| be |element|'s [=node document|document=]'s [=browsing context=].
-
-  1. [=Assert=]: |hostBrowsingContext| is not null.
-
-  1. If |hostBrowsingContext| is a nested browsing context, then abort these steps.
-
-      <p class="note">
-        The user agent may choose to emit a warning if the author attempts to
-        use a <{portal}> element in a nested browsing context, as this is not
-        supported.
-      </p>
-
-  1. Let |newBrowsingContext| be the result of [=create a new top-level browsing context|creating a new top-level browsing context=].
-
-  1. Set the [=portal state=] of |newBrowsingContext| to "`portal`", and set
-     the [=host element=] of |newBrowsingContext| to |element|.
-
-  1. Set |element|'s [=guest browsing context=] to |newBrowsingContext|.
+      <div class="note">
+        This ensures that a newly [=adopt the predecessor browsing context|adopted=]
+        <{portal}> element can be inserted into the document without navigating
+        it.
+      </div>
 
   1. [=set the source URL of a portal element|Set the source URL=] of |element|.
 
@@ -499,9 +514,10 @@ spec:url; type:dfn; text:scheme
     context=] if it is moved to the [=active document=] of a [=nested browsing
     context=].
 
-    Similarly, the steps when a <{portal}> element [=becomes browsing-context
-    connected=] prevent elements from creating a new [=guest browsing context=]
-    while inside such documents.
+    Similarly, the steps when a <{portal}> element's
+    [=set the source URL of a portal element|source URL is set=] prevent
+    elements from creating a new [=guest browsing context=] while inside such
+    documents.
 
     It is therefore impossible to embed a [=portal browsing context=] in a
     [=nested browsing context=].
