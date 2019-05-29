@@ -29,6 +29,8 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
         urlPrefix: browsing-the-web.html
             text: prompt to unload; url: prompt-to-unload-a-document
+        urlPrefix: common-dom-interfaces.html
+            text: limited to only known values; url: limited-to-only-known-values
         urlPrefix: history.html
             text: session history; url: session-history
         urlPrefix: infrastructure.html
@@ -241,6 +243,10 @@ spec:url; type:dfn; text:scheme
   page that the [=guest browsing context=] is to contain. The attribute, if
   present, must be a [=valid non-empty URL potentially surrounded by spaces=].
 
+  The <dfn element-attr for="portal">referrerpolicy</dfn> attribute is a [=referrer policy attribute=].
+  Its purpose is to set the [=/referrer policy=] used when
+  [=set the source URL of a portal element|setting the source URL of a portal element=]. [[REFERRER-POLICY]]
+
   <p class="note">
     A <{portal}> is similar to an <{iframe}>, in that it allows another browsing context to be embedded.
     However, the [=portal browsing context=] hosted by a <{portal}> is part of a separate [=unit of related
@@ -252,6 +258,8 @@ spec:url; type:dfn; text:scheme
       [Exposed=Window, HTMLConstructor]
       interface HTMLPortalElement : HTMLElement {
           [CEReactions] attribute USVString src;
+          [CEReactions] attribute DOMString referrerPolicy;
+
           [NewObject] Promise<void> activate(optional PortalActivateOptions options);
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
           void postMessage(any message, optional WindowPostMessageOptions options);
@@ -267,6 +275,8 @@ spec:url; type:dfn; text:scheme
   </xmp>
 
   The <dfn attribute for="HTMLPortalElement">src</dfn> IDL attribute must [=reflect=] the <{portal/src}> content attribute.
+
+  The <dfn attribute for="HTMLPortalElement">referrerPolicy</dfn> IDL attribute must [=reflect=] the <{portal/referrerpolicy}> content attribute, [=limited to only known values=].
 
   <section algorithm="htmlportalelement-activate">
     The <dfn method for="HTMLPortalElement"><code>activate(|options|)</code></dfn> method *must* run these steps:
@@ -407,7 +417,9 @@ spec:url; type:dfn; text:scheme
 
     1. If the [=scheme=] of |url| is not an [=HTTP(S) scheme=], then abort these steps.
 
-    1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
+    1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url|
+        and whose [=request referrer policy|referrer policy=] is the current state of
+        |element|'s <{portal/referrerpolicy}> content attribute.
 
     1. [=Navigate=] |guestBrowsingContext| to |resource|.
 
@@ -422,10 +434,6 @@ spec:url; type:dfn; text:scheme
       than by navigating to `about:blank`.
     </div>
   </section>
-
-  <div class="issue">
-    Is {{no-referrer}} the right referrer policy here, or should we send the document's URL?
-  </div>
 
   <wpt>
     portals-cross-origin-load.sub.html
