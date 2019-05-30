@@ -394,13 +394,15 @@ spec:url; type:dfn; text:scheme
   <section algorithm="htmlportalelement-setsourceurl">
     To <dfn for="HTMLPortalElement">set the source URL of a <{portal}> element</dfn> |element|, run the following steps:
 
-    1. [=Assert=]: |element| is [=browsing-context connected=].
-
     1. Let |hostBrowsingContext| be |element|'s [=node document|document=]'s [=browsing context=].
 
     1. [=Assert=]: |hostBrowsingContext| is not null.
 
     1. If |hostBrowsingContext| is a nested browsing context, then abort these steps.
+
+        <wpt>
+          portals-nested.html
+        </wpt>
 
         <p class="note">
           The user agent may choose to emit a warning if the author attempts to
@@ -463,7 +465,7 @@ spec:url; type:dfn; text:scheme
   Whenever a <{portal}> element |element| has its <{portal/src}> attribute set,
   changed, or removed, run the following steps:
 
-  1. If |element| is not [=browsing-context connected=], then abort these steps.
+  1. If |element| is not [=browsing-context connected=] and |element|'s [=guest browsing context=] is null, then abort these steps.
 
   1. [=set the source URL of a portal element|Set the source URL=] of |element|.
 
@@ -478,10 +480,6 @@ spec:url; type:dfn; text:scheme
       </div>
 
   1. [=set the source URL of a portal element|Set the source URL=] of |element|.
-
-  <wpt>
-    portals-nested.html
-  </wpt>
 
   Whenever a <{portal}> element |element| [=becomes browsing-context disconnected=], run the following steps:
 
