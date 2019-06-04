@@ -439,8 +439,11 @@ spec:url; type:dfn; text:scheme
   </section>
 
   <wpt>
+    portal-non-http-navigation.html
     portals-cross-origin-load.sub.html
-    portals-no-referrer.html
+    portals-referrer.html
+    portals-referrer-inherit-header.html
+    portals-referrer-inherit-meta.html
   </wpt>
 
   Whenever a <{portal}> element |element| has its <{portal/src}> attribute set,
@@ -545,6 +548,10 @@ spec:url; type:dfn; text:scheme
   The <{portal}> element exposes {{HTMLPortalElement/onmessage}} and {{HTMLPortalElement/onmessageerror}}
   as [=event handler content attributes=].
 
+  <wpt>
+    htmlportalelement-event-handler-content-attributes.html
+  </wpt>
+
   The `PortalHost` interface {#the-portalhost-interface}
   ------------------------------------------------------
 
@@ -632,6 +639,10 @@ spec:url; type:dfn; text:scheme
             initialized to |origin|, the {{MessageEvent/source}} attribute initialized to |element|, the {{MessageEvent/data}} attribute
             initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
   </section>
+
+  <wpt>
+    portals-host-post-message.sub.html
+  </wpt>
 
   The following events are dispatched on {{PortalHost}} objects:
 
