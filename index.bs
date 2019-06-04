@@ -24,9 +24,9 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
         urlPrefix: browsers.html
             text: browsing context; url: browsing-context
+            text: browsing context group; url: browsing-context-group
             text: create a new top-level browsing context; url: creating-a-new-top-level-browsing-context
             text: document browsing context; url: concept-document-bc
-            text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
         urlPrefix: browsing-the-web.html
             text: prompt to unload; url: prompt-to-unload-a-document
         urlPrefix: common-dom-interfaces.html
@@ -47,6 +47,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: discard a browsing context; url: a-browsing-context-is-discarded
 spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     type: dfn
+        text: agent; url: sec-agents
         text: promise; url: sec-promise-objects
 spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     type: dfn
@@ -248,10 +249,12 @@ spec:url; type:dfn; text:scheme
   [=set the source URL of a portal element|setting the source URL of a portal element=]. [[REFERRER-POLICY]]
 
   <p class="note">
-    A <{portal}> is similar to an <{iframe}>, in that it allows another browsing context to be embedded.
-    However, the [=portal browsing context=] hosted by a <{portal}> is part of a separate [=unit of related
-    browsing contexts=]. The user agent is thus free to use a separate [=event loop=] for the browsing
-    contexts, even if they are [=same origin-domain=].
+    A <{portal}> is similar to an <{iframe}>, in that it allows another
+    browsing context to be embedded.  However, the [=portal browsing context=]
+    hosted by a <{portal}> is part of a separate [=browsing context group=],
+    and thus a separate [=agent=].  The user agent is therefore free to use a
+    separate [=event loop=] for the browsing contexts, even if they are [=same
+    origin-domain=].
   </p>
 
   <xmp class="idl">
