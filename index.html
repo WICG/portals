@@ -1213,9 +1213,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 44fc33e66fca75b24a5f918514bfc443d4d9a19e" name="generator">
+  <meta content="Bikeshed version e036b293b2a1c6b3630bc094922f64bed031a220" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="7ae9ea7511c31e08cead94ed2366fff85090af89" name="document-revision">
+  <meta content="432c361b404b4d9bfbd4887fe87d1ec70f392604" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1499,7 +1499,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-05-29">29 May 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-06-04">4 June 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1709,10 +1709,11 @@ portalElement<c- p>.</c->activate<c- p>().</c->then<c- p>(()</c-> <c- p>=></c-> 
   present, must be a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#valid-non-empty-url-potentially-surrounded-by-spaces" id="ref-for-valid-non-empty-url-potentially-surrounded-by-spaces">valid non-empty URL potentially surrounded by spaces</a>.</p>
     <p>The <dfn class="dfn-paneled" data-dfn-for="portal" data-dfn-type="element-attr" data-export id="element-attrdef-portal-referrerpolicy"><code>referrerpolicy</code></dfn> attribute is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#referrer-policy-attribute" id="ref-for-referrer-policy-attribute">referrer policy attribute</a>.
   Its purpose is to set the <a data-link-type="dfn" href="https://w3c.github.io/webappsec-referrer-policy/#referrer-policy" id="ref-for-referrer-policy">referrer policy</a> used when <a data-link-type="dfn" href="#htmlportalelement-set-the-source-url-of-a-portal-element" id="ref-for-htmlportalelement-set-the-source-url-of-a-portal-element">setting the source URL of a portal element</a>. <a data-link-type="biblio" href="#biblio-referrer-policy">[REFERRER-POLICY]</a></p>
-    <p class="note" role="note"> A <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal③">portal</a></code> is similar to an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element">iframe</a></code>, in that it allows another browsing context to be embedded.
-    However, the <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑥">portal browsing context</a> hosted by a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal④">portal</a></code> is part of a separate <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-browsing-contexts" id="ref-for-unit-of-related-browsing-contexts">unit of related
-    browsing contexts</a>. The user agent is thus free to use a separate <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop③">event loop</a> for the browsing
-    contexts, even if they are <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin-domain" id="ref-for-same-origin-domain">same origin-domain</a>. </p>
+    <p class="note" role="note"> A <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal③">portal</a></code> is similar to an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element">iframe</a></code>, in that it allows another
+    browsing context to be embedded.  However, the <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑥">portal browsing context</a> hosted by a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal④">portal</a></code> is part of a separate <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-group" id="ref-for-browsing-context-group">browsing context group</a>,
+    and thus a separate <a data-link-type="dfn" href="http://tc39.github.io/ecma262/#sec-agents" id="ref-for-sec-agents">agent</a>.  The user agent is therefore free to use a
+    separate <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop③">event loop</a> for the browsing contexts, even if they are <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin-domain" id="ref-for-same-origin-domain">same
+    origin-domain</a>. </p>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor" id="ref-for-htmlconstructor"><c- g>HTMLConstructor</c-></a>]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="htmlportalelement"><code><c- g>HTMLPortalElement</c-></code></dfn> : <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/dom.html#htmlelement" id="ref-for-htmlelement"><c- n>HTMLElement</c-></a> {
     [<a class="idl-code" data-link-type="extended-attribute" href="https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions" id="ref-for-cereactions"><c- g>CEReactions</c-></a>] <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString"><c- b>USVString</c-></a> <a class="idl-code" data-link-type="attribute" data-type="USVString" href="#dom-htmlportalelement-src" id="ref-for-dom-htmlportalelement-src"><c- g>src</c-></a>;
@@ -1874,8 +1875,11 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
      </div>
     </section>
     <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portal-non-http-navigation.html">portal-non-http-navigation.html</a> <a href="http://web-platform-tests.live/portals/portal-non-http-navigation.html" title="portals/portal-non-http-navigation.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portal-non-http-navigation.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-cross-origin-load.sub.html">portals-cross-origin-load.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-cross-origin-load.sub.html" title="portals/portals-cross-origin-load.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-cross-origin-load.sub.html"><small>(source)</small></a>
-     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-no-referrer.html">portals-no-referrer.html</a> <a href="http://web-platform-tests.live/portals/portals-no-referrer.html" title="portals/portals-no-referrer.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-no-referrer.html"><small>(source)</small></a>
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-referrer.html">portals-referrer.html</a> <a href="http://web-platform-tests.live/portals/portals-referrer.html" title="portals/portals-referrer.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-referrer.html"><small>(source)</small></a>
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-referrer-inherit-header.html">portals-referrer-inherit-header.html</a> <a href="http://web-platform-tests.live/portals/portals-referrer-inherit-header.html" title="portals/portals-referrer-inherit-header.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-referrer-inherit-header.html"><small>(source)</small></a>
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-referrer-inherit-meta.html">portals-referrer-inherit-meta.html</a> <a href="http://web-platform-tests.live/portals/portals-referrer-inherit-meta.html" title="portals/portals-referrer-inherit-meta.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-referrer-inherit-meta.html"><small>(source)</small></a>
     </ul>
     <p>Whenever a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①①">portal</a></code> element <var>element</var> has its <code><a data-link-type="element-sub" href="#element-attrdef-portal-src" id="ref-for-element-attrdef-portal-src④">src</a></code> attribute set,
   changed, or removed, run the following steps:</p>
@@ -1962,6 +1966,9 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
        <td>A message is received by the object, but deserialization throws an exception.
     </table>
     <p>The <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①⑨">portal</a></code> element exposes <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessage" id="ref-for-dom-htmlportalelement-onmessage">onmessage</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-onmessageerror" id="ref-for-dom-htmlportalelement-onmessageerror">onmessageerror</a></code> as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes">event handler content attributes</a>.</p>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/htmlportalelement-event-handler-content-attributes.html">htmlportalelement-event-handler-content-attributes.html</a> <a href="http://web-platform-tests.live/portals/htmlportalelement-event-handler-content-attributes.html" title="portals/htmlportalelement-event-handler-content-attributes.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/htmlportalelement-event-handler-content-attributes.html"><small>(source)</small></a>
+    </ul>
     <h3 class="heading settled" data-level="3.2" id="the-portalhost-interface"><span class="secno">3.2. </span><span class="content">The <code>PortalHost</code> interface</span><a class="self-link" href="#the-portalhost-interface"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-host-object">portal host object</dfn> of a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> is a <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost①">PortalHost</a></code>.</p>
     <div class="note" role="note"> The <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object①">portal host object</a> can be used to communicate with the <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context②">host browsing context</a>.
@@ -2038,6 +2045,9 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
        </ol>
      </ol>
     </section>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-post-message.sub.html">portals-host-post-message.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-host-post-message.sub.html" title="portals/portals-host-post-message.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-post-message.sub.html"><small>(source)</small></a>
+    </ul>
     <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost②">PortalHost</a></code> objects:</p>
     <table class="data">
      <thead>
@@ -2472,6 +2482,12 @@ to deliver the message.</p>
     <li><a href="#ref-for-dom-event-type">2. Concepts</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-sec-agents">
+   <a href="http://tc39.github.io/ecma262/#sec-agents">http://tc39.github.io/ecma262/#sec-agents</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-sec-agents">3.1. The portal element</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-sec-promise-objects">
    <a href="http://tc39.github.io/ecma262/#sec-promise-objects">http://tc39.github.io/ecma262/#sec-promise-objects</a><b>Referenced in:</b>
    <ul>
@@ -2630,6 +2646,12 @@ to deliver the message.</p>
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#window-bc">https://html.spec.whatwg.org/multipage/window-object.html#window-bc</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-window-bc">3.4. Miscellaneous extensions</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-browsing-context-group">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-group">https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-group</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-browsing-context-group">3.1. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-close-a-browsing-context">
@@ -2839,12 +2861,6 @@ to deliver the message.</p>
     <li><a href="#ref-for-top-level-browsing-context②">3.4. Miscellaneous extensions</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-unit-of-related-browsing-contexts">
-   <a href="https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-browsing-contexts">https://html.spec.whatwg.org/multipage/browsers.html#unit-of-related-browsing-contexts</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-unit-of-related-browsing-contexts">3.1. The portal element</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-valid-non-empty-url-potentially-surrounded-by-spaces">
    <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#valid-non-empty-url-potentially-surrounded-by-spaces">https://html.spec.whatwg.org/multipage/urls-and-fetching.html#valid-non-empty-url-potentially-surrounded-by-spaces</a><b>Referenced in:</b>
    <ul>
@@ -2976,6 +2992,7 @@ to deliver the message.</p>
    <li>
     <a data-link-type="biblio">[ECMASCRIPT]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-sec-agents" style="color:initial">agent</span>
      <li><span class="dfn-paneled" id="term-for-sec-promise-objects" style="color:initial">promise</span>
     </ul>
    <li>
@@ -3008,6 +3025,7 @@ to deliver the message.</p>
      <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-disconnected" style="color:initial">becomes browsing-context disconnected</span>
      <li><span class="dfn-paneled" id="term-for-the-body-element" style="color:initial">body</span>
      <li><span class="dfn-paneled" id="term-for-window-bc" style="color:initial">browsing context <small>(for Window)</small></span>
+     <li><span class="dfn-paneled" id="term-for-browsing-context-group" style="color:initial">browsing context group</span>
      <li><span class="dfn-paneled" id="term-for-close-a-browsing-context" style="color:initial">close a browsing context</span>
      <li><span class="dfn-paneled" id="term-for-creating-a-new-top-level-browsing-context" style="color:initial">create a new top-level browsing context</span>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-data" style="color:initial">data</span>
@@ -3039,7 +3057,6 @@ to deliver the message.</p>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-source" style="color:initial">source</span>
      <li><span class="dfn-paneled" id="term-for-task-source" style="color:initial">task source</span>
      <li><span class="dfn-paneled" id="term-for-top-level-browsing-context" style="color:initial">top-level browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-unit-of-related-browsing-contexts" style="color:initial">unit of related browsing contexts</span>
      <li><span class="dfn-paneled" id="term-for-valid-non-empty-url-potentially-surrounded-by-spaces" style="color:initial">valid non-empty url potentially surrounded by spaces</span>
     </ul>
    <li>
