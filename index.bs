@@ -103,6 +103,13 @@ spec:url; type:dfn; text:scheme
   element which embeds its rendered output and receives messages sent from the
   portal browsing context.
 
+  <div class="note">
+    A <{portal}> element may only be a [=host element=] while it is
+    [=browsing-context connected=] or during the dispatch of the
+    {{Window/portalactivate!!event}} event from which it was obtained
+    using {{PortalActivateEvent/adoptPredecessor()}}.
+  </div>
+
   The <dfn>host browsing context</dfn> of a [=portal browsing context=] is its
   [=host element=]'s [=node document|document=]'s [=browsing context=].
 
