@@ -24,11 +24,13 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     type: dfn
         urlPrefix: browsers.html
             text: browsing context; url: browsing-context
+            text: browsing context group; url: browsing-context-group
             text: create a new top-level browsing context; url: creating-a-new-top-level-browsing-context
             text: document browsing context; url: concept-document-bc
-            text: unit of related browsing contexts; url: unit-of-related-browsing-contexts
         urlPrefix: browsing-the-web.html
             text: prompt to unload; url: prompt-to-unload-a-document
+        urlPrefix: common-dom-interfaces.html
+            text: limited to only known values; url: limited-to-only-known-values
         urlPrefix: history.html
             text: session history; url: session-history
         urlPrefix: infrastructure.html
@@ -45,6 +47,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: discard a browsing context; url: a-browsing-context-is-discarded
 spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     type: dfn
+        text: agent; url: sec-agents
         text: promise; url: sec-promise-objects
 spec: fetch; urlPrefix: https://fetch.spec.whatwg.org/
     type: dfn
@@ -241,17 +244,25 @@ spec:url; type:dfn; text:scheme
   page that the [=guest browsing context=] is to contain. The attribute, if
   present, must be a [=valid non-empty URL potentially surrounded by spaces=].
 
+  The <dfn element-attr for="portal">referrerpolicy</dfn> attribute is a [=referrer policy attribute=].
+  Its purpose is to set the [=/referrer policy=] used when
+  [=set the source URL of a portal element|setting the source URL of a portal element=]. [[REFERRER-POLICY]]
+
   <p class="note">
-    A <{portal}> is similar to an <{iframe}>, in that it allows another browsing context to be embedded.
-    However, the [=portal browsing context=] hosted by a <{portal}> is part of a separate [=unit of related
-    browsing contexts=]. The user agent is thus free to use a separate [=event loop=] for the browsing
-    contexts, even if they are [=same origin-domain=].
+    A <{portal}> is similar to an <{iframe}>, in that it allows another
+    browsing context to be embedded.  However, the [=portal browsing context=]
+    hosted by a <{portal}> is part of a separate [=browsing context group=],
+    and thus a separate [=agent=].  The user agent is therefore free to use a
+    separate [=event loop=] for the browsing contexts, even if they are [=same
+    origin-domain=].
   </p>
 
   <xmp class="idl">
       [Exposed=Window, HTMLConstructor]
       interface HTMLPortalElement : HTMLElement {
           [CEReactions] attribute USVString src;
+          [CEReactions] attribute DOMString referrerPolicy;
+
           [NewObject] Promise<void> activate(optional PortalActivateOptions options);
           void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
           void postMessage(any message, optional WindowPostMessageOptions options);
@@ -267,6 +278,8 @@ spec:url; type:dfn; text:scheme
   </xmp>
 
   The <dfn attribute for="HTMLPortalElement">src</dfn> IDL attribute must [=reflect=] the <{portal/src}> content attribute.
+
+  The <dfn attribute for="HTMLPortalElement">referrerPolicy</dfn> IDL attribute must [=reflect=] the <{portal/referrerpolicy}> content attribute, [=limited to only known values=].
 
   <section algorithm="htmlportalelement-activate">
     The <dfn method for="HTMLPortalElement"><code>activate(|options|)</code></dfn> method *must* run these steps:
@@ -341,6 +354,14 @@ spec:url; type:dfn; text:scheme
 
     1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
         [[HTML#concept-settings-object-origin|origin]] of |settings|.
+
+    1. Otherwise, if |targetOrigin| is not a single U+002A ASTERISK character (*), then:
+
+        1. Let |parsedURL| be the result of running the [=URL parser=] on |targetOrigin|.
+
+        1. If |parsedURL| is failure, then throw a "{{SyntaxError}}" {{DOMException}}.
+
+        1. Set |targetOrigin| to |parsedURL|'s [=url/origin=].
 
     1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
 
@@ -437,7 +458,9 @@ spec:url; type:dfn; text:scheme
 
     1. [=Assert=]: |guestBrowsingContext| is not null.
 
-    1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url| and whose [=request referrer policy|referrer policy=] is "{{no-referrer}}".
+    1. Let |resource| be a new [=request=] whose [=request URL|URL=] is |url|
+        and whose [=request referrer policy|referrer policy=] is the current state of
+        |element|'s <{portal/referrerpolicy}> content attribute.
 
     1. [=Navigate=] |guestBrowsingContext| to |resource|.
 
@@ -453,13 +476,12 @@ spec:url; type:dfn; text:scheme
     </div>
   </section>
 
-  <div class="issue">
-    Is {{no-referrer}} the right referrer policy here, or should we send the document's URL?
-  </div>
-
   <wpt>
+    portal-non-http-navigation.html
     portals-cross-origin-load.sub.html
-    portals-no-referrer.html
+    portals-referrer.html
+    portals-referrer-inherit-header.html
+    portals-referrer-inherit-meta.html
   </wpt>
 
   Whenever a <{portal}> element |element| has its <{portal/src}> attribute set,
@@ -548,6 +570,10 @@ spec:url; type:dfn; text:scheme
   The <{portal}> element exposes {{HTMLPortalElement/onmessage}} and {{HTMLPortalElement/onmessageerror}}
   as [=event handler content attributes=].
 
+  <wpt>
+    htmlportalelement-event-handler-content-attributes.html
+  </wpt>
+
   The `PortalHost` interface {#the-portalhost-interface}
   ------------------------------------------------------
 
@@ -596,6 +622,14 @@ spec:url; type:dfn; text:scheme
     1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
         [[HTML#concept-settings-object-origin|origin]] of |settings|.
 
+    1. Otherwise, if |targetOrigin| is not a single U+002A ASTERISK character (*), then:
+
+        1. Let |parsedURL| be the result of running the [=URL parser=] on |targetOrigin|.
+
+        1. If |parsedURL| is failure, then throw a "{{SyntaxError}}" {{DOMException}}.
+
+        1. Set |targetOrigin| to |parsedURL|'s [=url/origin=].
+
     1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
@@ -635,6 +669,10 @@ spec:url; type:dfn; text:scheme
             initialized to |origin|, the {{MessageEvent/source}} attribute initialized to |element|, the {{MessageEvent/data}} attribute
             initialized to |messageClone|, and the {{MessageEvent/ports}} attribute initialized to |newPorts|.
   </section>
+
+  <wpt>
+    portals-host-post-message.sub.html
+  </wpt>
 
   The following events are dispatched on {{PortalHost}} objects:
 
