@@ -1213,9 +1213,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version e036b293b2a1c6b3630bc094922f64bed031a220" name="generator">
+  <meta content="Bikeshed version 872cce6d3026423d677f3bd5837f1a1a46299a04" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="432c361b404b4d9bfbd4887fe87d1ec70f392604" name="document-revision">
+  <meta content="61494cdcd046dc98c6899294ec087bcc559cc20b" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1499,7 +1499,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-06-04">4 June 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-06-11">11 June 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1801,6 +1801,16 @@ promise <var>promise</var>.</p>
       <li data-md>
        <p>If <var>targetOrigin</var> is a single U+002F SOLIDUS character (/), then set <var>targetOrigin</var> to the <a href="https://html.spec.whatwg.org/multipage/#concept-settings-object-origin">origin</a> of <var>settings</var>.</p>
       <li data-md>
+       <p>Otherwise, if <var>targetOrigin</var> is not a single U+002A ASTERISK character (*), then:</p>
+       <ol>
+        <li data-md>
+         <p>Let <var>parsedURL</var> be the result of running the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-parser" id="ref-for-concept-url-parser">URL parser</a> on <var>targetOrigin</var>.</p>
+        <li data-md>
+         <p>If <var>parsedURL</var> is failure, then throw a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#syntaxerror" id="ref-for-syntaxerror">SyntaxError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
+        <li data-md>
+         <p>Set <var>targetOrigin</var> to <var>parsedURL</var>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-origin" id="ref-for-concept-url-origin">origin</a>.</p>
+       </ol>
+      <li data-md>
        <p>Let <var>transfer</var> be <var>options</var>["<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions③">transfer</a></code>"].</p>
       <li data-md>
        <p>Let <var>serializeWithTransferResult</var> be <a data-link-type="abstract-op" href="https://html.spec.whatwg.org/multipage/structured-data.html#structuredserializewithtransfer" id="ref-for-structuredserializewithtransfer①">StructuredSerializeWithTransfer</a>(<var>message</var>, <var>transfer</var>). Rethrow any exceptions.</p>
@@ -1998,7 +2008,7 @@ Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.
       <li data-md>
        <p>Let <var>browsingContext</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-browsing-context" id="ref-for-responsible-browsing-context">responsible browsing context</a> of <var>settings</var>.</p>
       <li data-md>
-       <p>If <var>browsingContext</var> has a <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①①">portal state</a> other than "<code>portal</code>", throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror④">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
+       <p>If <var>browsingContext</var> has a <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①①">portal state</a> other than "<code>portal</code>", throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror④">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code>.</p>
        <p class="note" role="note"><span>Note:</span> This roughly means that it has not yet been activated, as far as this <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop⑤">event loop</a> has been told.
 It is possible that this browsing context will be <a data-link-type="dfn" href="#activate-a-portal-browsing-context" id="ref-for-activate-a-portal-browsing-context③">activated</a> in parallel
 to this message being sent; in such cases, messages may not be delivered.</p>
@@ -2008,6 +2018,16 @@ to this message being sent; in such cases, messages may not be delivered.</p>
        <p>Let <var>targetOrigin</var> be <var>options</var>["<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions⑥">targetOrigin</a></code>"].</p>
       <li data-md>
        <p>If <var>targetOrigin</var> is a single U+002F SOLIDUS character (/), then set <var>targetOrigin</var> to the <a href="https://html.spec.whatwg.org/multipage/#concept-settings-object-origin">origin</a> of <var>settings</var>.</p>
+      <li data-md>
+       <p>Otherwise, if <var>targetOrigin</var> is not a single U+002A ASTERISK character (*), then:</p>
+       <ol>
+        <li data-md>
+         <p>Let <var>parsedURL</var> be the result of running the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-parser" id="ref-for-concept-url-parser①">URL parser</a> on <var>targetOrigin</var>.</p>
+        <li data-md>
+         <p>If <var>parsedURL</var> is failure, then throw a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#syntaxerror" id="ref-for-syntaxerror①">SyntaxError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code>.</p>
+        <li data-md>
+         <p>Set <var>targetOrigin</var> to <var>parsedURL</var>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-origin" id="ref-for-concept-url-origin①">origin</a>.</p>
+       </ol>
       <li data-md>
        <p>Let <var>transfer</var> be <var>options</var>["<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions⑦">transfer</a></code>"].</p>
       <li data-md>
@@ -2097,7 +2117,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
       <li data-md>
        <p>Let <var>predecessorBrowsingContext</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑥">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-predecessor-browsing-context" id="ref-for-portalactivateevent-predecessor-browsing-context③">predecessor browsing context</a>.</p>
       <li data-md>
-       <p>If <var>predecessorBrowsingContext</var> is null, throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror⑤">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code>.</p>
+       <p>If <var>predecessorBrowsingContext</var> is null, throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror⑤">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
       <li data-md>
        <p>Clear <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑦">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-predecessor-browsing-context" id="ref-for-portalactivateevent-predecessor-browsing-context④">predecessor browsing context</a>.</p>
       <li data-md>
@@ -2892,6 +2912,13 @@ to deliver the message.</p>
     <li><a href="#ref-for-serviceworker">3.4. Miscellaneous extensions</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-url-origin">
+   <a href="https://url.spec.whatwg.org/#concept-url-origin">https://url.spec.whatwg.org/#concept-url-origin</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-url-origin">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-url-origin①">3.2. The PortalHost interface</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-url-scheme">
    <a href="https://url.spec.whatwg.org/#concept-url-scheme">https://url.spec.whatwg.org/#concept-url-scheme</a><b>Referenced in:</b>
    <ul>
@@ -2904,12 +2931,19 @@ to deliver the message.</p>
     <li><a href="#ref-for-concept-url">3.1. The portal element</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-url-parser">
+   <a href="https://url.spec.whatwg.org/#concept-url-parser">https://url.spec.whatwg.org/#concept-url-parser</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-url-parser">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-url-parser①">3.2. The PortalHost interface</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMException">
    <a href="https://heycam.github.io/webidl/#idl-DOMException">https://heycam.github.io/webidl/#idl-DOMException</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMException">3.1. The portal element</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a> <a href="#ref-for-idl-DOMException③">(4)</a>
-    <li><a href="#ref-for-idl-DOMException④">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-idl-DOMException⑤">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-idl-DOMException">3.1. The portal element</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a> <a href="#ref-for-idl-DOMException③">(4)</a> <a href="#ref-for-idl-DOMException④">(5)</a>
+    <li><a href="#ref-for-idl-DOMException⑤">3.2. The PortalHost interface</a> <a href="#ref-for-idl-DOMException⑥">(2)</a>
+    <li><a href="#ref-for-idl-DOMException⑦">3.3. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMString">
@@ -2940,6 +2974,13 @@ to deliver the message.</p>
    <a href="https://heycam.github.io/webidl/#NewObject">https://heycam.github.io/webidl/#NewObject</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-NewObject">3.1. The portal element</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-syntaxerror">
+   <a href="https://heycam.github.io/webidl/#syntaxerror">https://heycam.github.io/webidl/#syntaxerror</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-syntaxerror">3.1. The portal element</a>
+    <li><a href="#ref-for-syntaxerror①">3.2. The PortalHost interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-USVString">
@@ -3078,8 +3119,10 @@ to deliver the message.</p>
    <li>
     <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-concept-url-origin" style="color:initial">origin</span>
      <li><span class="dfn-paneled" id="term-for-concept-url-scheme" style="color:initial">scheme</span>
      <li><span class="dfn-paneled" id="term-for-concept-url" style="color:initial">url</span>
+     <li><span class="dfn-paneled" id="term-for-concept-url-parser" style="color:initial">url parser</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
@@ -3089,6 +3132,7 @@ to deliver the message.</p>
      <li><span class="dfn-paneled" id="term-for-Exposed" style="color:initial">Exposed</span>
      <li><span class="dfn-paneled" id="term-for-invalidstateerror" style="color:initial">InvalidStateError</span>
      <li><span class="dfn-paneled" id="term-for-NewObject" style="color:initial">NewObject</span>
+     <li><span class="dfn-paneled" id="term-for-syntaxerror" style="color:initial">SyntaxError</span>
      <li><span class="dfn-paneled" id="term-for-idl-USVString" style="color:initial">USVString</span>
      <li><span class="dfn-paneled" id="term-for-dfn-frozen-array-type" style="color:initial">frozen array type</span>
      <li><span class="dfn-paneled" id="term-for-idl-object" style="color:initial">object</span>
