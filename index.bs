@@ -158,16 +158,24 @@ spec:url; type:dfn; text:scheme
 
         1. [=Dispatch=] |event| to |successorWindow|.
 
-        1. If |event|'s [=PortalActivateEvent/predecessor browsing context=] is not null, then
-            [=queue a task=] from the [=portal task source=] to the
-            [=event loop=] associated with |predecessorBrowsingContext| to
-            resolve |promise| with undefined.
+        1. Let |adoptedPredecessorElement| be |event|'s [=PortalActivateEvent/adopted predecessor element=].
 
-        1. If |predecessorBrowsingContext| is not a [=portal browsing context=], [=close a browsing context|close=] it.
+        1. If |adoptedPredecessorElement| is not null, then:
 
-            The user agent *should not* ask the user for confirmation during the
-            [=prompt to unload=] step (and so the browsing context should be
-            [=discard a browsing context|discarded=]).
+            1. Set |adoptedPredecessorElement|'s [=just-adopted flag=] to false.
+
+            1. [=Check the lifetime=] of |adoptedPredecessorElement|.
+
+        1. Otherwise:
+
+            1. [=Queue a task=] from the [=portal task source=] to the [=event loop=]
+                associated with |predecessorBrowsingContext| to resolve |promise| with undefined.
+
+            1. [=Close a browsing context|Close=] |predecessorBrowsingContext|.
+
+                The user agent *should not* ask the user for confirmation during the
+                [=prompt to unload=] step (and so the browsing context should be
+                [=discard a browsing context|discarded=]).
   </section>
 
   <wpt>
@@ -192,6 +200,8 @@ spec:url; type:dfn; text:scheme
     1. Let |document| be the [=associated Document|document=] of |successorWindow|.
 
     1. Let |portalElement| be the result of [=creating an element=] given |document|, `portal`, and the [=HTML namespace=].
+
+    1. Set |portalElement|'s [=just-adopted flag=] to true.
 
     1. [=Assert=]: |portalElement| is an {{HTMLPortalElement}}.
 
@@ -246,6 +256,10 @@ spec:url; type:dfn; text:scheme
   A <{portal}> element |portalElement| has a <dfn for="HTMLPortalElement">guest
   browsing context</dfn>, which is the [=portal browsing context=] whose [=host
   element=] is |portalElement|, or null if no such browsing context exists.
+
+  A <{portal}> element has a <dfn for="HTMLPortalElement">just-adopted
+  flag</dfn>, which is a [=boolean=] and is initially false. It is set during
+  dispatch of the {{Window/portalactivate!!event}} event.
 
   The <dfn element-attr for="portal">src</dfn> attribute gives the [=URL=] of a
   page that the [=guest browsing context=] is to contain. The attribute, if
@@ -407,6 +421,16 @@ spec:url; type:dfn; text:scheme
     </wpt>
   </section>
 
+  <section algorithm="htmlportalelement-check-lifetime">
+    To <dfn for="HTMLPortalElement">check the lifetime</dfn> of a <{portal}> element |element|, run the following steps:
+
+    1. If |element| is [=browsing-context connected=], then return.
+
+    1. If |element|'s [=just-adopted flag=] is true, then return.
+
+    1. [=discard a browsing context|Discard=] |element|'s [=guest browsing context=], if it is not null.
+  </section>
+
   <section algorithm="htmlportalelement-close">
     To <dfn for="HTMLPortalElement">close a <{portal}> element</dfn> |element|, run the following steps:
 
@@ -512,13 +536,7 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| [=becomes browsing-context disconnected=], run the following steps:
 
-  1. Let |guestBrowsingContext| be |element|'s [=guest browsing context=].
-
-  1. If |guestBrowsingContext| is null, then abort these steps.
-
-  1. [=discard a browsing context|Discard=] |guestBrowsingContext|.
-
-  1. Set |element|'s [=guest browsing context=] to null.
+  1. [=Check the lifetime=] of |element|.
 
   <div class="issue">
     It might be convenient to not immediately detach the portal element, but instead to do so
@@ -533,8 +551,6 @@ spec:url; type:dfn; text:scheme
   1. If |guestBrowsingContext| is null, then abort these steps.
 
   1. [=discard a browsing context|Discard=] |guestBrowsingContext|.
-
-  1. Set |element|'s [=guest browsing context=] to null.
 
   <div class="note">
     In particular, this means a <{portal}> element loses its [=guest browsing
@@ -722,7 +738,8 @@ spec:url; type:dfn; text:scheme
 
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
   which is a [=top-level browsing context=] or null, a <dfn for="PortalActivateEvent">successor window</dfn>, which is
-  a {{Window}}, and an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=].
+  a {{Window}}, an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=], and a
+  <dfn for="PortalActivateEvent">adopted predecessor element</dfn>, which is a <{portal}> element or null.
 
   <section algorithm="portalactivateevent-event-constructing-steps">
     The [=event constructing steps=] for {{PortalActivateEvent}}, given an |event|, are as follows:
@@ -730,6 +747,8 @@ spec:url; type:dfn; text:scheme
     1. Set |event|'s [=PortalActivateEvent/predecessor browsing context=] to null.
 
     1. Set |event|'s [=PortalActivateEvent/successor window=] to null.
+
+    1. Set |event|'s [=PortalActivateEvent/adopted predecessor element=] to null.
   </section>
 
   <wpt>
@@ -747,7 +766,10 @@ spec:url; type:dfn; text:scheme
 
     1. Let |successorWindow| be [=this=]'s [=PortalActivateEvent/successor window=].
 
-    1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |successorWindow|, and return the result.
+    1. Run the steps to [=adopt the predecessor browsing context=] |predecessorBrowsingContext| in |successorWindow|,
+        and let |adoptedPredecessorElement| be the result.
+
+    1. Set [=this=]'s [=PortalActivateEvent/adopted predecessor element=] to |adoptedPredecessorElement|.
 
     1. [=Queue a task=] from the [=portal task source=] to the [=event loop=] associated with
         |predecessorBrowsingContext| to resolve [=this=]'s [=activation promise=] with undefined.
@@ -756,6 +778,8 @@ spec:url; type:dfn; text:scheme
         portal during dispatch of the {{Window/portalactivate!!event}} event without
         ordering issues between the task to resolve the activation promise and the task
         to deliver the message.
+
+    1. Return |adoptedPredecessorElement|.
 
     <wpt>
       portals-adopt-predecessor.html
