@@ -123,6 +123,15 @@ spec:url; type:dfn; text:scheme
 
     1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`none`".
 
+    1. Set the [=host element=] of |successorBrowsingContext| to null.
+
+        User agents *should*, however, attempt to preserve the rendering of the
+        guest browsing context until |predecessorBrowsingContext| has been replaced
+        with |portalBrowsingContext| in the rendering.
+
+        Note: This is intended to avoid a visual glitch, such as a "white flash", where
+        the guest browsing context briefly disappears.
+
     1. Set the [=portal state=] of |predecessorBrowsingContext| to "`orphaned`".
 
     1. Update the user interface to replace |predecessorBrowsingContext| with |successorBrowsingContext|
@@ -329,14 +338,6 @@ spec:url; type:dfn; text:scheme
         |options|["{{PortalActivateOptions/transfer}}"]).
         Rethrow any exceptions.
 
-    1. Set the [=guest browsing context=] of [=this=] to null.
-        User agents *should*, however, attempt to preserve the rendering of the
-        guest browsing context until |predecessorBrowsingContext| has been replaced
-        with |portalBrowsingContext| in the rendering.
-
-        Note: This is intended to avoid a visual glitch, such as a "white flash", where
-        the guest browsing context briefly disappears.
-
     1. Let |promise| be a new [=promise=].
 
     1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
@@ -439,8 +440,6 @@ spec:url; type:dfn; text:scheme
         The user agent *should not* ask the user for confirmation during the
         [=prompt to unload=] step (and so the browsing context should be
         [=discard a browsing context|discarded=]).
-
-    1. Set |element|'s [=guest browsing context=] to null.
   </section>
 
   <section algorithm="htmlportalelement-setsourceurl">
@@ -482,8 +481,6 @@ spec:url; type:dfn; text:scheme
 
         1. Set the [=portal state=] of |newBrowsingContext| to "`portal`", and set
             the [=host element=] of |newBrowsingContext| to |element|.
-
-        1. Set |element|'s [=guest browsing context=] to |newBrowsingContext|.
 
     1. Let |guestBrowsingContext| be |element|'s [=guest browsing context=].
 
@@ -758,11 +755,9 @@ spec:url; type:dfn; text:scheme
   <section algorithm="portalactivateevent-adoptpredecessor">
     The <dfn method for="PortalActivateEvent"><code>adoptPredecessor()</code></dfn> method *must* run these steps:
 
+    1. If [=this=]'s [=PortalActivateEvent/adopted predecessor element=] is not null, throw an "{{InvalidStateError}}" {{DOMException}}.
+
     1. Let |predecessorBrowsingContext| be [=this=]'s [=PortalActivateEvent/predecessor browsing context=].
-
-    1. If |predecessorBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
-
-    1. Clear [=this=]'s [=PortalActivateEvent/predecessor browsing context=].
 
     1. Let |successorWindow| be [=this=]'s [=PortalActivateEvent/successor window=].
 
