@@ -173,7 +173,7 @@ spec:url; type:dfn; text:scheme
 
             1. Set |adoptedPredecessorElement|'s [=just-adopted flag=] to false.
 
-            1. [=Check the lifetime=] of |adoptedPredecessorElement|.
+            1. If |element| [=may have a guest browsing context|may not have a guest browsing context=] and its [=guest browsing context=] is not null, then [=discard a browsing context|discard=] it.
 
         1. Otherwise:
 
@@ -422,14 +422,14 @@ spec:url; type:dfn; text:scheme
     </wpt>
   </section>
 
-  <section algorithm="htmlportalelement-check-lifetime">
-    To <dfn for="HTMLPortalElement">check the lifetime</dfn> of a <{portal}> element |element|, run the following steps:
+  <section algorithm="htmlportalelement-may-have-guest-browsing-context">
+    To determine whether a <{portal}> element <dfn for="HTMLPortalElement">may have a guest browsing context</dfn>, run the following steps:
 
-    1. If |element| is [=browsing-context connected=], then return.
+    1. If |element| is [=browsing-context connected=], then return true.
 
-    1. If |element|'s [=just-adopted flag=] is true, then return.
+    1. If |element|'s [=just-adopted flag=] is true, then return true.
 
-    1. [=discard a browsing context|Discard=] |element|'s [=guest browsing context=], if it is not null.
+    1. Return false.
   </section>
 
   <section algorithm="htmlportalelement-close">
@@ -445,11 +445,17 @@ spec:url; type:dfn; text:scheme
   <section algorithm="htmlportalelement-setsourceurl">
     To <dfn for="HTMLPortalElement">set the source URL of a <{portal}> element</dfn> |element|, run the following steps:
 
+    1. [=Assert=]: |element| [=may have a guest browsing context=].
+
     1. Let |hostBrowsingContext| be |element|'s [=node document|document=]'s [=browsing context=].
 
     1. [=Assert=]: |hostBrowsingContext| is not null.
 
-    1. If |hostBrowsingContext| is a nested browsing context, then abort these steps.
+    1. If |hostBrowsingContext| is a nested browsing context, then:
+
+        1. [=Assert=]: |element|'s [=guest browsing context=] is null.
+
+        1. Return.
 
         <wpt>
           portals-nested.html
@@ -462,17 +468,15 @@ spec:url; type:dfn; text:scheme
         </p>
 
     1. If |element| has no <{portal/src}> attribute specified, or its value is the empty string,
-        then [=close a portal element|close=] |element| and abort these steps.
+        then [=close a portal element|close=] |element| and return.
 
     1. [=Parse a URL|Parse=] the value of the <{portal/src}> attribute. If that is not successful,
-        then [=close a portal element|close=] |element| and abort these steps.
+        then [=close a portal element|close=] |element| and return.
+
         Otherwise, let |url| be the [=resulting URL record=].
 
-    1. If the [=scheme=] of |url| is not an [=HTTP(S) scheme=], then abort these steps.
-
-        <div class="issue">
-          Would it be more consistent to treat this like an invalid URL, and close?
-        </div>
+    1. If the [=scheme=] of |url| is not an [=HTTP(S) scheme=], then [=close a portal element|close=]
+        |element| and return.
 
     1. If |element|'s [=guest browsing context=] is null, then run the following steps:
 
@@ -515,11 +519,11 @@ spec:url; type:dfn; text:scheme
   Whenever a <{portal}> element |element| has its <{portal/src}> attribute set,
   changed, or removed, run the following steps:
 
-  1. If |element| is not [=browsing-context connected=] and |element|'s [=guest browsing context=] is null, then abort these steps.
-
-  1. [=set the source URL of a portal element|Set the source URL=] of |element|.
+  1. If |element| [=may have a guest browsing context=], then [=set the source URL of a portal element|set the source URL=] of |element|.
 
   Whenever a <{portal}> element |element| [=becomes browsing-context connected=], run the following steps:
+
+  1. [=Assert=]: |element| [=may have a guest browsing context=].
 
   1. If |element|'s [=guest browsing context=] is not null, then abort these steps.
 
@@ -533,7 +537,7 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| [=becomes browsing-context disconnected=], run the following steps:
 
-  1. [=Check the lifetime=] of |element|.
+  1. If |element| [=may have a guest browsing context|may not have a guest browsing context=] and its [=guest browsing context=] is not null, then [=discard a browsing context|discard=] it.
 
   <div class="issue">
     It might be convenient to not immediately detach the portal element, but instead to do so
