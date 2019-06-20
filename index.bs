@@ -441,6 +441,18 @@ spec:url; type:dfn; text:scheme
   <section algorithm="htmlportalelement-may-have-guest-browsing-context">
     To determine whether a <{portal}> element <dfn for="HTMLPortalElement">may have a guest browsing context</dfn>, run the following steps:
 
+    1. If |element|'s [=node document|document=]'s [=browsing context=] is a [=nested browsing context=], then return false.
+
+        <wpt>
+          portals-nested.html
+        </wpt>
+
+        <p class="note">
+          The user agent may choose to emit a warning if the author attempts to
+          use a <{portal}> element in a nested browsing context, as this is not
+          supported.
+        </p>
+
     1. If |element| is [=browsing-context connected=], then return true.
 
     1. If |element|'s [=just-adopted flag=] is true, then return true.
@@ -465,23 +477,7 @@ spec:url; type:dfn; text:scheme
 
     1. Let |hostBrowsingContext| be |element|'s [=node document|document=]'s [=browsing context=].
 
-    1. [=Assert=]: |hostBrowsingContext| is not null.
-
-    1. If |hostBrowsingContext| is a [=nested browsing context=], then:
-
-        1. [=Assert=]: |element|'s [=guest browsing context=] is null.
-
-        1. Return.
-
-        <wpt>
-          portals-nested.html
-        </wpt>
-
-        <p class="note">
-          The user agent may choose to emit a warning if the author attempts to
-          use a <{portal}> element in a nested browsing context, as this is not
-          supported.
-        </p>
+    1. [=Assert=]: |hostBrowsingContext| is a [=top-level browsing context=].
 
     1. If |element| has no <{portal/src}> attribute specified, or its value is the empty string,
         then [=close a portal element|close=] |element| and return.
@@ -539,7 +535,7 @@ spec:url; type:dfn; text:scheme
 
   Whenever a <{portal}> element |element| [=becomes browsing-context connected=], run the following steps:
 
-  1. [=Assert=]: |element| [=may have a guest browsing context=].
+  1. If |element| [=may have a guest browsing context|may not have a guest browsing context=], then abort these steps.
 
   1. If |element|'s [=guest browsing context=] is not null, then abort these steps.
 
