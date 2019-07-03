@@ -127,7 +127,7 @@ spec:url; type:dfn; text:scheme
 
         User agents *should*, however, attempt to preserve the rendering of the
         guest browsing context until |predecessorBrowsingContext| has been replaced
-        with |portalBrowsingContext| in the rendering.
+        with |successorBrowsingContext| in the rendering.
 
         Note: This is intended to avoid a visual glitch, such as a "white flash", where
         the guest browsing context briefly disappears.
@@ -173,7 +173,8 @@ spec:url; type:dfn; text:scheme
 
             1. Set |adoptedPredecessorElement|'s [=just-adopted flag=] to false.
 
-            1. If |element| [=may have a guest browsing context|may not have a guest browsing context=] and its [=guest browsing context=] is not null, then [=discard a browsing context|discard=] it.
+            1. If |adoptedPredecessorElement| [=may have a guest browsing context|may not have a guest browsing context=] and
+                its [=guest browsing context=] is not null, then [=discard a browsing context|discard=] it.
 
                 <div class="note">
                   This unceremoniously [=discard a browsing context|discards=]
