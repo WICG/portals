@@ -1029,7 +1029,7 @@ Possible extra rowspan handling
 		}
 	/* } */
 
-	@supports (display:grid) {
+	@supports (display:grid) and (display:contents) {
 		/* Use #toc over .toc to override non-@supports rules. */
 		#toc {
 			display: grid;
@@ -1213,9 +1213,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 872cce6d3026423d677f3bd5837f1a1a46299a04" name="generator">
+  <meta content="Bikeshed version 30aa90d768746168deba12493f1f3622df2814b6" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="de86b695b588124f4b3523833f65f234b7bf7a2e" name="document-revision">
+  <meta content="1ddcfc36ba014f6b00e9924d99448b23ffabca6c" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1499,7 +1499,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-06-20">20 June 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-07-03">3 July 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1609,7 +1609,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
        <p>Set the <a data-link-type="dfn" href="#host-element" id="ref-for-host-element②">host element</a> of <var>successorBrowsingContext</var> to null.</p>
        <p>User agents <em>should</em>, however, attempt to preserve the rendering of the
 guest browsing context until <var>predecessorBrowsingContext</var> has been replaced
-with <var>portalBrowsingContext</var> in the rendering.</p>
+with <var>successorBrowsingContext</var> in the rendering.</p>
        <p class="note" role="note"><span>Note:</span> This is intended to avoid a visual glitch, such as a "white flash", where
 the guest browsing context briefly disappears.</p>
       <li data-md>
@@ -1653,7 +1653,8 @@ and let <var>dataClone</var> be <var>deserializeRecord</var>.[[Deserialized]].</
           <li data-md>
            <p>Set <var>adoptedPredecessorElement</var>’s <a data-link-type="dfn" href="#htmlportalelement-just-adopted-flag" id="ref-for-htmlportalelement-just-adopted-flag">just-adopted flag</a> to false.</p>
           <li data-md>
-           <p>If <var>element</var> <a data-link-type="dfn" href="#htmlportalelement-may-have-a-guest-browsing-context" id="ref-for-htmlportalelement-may-have-a-guest-browsing-context">may not have a guest browsing context</a> and its <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context">guest browsing context</a> is not null, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded" id="ref-for-a-browsing-context-is-discarded">discard</a> it.</p>
+           <p>If <var>adoptedPredecessorElement</var> <a data-link-type="dfn" href="#htmlportalelement-may-have-a-guest-browsing-context" id="ref-for-htmlportalelement-may-have-a-guest-browsing-context">may not have a guest browsing context</a> and
+its <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context">guest browsing context</a> is not null, then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded" id="ref-for-a-browsing-context-is-discarded">discard</a> it.</p>
            <div class="note" role="note">
              This unceremoniously <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded" id="ref-for-a-browsing-context-is-discarded①">discards</a> the browsing context, as if the element had been removed from
   the document after previously being attached. This is
