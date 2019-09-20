@@ -848,7 +848,7 @@ spec:url; type:dfn; text:scheme
     <tbody>
       <tr>
         <td><dfn event for="Window"><code>portalactivate</code></dfn></td>
-        <td>{{PortalActivateEvent}}</td
+        <td>{{PortalActivateEvent}}</td>
         <td>The window is associated with a new [=top-level browsing context=] due to activation of its [=portal browsing context=].</td>
       </tr>
     </tbody>
@@ -864,7 +864,8 @@ spec:url; type:dfn; text:scheme
   ==================================================
 
   <div class="issue">
-    We should expand this section further, to cover [[RFC7034]] and other specifications that confine the behavior of frames.
+    We should expand this section further, to cover [[RFC7034]]
+    and other specifications that confine the behavior of frames.
   </div>
 
   Overview {#security-overview}
