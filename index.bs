@@ -864,8 +864,7 @@ spec:url; type:dfn; text:scheme
   ==================================================
 
   <div class="issue">
-    We should expand this section further, to cover [[RFC7034]]
-    and other specifications that confine the behavior of frames.
+    We should expand this section further.
   </div>
 
   Overview {#security-overview}
