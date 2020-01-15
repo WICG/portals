@@ -1167,6 +1167,18 @@ Possible extra rowspan handling
 		margin-left: auto;
 		margin-right: auto;
 	}
+	.overlarge {
+		/* Magic to create good table positioning:
+		   "content column" is 50ems wide at max; less on smaller screens.
+		   Extra space (after ToC + content) is empty on the right.
+
+		   1. When table < content column, centers table in column.
+		   2. When content < table < available, left-aligns.
+		   3. When table > available, fills available + scroll bar.
+		*/ 
+		display: grid;
+		grid-template-columns: minmax(0, 50em);
+	}
 	.overlarge > table {
 		/* limit preferred width of table */
 		max-width: 50em;
@@ -1176,7 +1188,6 @@ Possible extra rowspan handling
 
 	@media (min-width: 55em) {
 		.overlarge {
-			margin-left: calc(13px + 26.5rem - 50vw);
 			margin-right: calc(13px + 26.5rem - 50vw);
 			max-width: none;
 		}
@@ -1184,14 +1195,12 @@ Possible extra rowspan handling
 	@media screen and (min-width: 78em) {
 		body:not(.toc-inline) .overlarge {
 			/* 30.5em body padding 50em content area */
-			margin-left: calc(40em - 50vw) !important;
 			margin-right: calc(40em - 50vw) !important;
 		}
 	}
 	@media screen and (min-width: 90em) {
 		body:not(.toc-inline) .overlarge {
 			/* 4em html margin 30.5em body padding 50em content area */
-			margin-left: 0 !important;
 			margin-right: calc(84.5em - 100vw) !important;
 		}
 	}
@@ -1213,9 +1222,9 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version e1a165f1c2fb1cc2aceb87e110984a42830c36fa" name="generator">
+  <meta content="Bikeshed version 2a881f0ee698433d75c6a1555514334adb37d8c7" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
-  <meta content="eb54b218a7c5fc57fe0a224ce6dc4378c1bea9db" name="document-revision">
+  <meta content="64ae6ab83742dae5a61ec99c2517b273dceab4bb" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1499,7 +1508,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-12-06">6 December 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-01-15">15 January 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1513,7 +1522,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2019 the Contributors to the Portals Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2020 the Contributors to the Portals Specification, published by the <a href="https://www.w3.org/community/wicg/">Web Platform Incubator Community Group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>.
 A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available. </p>
    <hr title="Separator for header">
   </div>
@@ -1837,7 +1846,7 @@ promise <var>promise</var>.</p>
       <li data-md>
        <p>Let <var>targetOrigin</var> be <var>options</var>["<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions②">targetOrigin</a></code>"].</p>
       <li data-md>
-       <p>If <var>targetOrigin</var> is a single U+002F SOLIDUS character (/), then set <var>targetOrigin</var> to the <a href="https://html.spec.whatwg.org/multipage/#concept-settings-object-origin">origin</a> of <var>settings</var>.</p>
+       <p>If <var>targetOrigin</var> is a single U+002F SOLIDUS character (/), then set <var>targetOrigin</var> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin①">origin</a> of <var>settings</var>.</p>
       <li data-md>
        <p>Otherwise, if <var>targetOrigin</var> is not a single U+002A ASTERISK character (*), then:</p>
        <ol>
@@ -2059,11 +2068,11 @@ the <a data-link-type="dfn" href="#host-element" id="ref-for-host-element⑤">ho
 It is possible that this browsing context will be <a data-link-type="dfn" href="#activate-a-portal-browsing-context" id="ref-for-activate-a-portal-browsing-context③">activated</a> in parallel
 to this message being sent; in such cases, messages may not be delivered.</p>
       <li data-md>
-       <p>Let <var>origin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin" id="ref-for-ascii-serialisation-of-an-origin①">serialization</a> of <var>settings</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin①">origin</a>.</p>
+       <p>Let <var>origin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin" id="ref-for-ascii-serialisation-of-an-origin①">serialization</a> of <var>settings</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin②">origin</a>.</p>
       <li data-md>
        <p>Let <var>targetOrigin</var> be <var>options</var>["<code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions" id="ref-for-windowpostmessageoptions⑥">targetOrigin</a></code>"].</p>
       <li data-md>
-       <p>If <var>targetOrigin</var> is a single U+002F SOLIDUS character (/), then set <var>targetOrigin</var> to the <a href="https://html.spec.whatwg.org/multipage/#concept-settings-object-origin">origin</a> of <var>settings</var>.</p>
+       <p>If <var>targetOrigin</var> is a single U+002F SOLIDUS character (/), then set <var>targetOrigin</var> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin③">origin</a> of <var>settings</var>.</p>
       <li data-md>
        <p>Otherwise, if <var>targetOrigin</var> is not a single U+002A ASTERISK character (*), then:</p>
        <ol>
@@ -2094,7 +2103,7 @@ In such cases, the message is not delivered.</p>
          <p>Let <var>targetSettings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object②">relevant settings object</a> of <var>hostElement</var>.</p>
         <li data-md>
          <p>If <var>targetOrigin</var> is not a single literal U+002A ASTERISK character
-(*) and <var>targetSettings</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin②">origin</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin①">same origin</a> with <var>targetOrigin</var>, then abort these steps.</p>
+(*) and <var>targetSettings</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin④">origin</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin①">same origin</a> with <var>targetOrigin</var>, then abort these steps.</p>
         <li data-md>
          <p>Let <var>targetRealm</var> be <var>targetSettings</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object&apos;s-realm" id="ref-for-environment-settings-object&apos;s-realm">realm</a>.</p>
         <li data-md>
@@ -2918,8 +2927,8 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
   <aside class="dfn-panel" data-for="term-for-concept-settings-object-origin">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin">https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-settings-object-origin">3.1. The portal element</a>
-    <li><a href="#ref-for-concept-settings-object-origin①">3.2. The PortalHost interface</a> <a href="#ref-for-concept-settings-object-origin②">(2)</a>
+    <li><a href="#ref-for-concept-settings-object-origin">3.1. The portal element</a> <a href="#ref-for-concept-settings-object-origin①">(2)</a>
+    <li><a href="#ref-for-concept-settings-object-origin②">3.2. The PortalHost interface</a> <a href="#ref-for-concept-settings-object-origin③">(2)</a> <a href="#ref-for-concept-settings-object-origin④">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-parent-browsing-context">
