@@ -14,12 +14,12 @@
     "url": "https://github.com/WICG/portals.git"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
     "eslint-config-google": "^0.12.0",
-    "gulp": "^4.0.1",
+    "gulp": "^4.0.2",
     "gulp-eslint": "^5.0.0"
   }
 }
