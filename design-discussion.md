@@ -10,7 +10,7 @@ We distinguish the following privacy concerns:
  - Considerations for users of browsers that block third-party cookies
  - Considerations for users of browsers with "double keys" strategies to storage and cache
  - Compliance with GDPR
- 
+
 On the other hand, we consider the following situation(s) as out-of-scope of the privacy model:
  - Collusion between a first party and a third party, i.e. the first party is enabling a third party to funnel privacy sensitive data out.
 
@@ -24,10 +24,10 @@ Leakage of sensitive personal data due to Network activity:
  - Beacon, pings but also regular resource fetching
 
 Leakage of sensitive personal data due to JS activity:
- - HTTP Cache stuffing: 
+ - HTTP Cache stuffing:
    1. have each page fetch a long-lived unique resource,
    2. on subsequent navigations, use resource timing’s transferSize to test for cache hits on each unique resource to build/augment a user model.
- - Tracking via storage APIs: 
+ - Tracking via storage APIs:
    1. record privacy sensitive info, e.g. potential interest deduced from pages displayed as insets, into one of the web platform storage facilities,
    2. On subsequent navigations, upstream data to augment a user model.
  - Tracking via scoped SW:
@@ -36,13 +36,13 @@ Leakage of sensitive personal data due to JS activity:
 
 Third-party cookie blocking:
  - Portals should NOT provide the ability to defeat third-party cookie blocking.
- 
+
 Storage with "double keys" strategies:
- - In browsers with double keys strategies, data is partitioned on a (first party origin, third party origin) basis. Data set by `someservice.com` in the context of a navigation to a page hosted by `example.com` is not accessible in different contexts, e.g. a navigation to `someservice.com` nor via a navigation to `otherexample.com` that happens to also include a script from `someservice.com`. 
+ - In browsers with double keys strategies, data is partitioned on a (first party origin, third party origin) basis. Data set by `someservice.com` in the context of a navigation to a page hosted by `example.com` is not accessible in different contexts, e.g. a navigation to `someservice.com` nor via a navigation to `otherexample.com` that happens to also include a script from `someservice.com`.
  - Portals should NOT provide the ability to defeat this property of double keyed storages, i.e. it should NOT be possible for a third party to use portals in a way that self promote its partitioned data to a first party status.
 
 [GDPR](https://www.eugdpr.org/) compliance:
- - From May 25th 2018, the European Union will enforce a new data privacy regulation called General Data Protection Regulation (GDPR) which replaces the Data Protection Directive 95/46/EC. 
+ - From May 25th 2018, the European Union will enforce a new data privacy regulation called General Data Protection Regulation (GDPR) which replaces the Data Protection Directive 95/46/EC.
  - It appears that one of the key differences is an emphasis on obtaining “explicit” and “unambiguous” consent for processing sensitive personal data.
 
 ### Proposal
@@ -71,7 +71,7 @@ Concretely:
  - **Isolated mode.** Give the yet-to-be-activated Portal a unique origin, allows it to run Javascript and modify local state.  Upon activation, the page either continue to operate under its unique origin, or is reloaded under its canonical origin at the cost of losing access to the local state it had previously setup. There is a way for the owner of the destination page to specify which of these behaviors they prefer.
  - **Isolated Service Worker Mode.** A Service Worker and its importScripts are provided, along with the content they're expected to fetch(), and the URL to load. If the URL already has a newer SW registration, that's used; otherwise the provided SW is installed and used. Any other fetch() fails, as do all writes to storage. (Reads from storage are probably safe?) When the portal is activated, the SW is killed and restarted without these restrictions. Since SW registrations own clients, there's no problem with the client suddenly acquiring a SW that it wasn't born with. If there's an existing SW for concurrent clients on the same origin, the pre-activation one runs in parallel but can't affect the "real" one, and post-activation the portal client re-uses the "real" SW. (H/T @wycats)
 
-Finally, for the case where privacy concerns don’t exist, e.g. same-origin / origins owned by the same owner or trusted parties, there could be an unrestricted mode. 
+Finally, for the case where privacy concerns don’t exist, e.g. same-origin / origins owned by the same owner or trusted parties, there could be an unrestricted mode.
 
 The UA should **provide** reasonable defaults, e.g. restricted when cross origin. However, the UA **should never force** a particular mode because relationships between entities and developer intent are hard to reason about from a UA viewpoint.
 
@@ -80,12 +80,12 @@ If a user has signified their desire to block third party cookies, the browser s
 
 
 ### Double keys strategies for storage
-This is only relevant in the **Isolated mode** since **Restricted mode** would disallow any problematic access to storage. The properties of **Isolated mode** are enough to maintain the guarantees of a "double keys" strategy to storage. 
+This is only relevant in the **Isolated mode** since **Restricted mode** would disallow any problematic access to storage. The properties of **Isolated mode** are enough to maintain the guarantees of a "double keys" strategy to storage.
 
 Let's walk through a scenario involving a privacy-hostile page.
 
 Setup:
- 1. The user is on a page featuring a portal pointing to a privacy-hostile page using the Isolated mode. 
+ 1. The user is on a page featuring a portal pointing to a privacy-hostile page using the Isolated mode.
  2. While still a `<portal>`, the hostile page has access to storage but under a *unique origin* (Note: this is a Chrome concept but Firefox's opaque unique origin seems related) which isn't an actual origin.
 
 The hostile page had 2 options to pick from beforehand in order to define what happens when its portal is activated:
@@ -137,7 +137,7 @@ This is only relevant when activating a Portal that ran in the isolated mode. Th
  - Should an inactive portal receive input events? No. Allowing interactivity with inactive portals creates additional complexity.
 
 ## Yet-to-be-activated Portals and Viewability
-By default, iframes are not mindful of viewability. This resulted in various interventions, e.g. throttling requestAnimationFrame or timers for offscreen cross origin iframes. 
+By default, iframes are not mindful of viewability. This resulted in various interventions, e.g. throttling requestAnimationFrame or timers for offscreen cross origin iframes.
 
 Can we use this new opportunity to avoid repeating the same mistake, i.e. making Portals mindful of Viewability by default?
 
@@ -172,10 +172,10 @@ There are various use cases for Portals that may require different visual behavi
 
 
 ## Considerations for GDPR compliance
-Feedback from Legal: seems fine. 
+Feedback from Legal: seems fine.
 
 Details:
  - The proposed API would allow the publisher to seek user consent on activation (e.g. using the associated event to trigger a user consent flow if not already obtained [1])
  - The embedder can restrain the embedded content in such a way that preserver the user's privacy until activation. This allows a publisher to show something useful while in the yet-to-be-activated flow (as opposed to a user consent flow).
- 
+
 [1]: this probably means that most content owners would want to opt for the "reload-me under my origin" on activation. Otherwise, they would have to seek user consent all the time due to the opaque origin context. There might be a better option though.

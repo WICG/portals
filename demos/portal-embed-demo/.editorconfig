@@ -1,0 +1,8 @@
+[*]
+indent_size = 4
+
+[{package,package-lock}.json]
+indent_size = 2
+
+[README.md]
+indent_size = 2

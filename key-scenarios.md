@@ -108,11 +108,11 @@ window.addEventListener('portalactivate', e => {
   console.assert(predecessor instanceof HTMLPortalElement);
   // by special dispensation, this element keeps the portal alive for the duration of the portalactivate event
   // past that, the author must attach it to the document
-  
+
   // maintain the user's expectations vis-a-vis the news aggregator flow
-  // by keeping the news aggregator's UI around in the form of a portal 
+  // by keeping the news aggregator's UI around in the form of a portal
   document.getElementById("extUI").appendChild(predecessor);
-  
+
   // add script to forward swipe gestures to the news aggregator (portal)
   [...]
 });
