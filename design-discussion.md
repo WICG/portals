@@ -1,5 +1,7 @@
 # Detailed design discussion
 
+**This document is not synchronized with the 2020-04 updates to the [explainer](./README.md), and so should only be used as a rough guide.**
+
 ## Privacy considerations
 Requirements:
 For the use cases where the source and destination websites have different owners, it is important that the owner of the source website can preserve their users’ privacy.

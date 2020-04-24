@@ -60,6 +60,15 @@ spec:url; type:dfn; for:/; text:url
 spec:url; type:dfn; text:scheme
 </pre>
 
+<details class="annoying-warning">
+  <summary>This spec is behind the explainer</summary>
+
+  <p>This specification document has not yet been updated to reflect the 2020-04 updates to
+  <a href="https://github.com/WICG/portals">the explainer</a>. We'll fix that as soon as we can, but
+  please be aware that there are probably contradictions, and the explainer should be taken as more
+  authoritative for the time being.</p>
+</details>
+
 <section class="non-normative">
   Introduction {#intro}
   =====================
