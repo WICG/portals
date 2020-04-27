@@ -1,6 +1,8 @@
 # Key scenarios
 
-This is a list of scenarios which we hope portals will help solve. It includes desired privacy behavior not covered in the [v0 explainer](explainer.md).
+This is a list of scenarios which we hope portals will help solve. It includes desired privacy behavior not covered in the [v0 explainer](./README.md).
+
+**This document is not synchronized with the 2020-04 updates to the explainer, and so should only be used as a rough guide. Some cases here are likely not possible given the new restrictions imposed on portals; we will be updating this soon.**
 
 ## Seamless transitions in a multi-page application
 
