@@ -44,7 +44,7 @@ TODO are we still thinking of making this the default click action? If so we sho
 
 At this point, the user will observe that their browser has navigated to `https://www.example.com/` (e.g., via changes to the URL bar contents and back/forward UI). Since `https://example.com/` was already loaded in the portal context, this navigation will occur seamlessly and instantly, without a network round-trip or document re-initialization.
 
-For more advance use cases, the `https://www.example.com/` document can react to activation, using the `portalactivate` event. It can use this event to adapt itself to its new context, and even to adopt its *predecessor* (the document which previously occupied the tab) into a new portal context.
+For more advanced use cases, the `https://www.example.com/` document can react to activation, using the `portalactivate` event. It can use this event to adapt itself to its new context, and even to adopt its *predecessor* (the document which previously occupied the tab) into a new portal context.
 
 ```js
 window.addEventListener('portalactivate', e => {
