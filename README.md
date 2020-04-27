@@ -65,7 +65,7 @@ window.addEventListener('portalactivate', e => {
 
 _See the ["Key Scenarios"](./key-scenarios.md) document for more detail on each of these, including visualizations._
 
-- **Pre-rendering**: by loading a page in a hidden portal, it is possible to pre-render the destination page. Then, activating the portal will instantly display the pre-rendered document in the same browsing context.
+- **Pre-rendering**: by loading a page in a hidden portal, it is possible to pre-render the destination page. Then, activating the portal will instantly display the pre-rendered document in the same browser tab.
 
   This requires some care and cooperation from both sides to deal with the restrictions on portaled content, and the transition between portaled and activated states.
 
