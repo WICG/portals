@@ -1,6 +1,6 @@
 # Portals
 
-Portals are a proposed new HTML element which enables seamless navigations between pages. In particular, the `<portal>` element enables a page to show another page as an inset, and then "activate" it to perform a seamless transition to a new state, where the formerly-inset page becomes the top-level document.
+Portals enable seamless navigations between pages. In particular, we propose a new `<portal>` HTML element which enables a page to show another page as an inset, and then *activate* it to perform a seamless transition to a new state, where the formerly-inset page becomes the top-level document.
 
 Portals encompass some of the use cases that iframes currently do, but with better security, privacy, and ergonomics properties. And via the activation operation, they enable new use cases like preloading or navigation transitions.
 
@@ -16,10 +16,12 @@ Portals encompass some of the use cases that iframes currently do, but with bett
   - [Permissions and policies](#permissions-and-policies)
   - [Rendering](#rendering)
   - [Interactivity](#interactivity)
-  - [Accessbility](#accessbility)
+  - [Accessibility](#accessibility)
   - [Session history, navigation, and bfcache](#session-history-navigation-and-bfcache)
 - [Summary of differences between portals and iframes](#summary-of-differences-between-portals-and-iframes)
 - [Alternatives considered](#alternatives-considered)
+- [Security and privacy considerations](#security-and-privacy-considerations)
+- [Stakeholder feedback](#stakeholder-feedback)
 - [Acknowledgments](#acknowledgments)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -32,7 +34,7 @@ A document can include a `<portal>` element, which renders the specified URL in 
 <portal id="myPortal" src="https://www.example.com/"></portal>
 ```
 
-This is somewhat like an iframe, in that it provides a rendering of the specified document at `https://example.com/`. However, a portal is much more restricted than an iframe: user interaction with it is [limited](#interactivity) to just clicks (like a button or link), and capabilities like storage and cross-origin communication are [prohibited](#privacy-threat-model-and-restrictions) while rendering in the portal context. This allows portals to be used as a more-restricted view onto another document when the full capabilities of an iframe are not needed.
+This is somewhat like an iframe, in that it provides a rendering of the specified document at `https://example.com/`. However, a portal is much more restricted than an iframe: user interaction with it [does not pass through to the portaled document](#interactivity), and when the portaled document is cross-origin, capabilities like storage and `postMessage()` communication are [prohibited](#privacy-threat-model-and-restrictions) while rendering in the portal context. This allows portals to be used as a more-restricted view onto another document when the full capabilities of an iframe are not needed.
 
 In exchange for these restrictions, portals gain an additional capability that iframes do not have. A portal can be *activated*, which causes the embedding window to navigate, replacing its document with the portal:
 
@@ -40,7 +42,7 @@ In exchange for these restrictions, portals gain an additional capability that i
 myPortal.activate();
 ```
 
-TODO are we still thinking of making this the default click action? If so we should state that here. If it's still under debate we should state that it's under debate and link to an open issue.
+_Note: [issue #174](https://github.com/WICG/portals/issues/174) discusses making this the default behavior when clicking on a portal, similar to a link._
 
 At this point, the user will observe that their browser has navigated to `https://www.example.com/` (e.g., via changes to the URL bar contents and back/forward UI). Since `https://example.com/` was already loaded in the portal context, this navigation will occur seamlessly and instantly, without a network round-trip or document re-initialization.
 
@@ -49,7 +51,9 @@ For more advanced use cases, the `https://www.example.com/` document can react t
 ```js
 window.addEventListener('portalactivate', e => {
   document.body.classList.add('displayed-fully');
-  document.requestStorageAccess();
+  document.requestStorageAccess().then(() => {
+    document.getElementById('user').textContent = localStorage.getItem('current-user');
+  });
 
   let predecessor = e.adoptPredecessor(document);
   console.assert(predecessor instanceof HTMLPortalElement);
@@ -93,7 +97,7 @@ Non-goals:
 
 - Subsume all the use cases of iframes. The use cases for portals overlap with those for iframes, but in exchange for the ability to be activated, portaled pages lose abilities like cross-origin communication, storage, and nontrivial interactivity. As such, portals are not suitable for use cases like embedded widgets.
 
-- Allowing arbitrary unmodified web pages to be portaled. Pages will need to adapt to work well when they are hosted in a portal.
+- Allowing arbitrary unmodified web pages to be portaled. Cross-origin pages will need to adapt to work well when they are hosted in a portal.
 
 ## Details
 
@@ -141,7 +145,7 @@ TODO:
 - Did we end up adding a default click behavior like links?
 - Discuss scrolling, including the problem of scroll handoff and its importance. Note that scroll handoff is a ??? in spec terms but we promise to spec something interoperably implementable, somehow.
 
-### Accessbility
+### Accessibility
 
 TODO:
 
@@ -171,12 +175,33 @@ TODO:
 
 TODO:
 
-- A new attribute on iframes (text exists in explainer.md but is very implementer-focused)
+- A new attribute on iframes ([text existed in explainer.md](https://github.com/WICG/portals/blob/d901563053af7d56a2cafee686ee89d651c49eb7/explainer.md#why-do-we-need-a-new-html-tag-why-not-use-iframe) but was very implementer-focused)
 - Other (historical?) solutions to prerendering
 - Other (historical?) solutions to navigation transitions
-- Adding activation ("promotion") to iframes (text exists in explainer.md but is very implementer-focused)
-- Using the fullscreen API (text exists in explainer.md but is very implementer-focused)
+- Adding activation ("promotion") to iframes ([text existed in explainer.md](https://github.com/WICG/portals/blob/d901563053af7d56a2cafee686ee89d651c49eb7/explainer.md#iframe-promotion) but was very implementer-focused)
+- Using the fullscreen API ([text existed in explainer.md](https://github.com/WICG/portals/blob/d901563053af7d56a2cafee686ee89d651c49eb7/explainer.md#fullscreen-iframe) but was very implementer-focused)
 - Allowing cross-origin communication and storage
+
+## Security and privacy considerations
+
+TODO:
+
+- Can reference privacy threat model and restrictions above (or however that splits into sections when written)
+- Eventually content here should be incorporated into the spec, but for now let's develop it in the explainer
+
+See also the [W3C TAG Security and Privacy Questionnaire answers](./security-and-privacy-questionnaire.md).
+
+## Stakeholder feedback
+
+- W3C TAG: [w3ctag/design-reviews#331](https://github.com/w3ctag/design-reviews/issues/331)
+- Browsers:
+  - Safari: No feedback so far
+  - Firefox: [mozilla/standards-positions#157](https://github.com/mozilla/standards-positions/issues/157)
+  - Samsung: No feedback so far
+  - UC: No feedback so far
+  - Opera: No feedback so far
+  - Edge: No feedback so far
+- Web developers: TODO
 
 ## Acknowledgments
 
