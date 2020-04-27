@@ -1,15 +1,13 @@
 language: python
 sudo: false
 python:
-  - "2.7"
+  - "3.7"
 
 install:
-  # Setup bikeshed. See https://tabatkins.github.io/bikeshed/#install-linux
-  - git clone https://github.com/tabatkins/bikeshed.git
-  - pip install --editable $PWD/bikeshed
+  - pip install bikeshed
   - bikeshed update
 
-script: bikeshed spec
+script: bikeshed --die-on=warning spec
 
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_5de9ee54225b_key -iv $encrypted_5de9ee54225b_iv -in deploy_key.enc -out deploy_key -d
