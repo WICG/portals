@@ -3,8 +3,8 @@ This demo demonstrates how Portals can enable a seamless user experience between
 
 
 ## TL;DR;
-- This demo consists of two websites (different origin): 
-  - **PORTALOG**, a blog service, 
+- This demo consists of two websites (different origin):
+  - **PORTALOG**, a blog service,
   - and **TTT Archive**, a podcast service.
 - TTT Archive is embedded in one of PORTALOG's articles using **Portals**.
 - Portals enables a **seamless experience** between the two websites.
@@ -68,7 +68,7 @@ OR
 const portal = document.createElement('portal');
 portal.src = 'https://example.com';
 ```
-> Demo code reference: [creating a portal element](public/js/portalog/portals-controller.js#L53) 
+> Demo code reference: [creating a portal element](public/js/portalog/portals-controller.js#L53)
 
 A page can detect if it is inside a portal and, if so, modify its UI accordingly.
 ```javascript

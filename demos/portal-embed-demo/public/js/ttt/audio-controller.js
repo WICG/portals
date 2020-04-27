@@ -164,7 +164,7 @@ class AudioController extends HTMLElement {
         this.playlistIndex++;
         this._createNewAudio(this.playlist[this.playlistIndex]);
         if (this.isPlaying) {
-            // If the controller was playing an audio, 
+            // If the controller was playing an audio,
             // start playing the new audio
             this.play();
         }
@@ -181,7 +181,7 @@ class AudioController extends HTMLElement {
         this.playlistIndex--;
         this._createNewAudio(this.playlist[this.playlistIndex]);
         if (this.isPlaying) {
-            // If the controller was playing an audio, 
+            // If the controller was playing an audio,
             // start playing the new audio
             this.play();
         }
@@ -206,14 +206,14 @@ class AudioController extends HTMLElement {
         const index = this.playlist.indexOf(id);
         if (index !== -1) this.playlist.splice(index, 1);
 
-        // Simply decrement the current index. There could be more 
-        // sophisticated UX to this but the quality of the audio 
+        // Simply decrement the current index. There could be more
+        // sophisticated UX to this but the quality of the audio
         // controller is not the point for this demo.
         if (this.playlistIndex !== 0) {
             this.playlistIndex--;
             this._createNewAudio(this.playlist[this.playlistIndex])
             if (this.isPlaying) {
-                // If the controller was playing an audio, 
+                // If the controller was playing an audio,
                 // start playing the new audio
                 this.play();
             }

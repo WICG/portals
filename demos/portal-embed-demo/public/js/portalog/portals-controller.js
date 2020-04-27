@@ -77,7 +77,7 @@ class PortalsController {
         this.initialWidth = this.embedContainer.getBoundingClientRect().width;
         this.embedContainer.style.transition =
             `top 0.6s cubic-bezier(.49,.86,.37,1.01),
-             left 0.3s cubic-bezier(.49,.86,.37,1.01), 
+             left 0.3s cubic-bezier(.49,.86,.37,1.01),
              width 0.3s cubic-bezier(.49,.86,.37,1.01),
              padding-top 0.3s cubic-bezier(.49,.86,.37,1.01)`;
         this.embedContainer.style.top = `${TARGET_Y - this.initialY}px`;
@@ -110,7 +110,7 @@ class PortalsController {
                 return;
             }
 
-            // hide the scroll bar so that it won't show when used as a predecessor 
+            // hide the scroll bar so that it won't show when used as a predecessor
             document.body.classList.add('hide-scroll-bars');
 
             // don't add event listeners if it was already added
@@ -132,7 +132,7 @@ class PortalsController {
 
     /**
      * Reinstalls the embedded portal after returning to PORTALOG.
-     * @param {HTMLPortalElement} predecessor 
+     * @param {HTMLPortalElement} predecessor
      *     - A portal element containing the embedded page.
      */
     returnFromEmbed(predecessor) {
@@ -193,7 +193,7 @@ class PortalsController {
 
     /**
      * Follow and unfollow
-     * @param {boolean} isFollowed 
+     * @param {boolean} isFollowed
      */
     _changeFollowStatus(isFollowed) {
         const follow = document.querySelector('#follow');
@@ -242,4 +242,3 @@ if ('HTMLPortalElement' in window) {
     document.querySelector('#fallback-message').style.display = "block";
 
 }
-

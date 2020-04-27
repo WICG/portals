@@ -45,7 +45,7 @@ class TTTReco extends HTMLElement {
                 background-color: #FBFBFB;
                 margin-top: 15px;
                 border-radius: 2px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12),
                             0 1px 2px rgba(0,0,0,0.24);
             }
             .thumbnail {
@@ -92,7 +92,7 @@ class TTTReco extends HTMLElement {
                 transition: background 0.8s;
             }
             .ripple:hover {
-                background: #FBFBFB radial-gradient(circle, 
+                background: #FBFBFB radial-gradient(circle,
                     transparent 2%, #FBFBFB 1%) center/15000%;
             }
             .ripple:active {
@@ -119,9 +119,9 @@ class TTTReco extends HTMLElement {
 
     /**
      * Generating HTML for each recommended auido
-     * @param {String} key 
-     * @param {String} imgURL 
-     * @param {String} title 
+     * @param {String} key
+     * @param {String} imgURL
+     * @param {String} title
      * @return {String}
      */
     _createItemTemplate(key, imgURL, title) {

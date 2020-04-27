@@ -112,11 +112,11 @@ class TTTController {
 
     /**
      * Setting the styles when being activated from a portal
-     * @param {boolean} followed 
-     * @param {String} name 
-     * @param {String} photoSrc 
-     * @param {Number} activatedWidth 
-     * @param {HTMLPortalElement} predecessor 
+     * @param {boolean} followed
+     * @param {String} name
+     * @param {String} photoSrc
+     * @param {Number} activatedWidth
+     * @param {HTMLPortalElement} predecessor
      */
     setPortalActivatedUI(followed, name, photoSrc, activatedWidth, predecessor) {
         // Show all the elements
@@ -157,8 +157,8 @@ class TTTController {
 
     /**
      * Setting the styles when activating the predecessor
-     * @param {Number} initialY 
-     * @param {Number} initialWidth 
+     * @param {Number} initialY
+     * @param {Number} initialWidth
      */
     setPredecessorActivateUI(initialY, initialWidth) {
         this.main.style.boxShadow = 'none';

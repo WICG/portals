@@ -739,8 +739,10 @@ spec:url; type:dfn; text:scheme
   ------------------------------------------------------------------------
 
   <xmp class="idl">
-      [Constructor(DOMString type, optional PortalActivateEventInit eventInitDict), Exposed=Window]
+      [Exposed=Window]
       interface PortalActivateEvent : Event {
+          constructor(DOMString type, optional PortalActivateEventInit eventInitDict = {});
+
           readonly attribute any data;
           HTMLPortalElement adoptPredecessor();
       };
@@ -883,7 +885,7 @@ spec:url; type:dfn; text:scheme
 
   <section algorithm="csp-effective-directive-for-a-request">
     The algorithm for determining the [[CSP#effective-directive-for-a-request|effective directive for a request]]
-    is modified by prepending the following:
+    |request| is modified by prepending the following:
 
     1. If |request|'s [=initiator=] is "", its [=destination=] is "`document`", and
         its [=target browsing context=] is a [=portal browsing context=], return `frame-src`.

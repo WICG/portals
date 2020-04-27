@@ -30,7 +30,7 @@ class WriterFollow extends HTMLElement {
                 background-color: #F7F9F9;
                 display: block;
             }
-        
+
             .writer {
                 height: 55px;
                 display: inline-block;
@@ -82,7 +82,7 @@ class WriterFollow extends HTMLElement {
                     <img src=${this.photo}>
                 </div>
                 <div class="details">
-                    <div class="name">Shared by 
+                    <div class="name">Shared by
                         <span class="bold">${this.name}</span>
                     </div>
                     <div class="follow">Follow in PORTALOG</div>

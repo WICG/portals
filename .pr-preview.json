@@ -1,7 +1,7 @@
 {
-    "src_file": "index.bs",
-    "type": "bikeshed",
-    "params": {
-        "force": 1
-    }
+  "src_file": "index.bs",
+  "type": "bikeshed",
+  "params": {
+    "force": 1
+  }
 }
