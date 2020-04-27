@@ -1,5 +1,7 @@
 SHELL=/bin/bash
 
+.PHONY: local remote ci clean
+
 # TODO: add --die-on=warning when we fix all the warnings
 local: index.bs
 	bikeshed index.bs index.html
@@ -19,10 +21,9 @@ index.html: index.bs
 
 remote: index.html
 
-ci: index.bs
+ci: index.bs index.html
 	mkdir -p out
-	make remote
-	mv index.html portals-state-transitions.svg out/
+	cp index.html portals-state-transitions.svg out/
 
 clean:
 	rm index.html

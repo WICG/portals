@@ -13,8 +13,6 @@ deploy:
   provider: pages
   local_dir: out
   deploy_key: deploy_key
-  edge:
-    branch: master
 
 notifications:
   email:
