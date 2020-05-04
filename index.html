@@ -1545,22 +1545,30 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
    <ol class="toc" role="directory">
     <li><a href="#intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
-    <li><a href="#concepts"><span class="secno">2</span> <span class="content">Concepts</span></a>
+    <li><a href="#concepts"><span class="secno">2</span> <span class="content">Portal browsing contexts</span></a>
     <li>
-     <a href="#api"><span class="secno">3</span> <span class="content">API</span></a>
+     <a href="#the-portal-element"><span class="secno">3</span> <span class="content">The <code>portal</code> element</span></a>
      <ol class="toc">
-      <li><a href="#the-portal-element"><span class="secno">3.1</span> <span class="content">The <code>portal</code> element</span></a>
-      <li><a href="#the-portalhost-interface"><span class="secno">3.2</span> <span class="content">The <code>PortalHost</code> interface</span></a>
-      <li><a href="#the-portalactivateevent-interface"><span class="secno">3.3</span> <span class="content">The <code>PortalActivateEvent</code> interface</span></a>
-      <li><a href="#miscellaneous-extensions"><span class="secno">3.4</span> <span class="content">Miscellaneous extensions</span></a>
+      <li><a href="#the-portalhost-interface"><span class="secno">3.1</span> <span class="content">Portal hosts</span></a>
+      <li><a href="#the-portalactivateevent-interface"><span class="secno">3.2</span> <span class="content">The <code>PortalActivateEvent</code> interface</span></a>
      </ol>
     <li>
-     <a href="#security-considerations"><span class="secno">4</span> <span class="content">Security Considerations</span></a>
+     <a href="#miscellaneous-extensions"><span class="secno">4</span> <span class="content">Miscellaneous HTML updates</span></a>
      <ol class="toc">
-      <li><a href="#security-overview"><span class="secno">4.1</span> <span class="content">Overview</span></a>
-      <li><a href="#csp"><span class="secno">4.2</span> <span class="content">Integration with Content Security Policy</span></a>
-      <li><a href="#rfc7034"><span class="secno">4.3</span> <span class="content">Integration with RFC 7034</span></a>
-      <li><a href="#fetch-metadata"><span class="secno">4.4</span> <span class="content">Integration with Fetch Metadata Request Headers</span></a>
+      <li><a href="#patch-messageevent"><span class="secno">4.1</span> <span class="content">The <code class="idl"><span>MessageEvent</span></code> interface</span></a>
+      <li><a href="#patch-event-handlers"><span class="secno">4.2</span> <span class="content">Event handlers</span></a>
+     </ol>
+    <li>
+     <a href="#other-spec-updates"><span class="secno">5</span> <span class="content">Updates to other specifications</span></a>
+     <ol class="toc">
+      <li><a href="#csp"><span class="secno">5.1</span> <span class="content">Content Security Policy</span></a>
+      <li><a href="#rfc7034"><span class="secno">5.2</span> <span class="content">RFC 7034</span></a>
+      <li><a href="#fetch-metadata"><span class="secno">5.3</span> <span class="content">Fetch Metadata Request Headers</span></a>
+     </ol>
+    <li>
+     <a href="#security-considerations"><span class="secno">6</span> <span class="content">Security Considerations</span></a>
+     <ol class="toc">
+      <li><a href="#security-overview"><span class="secno">6.1</span> <span class="content">Overview</span></a>
      </ol>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
     <li>
@@ -1592,9 +1600,12 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <p>This specification extends <a data-link-type="biblio" href="#biblio-html">[HTML]</a> to define a new kind of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context">top-level browsing context</a>,
   which can be embedded in another document, and a mechanism for replacing the contents of another
   top-level browsing context with the previously embedded context.</p>
+    <p>It is structured as a series of patches to HTML and other specifications, with each major section
+  indicating where each it would be placed in the event of eventual graduation from incubation.</p>
    </section>
    <section>
-    <h2 class="heading settled" data-level="2" id="concepts"><span class="secno">2. </span><span class="content">Concepts</span><a class="self-link" href="#concepts"></a></h2>
+    <h2 class="heading settled" data-level="2" id="concepts"><span class="secno">2. </span><span class="content">Portal browsing contexts</span><a class="self-link" href="#concepts"></a></h2>
+    <p><em>The following section would be added as a new sub-section of <a data-link-type="biblio" href="#biblio-html">[HTML]</a>'s <a href="https://html.spec.whatwg.org/#windows">Browsing contexts</a> section.</em></p>
     <p>Every <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context">browsing context</a> has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-state">portal state</dfn>, which may be "<code>none</code>" (the default), "<code>portal</code>" or "<code>orphaned</code>".
   A <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context">nested browsing context</a> always has the <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state">portal state</a> "<code>none</code>".</p>
     <div class="note" role="note">
@@ -1751,8 +1762,8 @@ portalElement<c- p>.</c->activate<c- p>().</c->then<c- p>(()</c-> <c- p>=></c-> 
     </div>
    </section>
    <section>
-    <h2 class="heading settled" data-level="3" id="api"><span class="secno">3. </span><span class="content">API</span><a class="self-link" href="#api"></a></h2>
-    <h3 class="heading settled" data-level="3.1" id="the-portal-element"><span class="secno">3.1. </span><span class="content">The <code>portal</code> element</span><a class="self-link" href="#the-portal-element"></a></h3>
+    <h2 class="heading settled" data-level="3" id="the-portal-element"><span class="secno">3. </span><span class="content">The <code>portal</code> element</span><a class="self-link" href="#the-portal-element"></a></h2>
+    <p><em>The following section would be added as a new subsection of <a data-link-type="biblio" href="#biblio-html">[HTML]</a>'s <a href="https://html.spec.whatwg.org/#embedded-content">Embedded content</a> section.</em></p>
     <p>A <dfn class="dfn-paneled" data-dfn-type="element" data-export id="elementdef-portal"><code>portal</code></dfn> element allows for a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context③">portal browsing context</a> to be embedded in an HTML document.</p>
     <ul class="wpt-tests-block">
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-rendering.html">portals-rendering.html</a> <a href="http://web-platform-tests.live/portals/portals-rendering.html" title="portals/portals-rendering.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-rendering.html"><small>(source)</small></a>
@@ -2039,11 +2050,33 @@ the <a data-link-type="dfn" href="#host-element" id="ref-for-host-element⑤">ho
     <ul class="wpt-tests-block">
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/htmlportalelement-event-handler-content-attributes.html">htmlportalelement-event-handler-content-attributes.html</a> <a href="http://web-platform-tests.live/portals/htmlportalelement-event-handler-content-attributes.html" title="portals/htmlportalelement-event-handler-content-attributes.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/htmlportalelement-event-handler-content-attributes.html"><small>(source)</small></a>
     </ul>
-    <h3 class="heading settled" data-level="3.2" id="the-portalhost-interface"><span class="secno">3.2. </span><span class="content">The <code>PortalHost</code> interface</span><a class="self-link" href="#the-portalhost-interface"></a></h3>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-host-object">portal host object</dfn> of a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> is a <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost①">PortalHost</a></code>.</p>
-    <div class="note" role="note"> The <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object①">portal host object</a> can be used to communicate with the <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context②">host browsing context</a>.
-    Its operations throw if used while its context is not a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑧">portal browsing context</a> (i.e. there is no host).
-    It is not accessible via <code class="idl"><a data-link-type="idl" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost">window.portalHost</a></code> at such times. </div>
+    <h3 class="heading settled" data-level="3.1" id="the-portalhost-interface"><span class="secno">3.1. </span><span class="content">Portal hosts</span><a class="self-link" href="#the-portalhost-interface"></a></h3>
+    <p>Every <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-host-object">portal host object</dfn>, which is a <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost①">PortalHost</a></code>. It is exposed
+  through the <code class="idl"><a data-link-type="idl" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost">portalHost</a></code> attribute getter at times when the window may be in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑧">portal browsing context</a>.</p>
+    <div class="note" role="note"> The <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object①">portal host object</a> can be used to communicate with the <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context②">host browsing context</a>. Its
+    operations throw if used while its context is not a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑨">portal browsing context</a> (i.e. there is
+    no host), in the event that JavaScript code has saved a reference to it. At such times, the <code class="idl"><a data-link-type="idl" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost①">window.portalHost</a></code> getter will return null. </div>
+<pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window①"><c- g>Window</c-></a> {
+    <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost②"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost②"><c- g>portalHost</c-></a>;
+};
+</pre>
+    <section class="algorithm" data-algorithm="window-portalhost">
+      The <dfn class="dfn-paneled idl-code" data-dfn-for="Window" data-dfn-type="attribute" data-export id="dom-window-portalhost"><code>portalHost</code></dfn> attribute’s getter <em>must</em> run the following steps: 
+     <ol>
+      <li data-md>
+       <p>Let <var>context</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this④">this</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#window-bc" id="ref-for-window-bc">browsing context</a>.</p>
+      <li data-md>
+       <p>If <var>context</var> is null or the <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①①">portal state</a> of <var>context</var> is not "<code>portal</code>", then return null.</p>
+      <li data-md>
+       <p>Return <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑤">this</a>'s <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object②">portal host object</a>.</p>
+     </ol>
+    </section>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-exposure.sub.html">portals-host-exposure.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-host-exposure.sub.html" title="portals/portals-host-exposure.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-exposure.sub.html"><small>(source)</small></a>
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-null.html">portals-host-null.html</a> <a href="http://web-platform-tests.live/portals/portals-host-null.html" title="portals/portals-host-null.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-null.html"><small>(source)</small></a>
+    </ul>
+    <hr>
+    <p>The <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost③">PortalHost</a></code> interface definition is as follows:</p>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="portalhost"><code><c- g>PortalHost</c-></code></dfn> : <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#eventtarget" id="ref-for-eventtarget"><c- n>EventTarget</c-></a> {
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-portalhost-postmessage" id="ref-for-dom-portalhost-postmessage"><c- g>postMessage</c-></a>(<c- b>any</c-> <dfn class="idl-code" data-dfn-for="PortalHost/postMessage(message, targetOrigin, transfer), PortalHost/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-portalhost-postmessage-message-targetorigin-transfer-message"><code><c- g>message</c-></code><a class="self-link" href="#dom-portalhost-postmessage-message-targetorigin-transfer-message"></a></dfn>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString②"><c- b>USVString</c-></a> <dfn class="idl-code" data-dfn-for="PortalHost/postMessage(message, targetOrigin, transfer), PortalHost/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-portalhost-postmessage-message-targetorigin-transfer-targetorigin"><code><c- g>targetOrigin</c-></code><a class="self-link" href="#dom-portalhost-postmessage-message-targetorigin-transfer-targetorigin"></a></dfn>, <c- b>optional</c-> <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-object" id="ref-for-idl-object②"><c- b>object</c-></a>> <dfn class="idl-code" data-dfn-for="PortalHost/postMessage(message, targetOrigin, transfer), PortalHost/postMessage(message, targetOrigin)" data-dfn-type="argument" data-export id="dom-portalhost-postmessage-message-targetorigin-transfer-transfer"><code><c- g>transfer</c-></code><a class="self-link" href="#dom-portalhost-postmessage-message-targetorigin-transfer-transfer"></a></dfn> = []);
@@ -2064,11 +2097,11 @@ the <a data-link-type="dfn" href="#host-element" id="ref-for-host-element⑤">ho
      <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="PortalHost" data-dfn-type="method" data-export data-lt="postMessage(message, options)|postMessage(message)" id="dom-portalhost-postmessage-message-options"><code>postMessage(<var>message</var>, <var>options</var>)</code></dfn> method <em>must</em> run these steps:</p>
      <ol>
       <li data-md>
-       <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object①">relevant settings object</a> of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this④">this</a>.</p>
+       <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object①">relevant settings object</a> of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑥">this</a>.</p>
       <li data-md>
        <p>Let <var>browsingContext</var> be the <a data-link-type="dfn">responsible browsing context</a> of <var>settings</var>.</p>
       <li data-md>
-       <p>If <var>browsingContext</var> has a <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①①">portal state</a> other than "<code>portal</code>", throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror④">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code>.</p>
+       <p>If <var>browsingContext</var> has a <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①②">portal state</a> other than "<code>portal</code>", throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror④">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code>.</p>
        <p class="note" role="note"><span>Note:</span> This roughly means that it has not yet been activated, as far as this <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop" id="ref-for-concept-agent-event-loop⑤">event loop</a> has been told.
 It is possible that this browsing context will be <a data-link-type="dfn" href="#activate-a-portal-browsing-context" id="ref-for-activate-a-portal-browsing-context③">activated</a> in parallel
 to this message being sent; in such cases, messages may not be delivered.</p>
@@ -2128,7 +2161,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
     <ul class="wpt-tests-block">
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-post-message.sub.html">portals-host-post-message.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-host-post-message.sub.html" title="portals/portals-host-post-message.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-post-message.sub.html"><small>(source)</small></a>
     </ul>
-    <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost②">PortalHost</a></code> objects:</p>
+    <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost④">PortalHost</a></code> objects:</p>
     <table class="data">
      <thead>
       <tr>
@@ -2145,7 +2178,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
        <td><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑦">MessageEvent</a></code>
        <td>A message is received by the object, but deserialization throws an exception.
     </table>
-    <h3 class="heading settled" data-level="3.3" id="the-portalactivateevent-interface"><span class="secno">3.3. </span><span class="content">The <code>PortalActivateEvent</code> interface</span><a class="self-link" href="#the-portalactivateevent-interface"></a></h3>
+    <h3 class="heading settled" data-level="3.2" id="the-portalactivateevent-interface"><span class="secno">3.2. </span><span class="content">The <code>PortalActivateEvent</code> interface</span><a class="self-link" href="#the-portalactivateevent-interface"></a></h3>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed②"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="portalactivateevent"><code><c- g>PortalActivateEvent</c-></code></dfn> : <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#event" id="ref-for-event"><c- n>Event</c-></a> {
     <dfn class="idl-code" data-dfn-for="PortalActivateEvent" data-dfn-type="constructor" data-export data-lt="PortalActivateEvent(type, eventInitDict)|constructor(type, eventInitDict)|PortalActivateEvent(type)|constructor(type)" id="dom-portalactivateevent-portalactivateevent"><code><c- g>constructor</c-></code><a class="self-link" href="#dom-portalactivateevent-portalactivateevent"></a></dfn>(<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="PortalActivateEvent/PortalActivateEvent(type, eventInitDict), PortalActivateEvent/constructor(type, eventInitDict), PortalActivateEvent/PortalActivateEvent(type), PortalActivateEvent/constructor(type)" data-dfn-type="argument" data-export id="dom-portalactivateevent-portalactivateevent-type-eventinitdict-type"><code><c- g>type</c-></code><a class="self-link" href="#dom-portalactivateevent-portalactivateevent-type-eventinitdict-type"></a></dfn>, <c- b>optional</c-> <a class="n" data-link-type="idl-name" href="#dictdef-portalactivateeventinit" id="ref-for-dictdef-portalactivateeventinit"><c- n>PortalActivateEventInit</c-></a> <dfn class="idl-code" data-dfn-for="PortalActivateEvent/PortalActivateEvent(type, eventInitDict), PortalActivateEvent/constructor(type, eventInitDict), PortalActivateEvent/PortalActivateEvent(type), PortalActivateEvent/constructor(type)" data-dfn-type="argument" data-export id="dom-portalactivateevent-portalactivateevent-type-eventinitdict-eventinitdict"><code><c- g>eventInitDict</c-></code><a class="self-link" href="#dom-portalactivateevent-portalactivateevent-type-eventinitdict-eventinitdict"></a></dfn> = {});
@@ -2160,7 +2193,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
 </pre>
     <p>A <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent①">PortalActivateEvent</a></code> has an associated <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-predecessor-browsing-context">predecessor browsing context</dfn>,
   which is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context③">top-level browsing context</a> or null, a <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-successor-window">successor window</dfn>, which is
-  a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window①">Window</a></code>, an <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-activation-promise">activation promise</dfn>, which is a <a data-link-type="dfn" href="http://tc39.github.io/ecma262/#sec-promise-objects" id="ref-for-sec-promise-objects①">promise</a>, and a <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-adopted-predecessor-element">adopted predecessor element</dfn>, which is a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal②④">portal</a></code> element or null.</p>
+  a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②">Window</a></code>, an <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-activation-promise">activation promise</dfn>, which is a <a data-link-type="dfn" href="http://tc39.github.io/ecma262/#sec-promise-objects" id="ref-for-sec-promise-objects①">promise</a>, and a <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-adopted-predecessor-element">adopted predecessor element</dfn>, which is a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal②④">portal</a></code> element or null.</p>
     <section class="algorithm" data-algorithm="portalactivateevent-event-constructing-steps">
       The <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-constructor-ext" id="ref-for-concept-event-constructor-ext">event constructing steps</a> for <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent②">PortalActivateEvent</a></code>, given an <var>event</var>, are as follows: 
      <ol>
@@ -2179,18 +2212,18 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
       The <dfn class="dfn-paneled idl-code" data-dfn-for="PortalActivateEvent" data-dfn-type="method" data-export id="dom-portalactivateevent-adoptpredecessor"><code>adoptPredecessor()</code></dfn> method <em>must</em> run these steps: 
      <ol>
       <li data-md>
-       <p>If <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑤">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-adopted-predecessor-element" id="ref-for-portalactivateevent-adopted-predecessor-element②">adopted predecessor element</a> is not null, throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror⑤">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
+       <p>If <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑦">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-adopted-predecessor-element" id="ref-for-portalactivateevent-adopted-predecessor-element②">adopted predecessor element</a> is not null, throw an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#invalidstateerror" id="ref-for-invalidstateerror⑤">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
       <li data-md>
-       <p>Let <var>predecessorBrowsingContext</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑥">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-predecessor-browsing-context" id="ref-for-portalactivateevent-predecessor-browsing-context②">predecessor browsing context</a>.</p>
+       <p>Let <var>predecessorBrowsingContext</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑧">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-predecessor-browsing-context" id="ref-for-portalactivateevent-predecessor-browsing-context②">predecessor browsing context</a>.</p>
       <li data-md>
-       <p>Let <var>successorWindow</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑦">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-successor-window" id="ref-for-portalactivateevent-successor-window②">successor window</a>.</p>
+       <p>Let <var>successorWindow</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑨">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-successor-window" id="ref-for-portalactivateevent-successor-window②">successor window</a>.</p>
       <li data-md>
        <p>Run the steps to <a data-link-type="dfn" href="#adopt-the-predecessor-browsing-context" id="ref-for-adopt-the-predecessor-browsing-context③">adopt the predecessor browsing context</a> <var>predecessorBrowsingContext</var> in <var>successorWindow</var>,
 and let <var>adoptedPredecessorElement</var> be the result.</p>
       <li data-md>
-       <p>Set <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑧">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-adopted-predecessor-element" id="ref-for-portalactivateevent-adopted-predecessor-element③">adopted predecessor element</a> to <var>adoptedPredecessorElement</var>.</p>
+       <p>Set <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this①⓪">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-adopted-predecessor-element" id="ref-for-portalactivateevent-adopted-predecessor-element③">adopted predecessor element</a> to <var>adoptedPredecessorElement</var>.</p>
       <li data-md>
-       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task⑤">Queue a task</a> from the <a data-link-type="dfn" href="#portal-task-source" id="ref-for-portal-task-source⑤">portal task source</a> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop" id="ref-for-concept-agent-event-loop⑧">event loop</a> associated with <var>predecessorBrowsingContext</var> to resolve <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this⑨">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-activation-promise" id="ref-for-portalactivateevent-activation-promise②">activation promise</a> with undefined.</p>
+       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task⑤">Queue a task</a> from the <a data-link-type="dfn" href="#portal-task-source" id="ref-for-portal-task-source⑤">portal task source</a> to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop" id="ref-for-concept-agent-event-loop⑧">event loop</a> associated with <var>predecessorBrowsingContext</var> to resolve <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this①①">this</a>'s <a data-link-type="dfn" href="#portalactivateevent-activation-promise" id="ref-for-portalactivateevent-activation-promise②">activation promise</a> with undefined.</p>
        <p class="note" role="note"><span>Note:</span> Queuing this immediately makes it possible to send messages to the adopted
 portal during dispatch of the <code class="idl"><a class="idl-code" data-link-type="event" href="#eventdef-window-portalactivate" id="ref-for-eventdef-window-portalactivate③">portalactivate</a></code> event without
 ordering issues between the task to resolve the activation promise and the task
@@ -2202,60 +2235,55 @@ to deliver the message.</p>
       <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-adopt-predecessor.html">portals-adopt-predecessor.html</a> <a href="http://web-platform-tests.live/portals/portals-adopt-predecessor.html" title="portals/portals-adopt-predecessor.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-adopt-predecessor.html"><small>(source)</small></a>
      </ul>
     </section>
-    <h3 class="heading settled" data-level="3.4" id="miscellaneous-extensions"><span class="secno">3.4. </span><span class="content">Miscellaneous extensions</span><a class="self-link" href="#miscellaneous-extensions"></a></h3>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="4" id="miscellaneous-extensions"><span class="secno">4. </span><span class="content">Miscellaneous HTML updates</span><a class="self-link" href="#miscellaneous-extensions"></a></h2>
+    <p><em>This section contains various small patches to miscellaneous areas of the HTML Standard.</em></p>
+    <h3 class="heading settled" data-level="4.1" id="patch-messageevent"><span class="secno">4.1. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑧">MessageEvent</a></code> interface</span><a class="self-link" href="#patch-messageevent"></a></h3>
     <p>The <code class="idl"><a data-link-type="idl" href="#typedefdef-messageeventsource" id="ref-for-typedefdef-messageeventsource">MessageEventSource</a></code> union is extended to include the new interfaces
-  which can produce <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑧">MessageEvent</a></code> events.</p>
-<pre class="idl highlight def"><c- b>typedef</c-> (<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy" id="ref-for-windowproxy②"><c- n>WindowProxy</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/web-messaging.html#messageport" id="ref-for-messageport②"><c- n>MessagePort</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://w3c.github.io/ServiceWorker/#serviceworker" id="ref-for-serviceworker"><c- n>ServiceWorker</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#htmlportalelement" id="ref-for-htmlportalelement③"><c- n>HTMLPortalElement</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost③"><c- n>PortalHost</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-messageeventsource"><code><c- g>MessageEventSource</c-></code></dfn>;
+  which can produce <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑨">MessageEvent</a></code> events.</p>
+<pre class="idl highlight def"><c- b>typedef</c-> (<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy" id="ref-for-windowproxy②"><c- n>WindowProxy</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/web-messaging.html#messageport" id="ref-for-messageport②"><c- n>MessagePort</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://w3c.github.io/ServiceWorker/#serviceworker" id="ref-for-serviceworker"><c- n>ServiceWorker</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#htmlportalelement" id="ref-for-htmlportalelement③"><c- n>HTMLPortalElement</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost⑤"><c- n>PortalHost</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-messageeventsource"><code><c- g>MessageEventSource</c-></code></dfn>;
 </pre>
-    <p>A <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost④">PortalHost</a></code> is exposed at times when the window may be in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑨">portal browsing context</a>.</p>
-<pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②"><c- g>Window</c-></a> {
-    <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost⑤"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost①"><c- g>portalHost</c-></a>;
-};
-
-<c- b>partial</c-> <c- b>interface</c-> <c- b>mixin</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers" id="ref-for-windoweventhandlers"><c- g>WindowEventHandlers</c-></a> {
-    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler④"><c- n>EventHandler</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="WindowEventHandlers" data-dfn-type="attribute" data-export data-type="EventHandler" id="dom-windoweventhandlers-onportalactivate"><code><c- g>onportalactivate</c-></code></dfn>;
-};
-</pre>
-    <section class="algorithm" data-algorithm="window-portalhost">
-      The <dfn class="dfn-paneled idl-code" data-dfn-for="Window" data-dfn-type="attribute" data-export id="dom-window-portalhost"><code>portalHost</code></dfn> attribute’s getter <em>must</em> run the following steps: 
-     <ol>
-      <li data-md>
-       <p>Let <var>context</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this①⓪">this</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#window-bc" id="ref-for-window-bc">browsing context</a>.</p>
-      <li data-md>
-       <p>If <var>context</var> is null or the <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①②">portal state</a> of <var>context</var> is not "<code>portal</code>", then return null.</p>
-      <li data-md>
-       <p>Return <a data-link-type="dfn" href="https://heycam.github.io/webidl/#this" id="ref-for-this①①">this</a>'s <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object②">portal host object</a>.</p>
-     </ol>
-    </section>
-    <ul class="wpt-tests-block">
-     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-exposure.sub.html">portals-host-exposure.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-host-exposure.sub.html" title="portals/portals-host-exposure.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-exposure.sub.html"><small>(source)</small></a>
-     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-host-null.html">portals-host-null.html</a> <a href="http://web-platform-tests.live/portals/portals-host-null.html" title="portals/portals-host-null.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-host-null.html"><small>(source)</small></a>
-    </ul>
-    <p>The following events are dispatched on <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code> objects:</p>
+    <h3 class="heading settled" data-level="4.2" id="patch-event-handlers"><span class="secno">4.2. </span><span class="content">Event handlers</span><a class="self-link" href="#patch-event-handlers"></a></h3>
+    <p>The table of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers" id="ref-for-event-handlers">event handlers</a> which must be supported by <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window③">Window</a></code> objects, as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes" id="ref-for-event-handler-idl-attributes">event handler
+  IDL attributes</a> on the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window④">Window</a></code> objects themselves (i.e. the table containing <code>onafterprint</code>),
+  gets extended with the following row:</p>
     <table class="data">
      <thead>
       <tr>
-       <th>Event name
+       <th><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers" id="ref-for-event-handlers①">Event handler</a>
+       <th><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-event-type" id="ref-for-event-handler-event-type">Event handler event type</a>
+     <tbody>
+      <tr>
+       <td><dfn class="idl-code" data-dfn-for="Window" data-dfn-type="attribute" data-export id="dom-window-onportalactivate"><code>onportalactivate</code><a class="self-link" href="#dom-window-onportalactivate"></a></dfn>
+       <td><code class="idl"><a data-link-type="idl" href="#eventdef-window-portalactivate" id="ref-for-eventdef-window-portalactivate④">portalactivate</a></code>
+    </table>
+    <p>The corresponding <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers" id="ref-for-windoweventhandlers">WindowEventHandlers</a></code> mixin gets extended as follows:</p>
+<pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <c- b>mixin</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers" id="ref-for-windoweventhandlers①"><c- g>WindowEventHandlers</c-></a> {
+    <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler" id="ref-for-eventhandler④"><c- n>EventHandler</c-></a> <dfn class="idl-code" data-dfn-for="WindowEventHandlers" data-dfn-type="attribute" data-export data-type="EventHandler" id="dom-windoweventhandlers-onportalactivate"><code><c- g>onportalactivate</c-></code><a class="self-link" href="#dom-windoweventhandlers-onportalactivate"></a></dfn>;
+};
+</pre>
+    <p>The <a href="https://html.spec.whatwg.org/#events-2">Events index</a> is also updated with the
+  following additional row:</p>
+    <table class="data">
+     <thead>
+      <tr>
+       <th>Event
        <th>Interface
-       <th>Dispatched when
+       <th>Interesting targets
+       <th>Description
      <tbody>
       <tr>
        <td><dfn class="dfn-paneled idl-code" data-dfn-for="Window" data-dfn-type="event" data-export id="eventdef-window-portalactivate"><code>portalactivate</code></dfn>
        <td><code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent③">PortalActivateEvent</a></code>
-       <td>The window is associated with a new <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context④">top-level browsing context</a> due to activation of its <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⓪">portal browsing context</a>.
+       <td><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window⑤">Window</a></code>
+       <td>Fired at the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window⑥">Window</a></code> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⓪">portal browsing context</a> when that <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing
+        context</a> is activated.
     </table>
-    <p>Like other <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes" id="ref-for-event-handler-idl-attributes">event handler IDL attributes</a> in the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers" id="ref-for-windoweventhandlers①">WindowEventHandlers</a></code> interface mixin, <code class="idl"><a data-link-type="idl" href="#dom-windoweventhandlers-onportalactivate" id="ref-for-dom-windoweventhandlers-onportalactivate">onportalactivate</a></code> is exposed on all <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/sections.html#the-body-element" id="ref-for-the-body-element">body</a></code> and <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/obsolete.html#frameset" id="ref-for-frameset">frameset</a></code> elements
-  as a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes" id="ref-for-event-handler-content-attributes①">event handler content attribute</a>.</p>
    </section>
    <section>
-    <h2 class="heading settled" data-level="4" id="security-considerations"><span class="secno">4. </span><span class="content">Security Considerations</span><a class="self-link" href="#security-considerations"></a></h2>
-    <div class="issue" id="issue-6b2c0ac1"><a class="self-link" href="#issue-6b2c0ac1"></a> We should expand this section further. </div>
-    <h3 class="heading settled" data-level="4.1" id="security-overview"><span class="secno">4.1. </span><span class="content">Overview</span><a class="self-link" href="#security-overview"></a></h3>
-    <p><em>This section is non-normative.</em></p>
-    <p>In general, a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing context</a> should respect policies that would apply to
-  a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context④">nested browsing context</a>, e.g. that would restrict whether a document can be embedded
-  in a document from another <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①">origin</a>.</p>
-    <h3 class="heading settled" data-level="4.2" id="csp"><span class="secno">4.2. </span><span class="content">Integration with Content Security Policy</span><a class="self-link" href="#csp"></a></h3>
+    <h2 class="heading settled" data-level="5" id="other-spec-updates"><span class="secno">5. </span><span class="content">Updates to other specifications</span><a class="self-link" href="#other-spec-updates"></a></h2>
+    <h3 class="heading settled" data-level="5.1" id="csp"><span class="secno">5.1. </span><span class="content">Content Security Policy</span><a class="self-link" href="#csp"></a></h3>
     <p>This specification integrates with <a data-link-type="biblio" href="#biblio-csp">[CSP]</a> as follows.</p>
     <section class="algorithm" data-algorithm="csp-effective-directive-for-a-request">
       The algorithm for determining the <a href="https://www.w3.org/TR/CSP3/#effective-directive-for-a-request">effective directive for a request</a> <var>request</var> is modified by prepending the following: 
@@ -2269,14 +2297,16 @@ its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappa
       The <a href="https://www.w3.org/TR/CSP3/#frame-ancestors-navigation-response">frame-ancestors Navigation Response Check</a> is modified as follows: 
      <ol>
       <li data-md>
-       <p>Replace all references to "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑤">nested browsing context</a>" with "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑥">nested browsing context</a> or <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①③">portal browsing context</a>".</p>
+       <p>Replace all references to "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context④">nested browsing context</a>" with "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑤">nested browsing context</a> or <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①③">portal browsing context</a>".</p>
       <li data-md>
        <p>Replace all references to "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context" id="ref-for-parent-browsing-context">parent browsing context</a>" with "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context" id="ref-for-parent-browsing-context①">parent browsing context</a> or <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context④">host browsing context</a>".</p>
      </ol>
     </section>
     <div class="issue" id="issue-0bcb49e2"><a class="self-link" href="#issue-0bcb49e2"></a> <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-activate" id="ref-for-dom-htmlportalelement-activate③">activate(options)</a></code> should also respect the CSP <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#navigate-to" id="ref-for-navigate-to">navigate-to</a> directive. </div>
-    <h3 class="heading settled" data-level="4.3" id="rfc7034"><span class="secno">4.3. </span><span class="content">Integration with RFC 7034</span><a class="self-link" href="#rfc7034"></a></h3>
-    <p>This specification integrates with <a data-link-type="biblio" href="#biblio-rfc7034">[RFC7034]</a>, which defines the <code>X-Frame-Options</code> HTTP header, as follows.</p>
+    <h3 class="heading settled" data-level="5.2" id="rfc7034"><span class="secno">5.2. </span><span class="content">RFC 7034</span><a class="self-link" href="#rfc7034"></a></h3>
+    <p>This specification integrates with <a data-link-type="biblio" href="#biblio-rfc7034">[RFC7034]</a>, which defines the <code>X-Frame-Options</code> HTTP header,
+  as follows. Note that <a data-link-type="biblio" href="#biblio-html">[HTML]</a> also has an open issue, <a href="https://github.com/whatwg/html/issues/1230">whatwg/html#1230</a>, to define <code>X-Frame-Options</code> processing, and perhaps these updates would be done as part of resolving that
+  issue.</p>
     <p>If a browser receives content with this header field in response to a navigation request whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context①">target browsing context</a> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①④">portal browsing context</a>, then the browser must apply the rules
   in <a data-link-type="biblio" href="#biblio-rfc7034">[RFC7034]</a> as though it were to be displayed in a frame in the <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context⑤">host browsing context</a> instead
   and as though the origin of the top-level browsing context <var>topLevelBrowsingContext</var> were the origin of
@@ -2291,25 +2321,35 @@ its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappa
      <li data-md>
       <p>Return <var>topLevelBrowsingContext</var>.</p>
     </ol>
-    <h3 class="heading settled" data-level="4.4" id="fetch-metadata"><span class="secno">4.4. </span><span class="content">Integration with Fetch Metadata Request Headers</span><a class="self-link" href="#fetch-metadata"></a></h3>
+    <h3 class="heading settled" data-level="5.3" id="fetch-metadata"><span class="secno">5.3. </span><span class="content">Fetch Metadata Request Headers</span><a class="self-link" href="#fetch-metadata"></a></h3>
     <p>This specification integrates with <a data-link-type="biblio" href="#biblio-fetch-metadata">[FETCH-METADATA]</a> as follows.</p>
-    <div class="note" role="note">
-      The effect of this is that the request for a document in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑥">portal browsing context</a> will contain the following HTTP header, as though it were in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑦">nested browsing context</a>. 
-<pre>    Sec-Fetch-Mode: nested-navigate
-</pre>
-     <p>Even though no spec patches are required to do so, implementations must also send
-    the appropriate fetch metadata headers as it would if the load were occurring in
-    an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element②">iframe</a></code> element.</p>
-    </div>
     <section class="algorithm" data-algorithm="fetch-metadata-set-mode">
       The algorithm to <a href="https://www.w3.org/TR/fetch-metadata/#abstract-opdef-set-mode">set the Sec-Fetch-Mode header</a> for a request <var>r</var> is modified as follows: 
      <ol>
       <li data-md>
        <p>Where the algorithm checks whether <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-reserved-client" id="ref-for-concept-request-reserved-client">reserved client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context②">target browsing context</a> is
-a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑧">nested browsing context</a>, check instead whether it is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑨">nested browsing context</a> or
-a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑦">portal browsing context</a>.</p>
+a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑥">nested browsing context</a>, check instead whether it is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑦">nested browsing context</a> or
+a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑥">portal browsing context</a>.</p>
      </ol>
     </section>
+    <div class="note" role="note">
+      The effect of this is that the request for a document in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑦">portal browsing context</a> will contain the following HTTP header, as though it were in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑧">nested browsing context</a>. 
+<pre>    Sec-Fetch-Mode: nested-navigate
+</pre>
+    </div>
+    <div class="note" role="note"> Per the existing processing model, the other fetch metadata headers will automatically have the
+    same values as they would would if the load were occurring in an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element②">iframe</a></code> element, with no
+    spec updates needed. </div>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="6" id="security-considerations"><span class="secno">6. </span><span class="content">Security Considerations</span><a class="self-link" href="#security-considerations"></a></h2>
+    <div class="issue" id="issue-8e856747"><a class="self-link" href="#issue-8e856747"></a> We should expand this section further. Much of what was formerly there is in <a href="#other-spec-updates">§ 5 Updates to other specifications</a> now. Once we have a more comprehensive view of all the security-related
+    spec updates, we should summarize them in a non-normative fashion here. </div>
+    <h3 class="heading settled" data-level="6.1" id="security-overview"><span class="secno">6.1. </span><span class="content">Overview</span><a class="self-link" href="#security-overview"></a></h3>
+    <p><em>This section is non-normative.</em></p>
+    <p>In general, a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑧">portal browsing context</a> should respect policies that would apply to
+  a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑨">nested browsing context</a>, e.g. that would restrict whether a document can be embedded
+  in a document from another <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①">origin</a>.</p>
    </section>
   </main>
   <div data-fill-with="conformance">
@@ -2461,743 +2501,745 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
-   <li><a href="#dom-htmlportalelement-activate">activate()</a><span>, in §3.1</span>
+   <li><a href="#dom-htmlportalelement-activate">activate()</a><span>, in §3</span>
    <li><a href="#activate-a-portal-browsing-context">activate a portal browsing context</a><span>, in §2</span>
-   <li><a href="#dom-htmlportalelement-activate">activate(options)</a><span>, in §3.1</span>
-   <li><a href="#portalactivateevent-activation-promise">activation promise</a><span>, in §3.3</span>
-   <li><a href="#portalactivateevent-adopted-predecessor-element">adopted predecessor element</a><span>, in §3.3</span>
-   <li><a href="#dom-portalactivateevent-adoptpredecessor">adoptPredecessor()</a><span>, in §3.3</span>
+   <li><a href="#dom-htmlportalelement-activate">activate(options)</a><span>, in §3</span>
+   <li><a href="#portalactivateevent-activation-promise">activation promise</a><span>, in §3.2</span>
+   <li><a href="#portalactivateevent-adopted-predecessor-element">adopted predecessor element</a><span>, in §3.2</span>
+   <li><a href="#dom-portalactivateevent-adoptpredecessor">adoptPredecessor()</a><span>, in §3.2</span>
    <li><a href="#adopt-the-predecessor-browsing-context">adopt the predecessor browsing context</a><span>, in §2</span>
-   <li><a href="#htmlportalelement-close-a-portal-element">close a portal element</a><span>, in §3.1</span>
-   <li><a href="#dom-portalactivateevent-portalactivateevent">constructor(type)</a><span>, in §3.3</span>
-   <li><a href="#dom-portalactivateevent-portalactivateevent">constructor(type, eventInitDict)</a><span>, in §3.3</span>
+   <li><a href="#htmlportalelement-close-a-portal-element">close a portal element</a><span>, in §3</span>
+   <li><a href="#dom-portalactivateevent-portalactivateevent">constructor(type)</a><span>, in §3.2</span>
+   <li><a href="#dom-portalactivateevent-portalactivateevent">constructor(type, eventInitDict)</a><span>, in §3.2</span>
    <li>
     data
     <ul>
-     <li><a href="#dom-portalactivateevent-data">attribute for PortalActivateEvent</a><span>, in §3.3</span>
-     <li><a href="#dom-portalactivateeventinit-data">dict-member for PortalActivateEventInit</a><span>, in §3.3</span>
-     <li><a href="#dom-portalactivateoptions-data">dict-member for PortalActivateOptions</a><span>, in §3.1</span>
+     <li><a href="#dom-portalactivateevent-data">attribute for PortalActivateEvent</a><span>, in §3.2</span>
+     <li><a href="#dom-portalactivateeventinit-data">dict-member for PortalActivateEventInit</a><span>, in §3.2</span>
+     <li><a href="#dom-portalactivateoptions-data">dict-member for PortalActivateOptions</a><span>, in §3</span>
     </ul>
-   <li><a href="#htmlportalelement-guest-browsing-context">guest browsing context</a><span>, in §3.1</span>
+   <li><a href="#htmlportalelement-guest-browsing-context">guest browsing context</a><span>, in §3</span>
    <li><a href="#host-browsing-context">host browsing context</a><span>, in §2</span>
    <li><a href="#host-element">host element</a><span>, in §2</span>
-   <li><a href="#htmlportalelement">HTMLPortalElement</a><span>, in §3.1</span>
-   <li><a href="#htmlportalelement-just-adopted-flag">just-adopted flag</a><span>, in §3.1</span>
-   <li><a href="#htmlportalelement-may-have-a-guest-browsing-context">may have a guest browsing context</a><span>, in §3.1</span>
+   <li><a href="#htmlportalelement">HTMLPortalElement</a><span>, in §3</span>
+   <li><a href="#htmlportalelement-just-adopted-flag">just-adopted flag</a><span>, in §3</span>
+   <li><a href="#htmlportalelement-may-have-a-guest-browsing-context">may have a guest browsing context</a><span>, in §3</span>
    <li>
     message
     <ul>
-     <li><a href="#eventdef-htmlportalelement-message">event for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#eventdef-portalhost-message">event for PortalHost</a><span>, in §3.2</span>
+     <li><a href="#eventdef-htmlportalelement-message">event for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#eventdef-portalhost-message">event for PortalHost</a><span>, in §3.1</span>
     </ul>
    <li>
     messageerror
     <ul>
-     <li><a href="#eventdef-htmlportalelement-messageerror">event for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#eventdef-portalhost-messageerror">event for PortalHost</a><span>, in §3.2</span>
+     <li><a href="#eventdef-htmlportalelement-messageerror">event for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#eventdef-portalhost-messageerror">event for PortalHost</a><span>, in §3.1</span>
     </ul>
-   <li><a href="#typedefdef-messageeventsource">MessageEventSource</a><span>, in §3.4</span>
+   <li><a href="#typedefdef-messageeventsource">MessageEventSource</a><span>, in §4.1</span>
    <li>
     onmessage
     <ul>
-     <li><a href="#dom-htmlportalelement-onmessage">attribute for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#dom-portalhost-onmessage">attribute for PortalHost</a><span>, in §3.2</span>
+     <li><a href="#dom-htmlportalelement-onmessage">attribute for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#dom-portalhost-onmessage">attribute for PortalHost</a><span>, in §3.1</span>
     </ul>
    <li>
     onmessageerror
     <ul>
-     <li><a href="#dom-htmlportalelement-onmessageerror">attribute for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#dom-portalhost-onmessageerror">attribute for PortalHost</a><span>, in §3.2</span>
+     <li><a href="#dom-htmlportalelement-onmessageerror">attribute for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#dom-portalhost-onmessageerror">attribute for PortalHost</a><span>, in §3.1</span>
     </ul>
-   <li><a href="#dom-windoweventhandlers-onportalactivate">onportalactivate</a><span>, in §3.4</span>
-   <li><a href="#elementdef-portal">portal</a><span>, in §3.1</span>
-   <li><a href="#eventdef-window-portalactivate">portalactivate</a><span>, in §3.4</span>
-   <li><a href="#portalactivateevent">PortalActivateEvent</a><span>, in §3.3</span>
-   <li><a href="#dictdef-portalactivateeventinit">PortalActivateEventInit</a><span>, in §3.3</span>
-   <li><a href="#dom-portalactivateevent-portalactivateevent">PortalActivateEvent(type)</a><span>, in §3.3</span>
-   <li><a href="#dom-portalactivateevent-portalactivateevent">PortalActivateEvent(type, eventInitDict)</a><span>, in §3.3</span>
-   <li><a href="#dictdef-portalactivateoptions">PortalActivateOptions</a><span>, in §3.1</span>
+   <li>
+    onportalactivate
+    <ul>
+     <li><a href="#dom-window-onportalactivate">attribute for Window</a><span>, in §4.2</span>
+     <li><a href="#dom-windoweventhandlers-onportalactivate">attribute for WindowEventHandlers</a><span>, in §4.2</span>
+    </ul>
+   <li><a href="#elementdef-portal">portal</a><span>, in §3</span>
+   <li><a href="#eventdef-window-portalactivate">portalactivate</a><span>, in §4.2</span>
+   <li><a href="#portalactivateevent">PortalActivateEvent</a><span>, in §3.2</span>
+   <li><a href="#dictdef-portalactivateeventinit">PortalActivateEventInit</a><span>, in §3.2</span>
+   <li><a href="#dom-portalactivateevent-portalactivateevent">PortalActivateEvent(type)</a><span>, in §3.2</span>
+   <li><a href="#dom-portalactivateevent-portalactivateevent">PortalActivateEvent(type, eventInitDict)</a><span>, in §3.2</span>
+   <li><a href="#dictdef-portalactivateoptions">PortalActivateOptions</a><span>, in §3</span>
    <li><a href="#portal-browsing-context">portal browsing context</a><span>, in §2</span>
-   <li><a href="#portalhost">PortalHost</a><span>, in §3.2</span>
-   <li><a href="#dom-window-portalhost">portalHost</a><span>, in §3.4</span>
-   <li><a href="#portal-host-object">portal host object</a><span>, in §3.2</span>
+   <li><a href="#portalhost">PortalHost</a><span>, in §3.1</span>
+   <li><a href="#dom-window-portalhost">portalHost</a><span>, in §3.1</span>
+   <li><a href="#portal-host-object">portal host object</a><span>, in §3.1</span>
    <li><a href="#portal-state">portal state</a><span>, in §2</span>
    <li><a href="#portal-task-source">portal task source</a><span>, in §2</span>
    <li>
     postMessage(message)
     <ul>
-     <li><a href="#dom-htmlportalelement-postmessage-message-options">method for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#dom-portalhost-postmessage-message-options">method for PortalHost</a><span>, in §3.2</span>
+     <li><a href="#dom-htmlportalelement-postmessage-message-options">method for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#dom-portalhost-postmessage-message-options">method for PortalHost</a><span>, in §3.1</span>
     </ul>
    <li>
     postMessage(message, options)
     <ul>
-     <li><a href="#dom-htmlportalelement-postmessage-message-options">method for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#dom-portalhost-postmessage-message-options">method for PortalHost</a><span>, in §3.2</span>
+     <li><a href="#dom-htmlportalelement-postmessage-message-options">method for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#dom-portalhost-postmessage-message-options">method for PortalHost</a><span>, in §3.1</span>
     </ul>
    <li>
     postMessage(message, targetOrigin)
     <ul>
-     <li><a href="#dom-htmlportalelement-postmessage">method for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#dom-portalhost-postmessage">method for PortalHost</a><span>, in §3.2</span>
+     <li><a href="#dom-htmlportalelement-postmessage">method for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#dom-portalhost-postmessage">method for PortalHost</a><span>, in §3.1</span>
     </ul>
    <li>
     postMessage(message, targetOrigin, transfer)
     <ul>
-     <li><a href="#dom-htmlportalelement-postmessage">method for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#dom-portalhost-postmessage">method for PortalHost</a><span>, in §3.2</span>
+     <li><a href="#dom-htmlportalelement-postmessage">method for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#dom-portalhost-postmessage">method for PortalHost</a><span>, in §3.1</span>
     </ul>
-   <li><a href="#portalactivateevent-predecessor-browsing-context">predecessor browsing context</a><span>, in §3.3</span>
-   <li><a href="#dom-htmlportalelement-referrerpolicy">referrerPolicy</a><span>, in §3.1</span>
-   <li><a href="#element-attrdef-portal-referrerpolicy">referrerpolicy</a><span>, in §3.1</span>
-   <li><a href="#htmlportalelement-set-the-source-url-of-a-portal-element">set the source URL of a portal element</a><span>, in §3.1</span>
+   <li><a href="#portalactivateevent-predecessor-browsing-context">predecessor browsing context</a><span>, in §3.2</span>
+   <li><a href="#dom-htmlportalelement-referrerpolicy">referrerPolicy</a><span>, in §3</span>
+   <li><a href="#element-attrdef-portal-referrerpolicy">referrerpolicy</a><span>, in §3</span>
+   <li><a href="#htmlportalelement-set-the-source-url-of-a-portal-element">set the source URL of a portal element</a><span>, in §3</span>
    <li>
     src
     <ul>
-     <li><a href="#dom-htmlportalelement-src">attribute for HTMLPortalElement</a><span>, in §3.1</span>
-     <li><a href="#element-attrdef-portal-src">element-attr for portal</a><span>, in §3.1</span>
+     <li><a href="#dom-htmlportalelement-src">attribute for HTMLPortalElement</a><span>, in §3</span>
+     <li><a href="#element-attrdef-portal-src">element-attr for portal</a><span>, in §3</span>
     </ul>
-   <li><a href="#portalactivateevent-successor-window">successor window</a><span>, in §3.3</span>
-   <li><a href="#dom-portalactivateoptions-transfer">transfer</a><span>, in §3.1</span>
+   <li><a href="#portalactivateevent-successor-window">successor window</a><span>, in §3.2</span>
+   <li><a href="#dom-portalactivateoptions-transfer">transfer</a><span>, in §3</span>
   </ul>
   <aside class="dfn-panel" data-for="term-for-navigate-to">
    <a href="https://w3c.github.io/webappsec-csp/#navigate-to">https://w3c.github.io/webappsec-csp/#navigate-to</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-navigate-to">4.2. Integration with Content Security Policy</a>
+    <li><a href="#ref-for-navigate-to">5.1. Content Security Policy</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event">
    <a href="https://dom.spec.whatwg.org/#event">https://dom.spec.whatwg.org/#event</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-event">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-event">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dictdef-eventinit">
    <a href="https://dom.spec.whatwg.org/#dictdef-eventinit">https://dom.spec.whatwg.org/#dictdef-eventinit</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dictdef-eventinit">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-dictdef-eventinit">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-eventtarget">
    <a href="https://dom.spec.whatwg.org/#eventtarget">https://dom.spec.whatwg.org/#eventtarget</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-eventtarget">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-eventtarget">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-node-adopt-ext">
    <a href="https://dom.spec.whatwg.org/#concept-node-adopt-ext">https://dom.spec.whatwg.org/#concept-node-adopt-ext</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-node-adopt-ext">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-node-adopt-ext">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-create-element">
    <a href="https://dom.spec.whatwg.org/#concept-create-element">https://dom.spec.whatwg.org/#concept-create-element</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-create-element">2. Concepts</a>
+    <li><a href="#ref-for-concept-create-element">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-event-create">
    <a href="https://dom.spec.whatwg.org/#concept-event-create">https://dom.spec.whatwg.org/#concept-event-create</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-event-create">2. Concepts</a>
+    <li><a href="#ref-for-concept-event-create">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-event-dispatch">
    <a href="https://dom.spec.whatwg.org/#concept-event-dispatch">https://dom.spec.whatwg.org/#concept-event-dispatch</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-event-dispatch">2. Concepts</a>
+    <li><a href="#ref-for-concept-event-dispatch">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-event-constructor-ext">
    <a href="https://dom.spec.whatwg.org/#concept-event-constructor-ext">https://dom.spec.whatwg.org/#concept-event-constructor-ext</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-event-constructor-ext">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-concept-event-constructor-ext">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-event-fire">
    <a href="https://dom.spec.whatwg.org/#concept-event-fire">https://dom.spec.whatwg.org/#concept-event-fire</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-event-fire">3.1. The portal element</a> <a href="#ref-for-concept-event-fire①">(2)</a>
-    <li><a href="#ref-for-concept-event-fire②">3.2. The PortalHost interface</a> <a href="#ref-for-concept-event-fire③">(2)</a>
+    <li><a href="#ref-for-concept-event-fire">3. The portal element</a> <a href="#ref-for-concept-event-fire①">(2)</a>
+    <li><a href="#ref-for-concept-event-fire②">3.1. Portal hosts</a> <a href="#ref-for-concept-event-fire③">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-node-document">
    <a href="https://dom.spec.whatwg.org/#concept-node-document">https://dom.spec.whatwg.org/#concept-node-document</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-node-document">2. Concepts</a>
-    <li><a href="#ref-for-concept-node-document①">3.1. The portal element</a> <a href="#ref-for-concept-node-document②">(2)</a> <a href="#ref-for-concept-node-document③">(3)</a>
+    <li><a href="#ref-for-concept-node-document">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-concept-node-document①">3. The portal element</a> <a href="#ref-for-concept-node-document②">(2)</a> <a href="#ref-for-concept-node-document③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-reflect">
    <a href="https://dom.spec.whatwg.org/#concept-reflect">https://dom.spec.whatwg.org/#concept-reflect</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-reflect">3.1. The portal element</a> <a href="#ref-for-concept-reflect①">(2)</a>
+    <li><a href="#ref-for-concept-reflect">3. The portal element</a> <a href="#ref-for-concept-reflect①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-event-type">
    <a href="https://dom.spec.whatwg.org/#dom-event-type">https://dom.spec.whatwg.org/#dom-event-type</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-event-type">2. Concepts</a>
+    <li><a href="#ref-for-dom-event-type">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-sec-agents">
    <a href="http://tc39.github.io/ecma262/#sec-agents">http://tc39.github.io/ecma262/#sec-agents</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sec-agents">3.1. The portal element</a>
+    <li><a href="#ref-for-sec-agents">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-sec-promise-objects">
    <a href="http://tc39.github.io/ecma262/#sec-promise-objects">http://tc39.github.io/ecma262/#sec-promise-objects</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-sec-promise-objects">3.1. The portal element</a>
-    <li><a href="#ref-for-sec-promise-objects①">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-sec-promise-objects">3. The portal element</a>
+    <li><a href="#ref-for-sec-promise-objects①">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request-destination">
    <a href="https://fetch.spec.whatwg.org/#concept-request-destination">https://fetch.spec.whatwg.org/#concept-request-destination</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-destination">4.2. Integration with Content Security Policy</a>
+    <li><a href="#ref-for-concept-request-destination">5.1. Content Security Policy</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-http-scheme">
    <a href="https://fetch.spec.whatwg.org/#http-scheme">https://fetch.spec.whatwg.org/#http-scheme</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-http-scheme">3.1. The portal element</a>
+    <li><a href="#ref-for-http-scheme">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request-initiator">
    <a href="https://fetch.spec.whatwg.org/#concept-request-initiator">https://fetch.spec.whatwg.org/#concept-request-initiator</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-initiator">4.2. Integration with Content Security Policy</a>
+    <li><a href="#ref-for-concept-request-initiator">5.1. Content Security Policy</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request">
    <a href="https://fetch.spec.whatwg.org/#concept-request">https://fetch.spec.whatwg.org/#concept-request</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-request">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request-referrer-policy">
    <a href="https://fetch.spec.whatwg.org/#concept-request-referrer-policy">https://fetch.spec.whatwg.org/#concept-request-referrer-policy</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-referrer-policy">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-request-referrer-policy">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request-url">
    <a href="https://fetch.spec.whatwg.org/#concept-request-url">https://fetch.spec.whatwg.org/#concept-request-url</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-url">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-request-url">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request-reserved-client">
    <a href="https://fetch.spec.whatwg.org/#concept-request-reserved-client">https://fetch.spec.whatwg.org/#concept-request-reserved-client</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-request-reserved-client">4.4. Integration with Fetch Metadata Request Headers</a>
+    <li><a href="#ref-for-concept-request-reserved-client">5.3. Fetch Metadata Request Headers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-cereactions">
    <a href="https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions">https://html.spec.whatwg.org/multipage/custom-elements.html#cereactions</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-cereactions">3.1. The portal element</a> <a href="#ref-for-cereactions①">(2)</a>
+    <li><a href="#ref-for-cereactions">3. The portal element</a> <a href="#ref-for-cereactions①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-eventhandler">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-eventhandler">3.1. The portal element</a> <a href="#ref-for-eventhandler①">(2)</a>
-    <li><a href="#ref-for-eventhandler②">3.2. The PortalHost interface</a> <a href="#ref-for-eventhandler③">(2)</a>
-    <li><a href="#ref-for-eventhandler④">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-eventhandler">3. The portal element</a> <a href="#ref-for-eventhandler①">(2)</a>
+    <li><a href="#ref-for-eventhandler②">3.1. Portal hosts</a> <a href="#ref-for-eventhandler③">(2)</a>
+    <li><a href="#ref-for-eventhandler④">4.2. Event handlers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlconstructor">
    <a href="https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor">https://html.spec.whatwg.org/multipage/dom.html#htmlconstructor</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlconstructor">3.1. The portal element</a>
+    <li><a href="#ref-for-htmlconstructor">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-htmlelement">
    <a href="https://html.spec.whatwg.org/multipage/dom.html#htmlelement">https://html.spec.whatwg.org/multipage/dom.html#htmlelement</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlelement">3.1. The portal element</a>
+    <li><a href="#ref-for-htmlelement">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-messageevent">
    <a href="https://html.spec.whatwg.org/multipage/comms.html#messageevent">https://html.spec.whatwg.org/multipage/comms.html#messageevent</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-messageevent">3.1. The portal element</a> <a href="#ref-for-messageevent①">(2)</a> <a href="#ref-for-messageevent②">(3)</a> <a href="#ref-for-messageevent③">(4)</a>
-    <li><a href="#ref-for-messageevent④">3.2. The PortalHost interface</a> <a href="#ref-for-messageevent⑤">(2)</a> <a href="#ref-for-messageevent⑥">(3)</a> <a href="#ref-for-messageevent⑦">(4)</a>
-    <li><a href="#ref-for-messageevent⑧">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-messageevent">3. The portal element</a> <a href="#ref-for-messageevent①">(2)</a> <a href="#ref-for-messageevent②">(3)</a> <a href="#ref-for-messageevent③">(4)</a>
+    <li><a href="#ref-for-messageevent④">3.1. Portal hosts</a> <a href="#ref-for-messageevent⑤">(2)</a> <a href="#ref-for-messageevent⑥">(3)</a> <a href="#ref-for-messageevent⑦">(4)</a>
+    <li><a href="#ref-for-messageevent⑧">4.1. The MessageEvent interface</a> <a href="#ref-for-messageevent⑨">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-messageport">
    <a href="https://html.spec.whatwg.org/multipage/web-messaging.html#messageport">https://html.spec.whatwg.org/multipage/web-messaging.html#messageport</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-messageport">3.1. The portal element</a>
-    <li><a href="#ref-for-messageport①">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-messageport②">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-messageport">3. The portal element</a>
+    <li><a href="#ref-for-messageport①">3.1. Portal hosts</a>
+    <li><a href="#ref-for-messageport②">4.1. The MessageEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-postmessageoptions">
    <a href="https://html.spec.whatwg.org/multipage/web-messaging.html#postmessageoptions">https://html.spec.whatwg.org/multipage/web-messaging.html#postmessageoptions</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-postmessageoptions">3.1. The portal element</a>
-    <li><a href="#ref-for-postmessageoptions①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-postmessageoptions">3. The portal element</a>
+    <li><a href="#ref-for-postmessageoptions①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-structureddeserializewithtransfer">
    <a href="https://html.spec.whatwg.org/multipage/structured-data.html#structureddeserializewithtransfer">https://html.spec.whatwg.org/multipage/structured-data.html#structureddeserializewithtransfer</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-structureddeserializewithtransfer">2. Concepts</a>
-    <li><a href="#ref-for-structureddeserializewithtransfer①">3.1. The portal element</a>
-    <li><a href="#ref-for-structureddeserializewithtransfer②">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-structureddeserializewithtransfer">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-structureddeserializewithtransfer①">3. The portal element</a>
+    <li><a href="#ref-for-structureddeserializewithtransfer②">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-structuredserializewithtransfer">
    <a href="https://html.spec.whatwg.org/multipage/structured-data.html#structuredserializewithtransfer">https://html.spec.whatwg.org/multipage/structured-data.html#structuredserializewithtransfer</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-structuredserializewithtransfer">3.1. The portal element</a> <a href="#ref-for-structuredserializewithtransfer①">(2)</a>
-    <li><a href="#ref-for-structuredserializewithtransfer②">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-structuredserializewithtransfer">3. The portal element</a> <a href="#ref-for-structuredserializewithtransfer①">(2)</a>
+    <li><a href="#ref-for-structuredserializewithtransfer②">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-window">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#window">https://html.spec.whatwg.org/multipage/window-object.html#window</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-window">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-window①">3.3. The PortalActivateEvent interface</a>
-    <li><a href="#ref-for-window②">3.4. Miscellaneous extensions</a> <a href="#ref-for-window③">(2)</a>
+    <li><a href="#ref-for-window">3.1. Portal hosts</a> <a href="#ref-for-window①">(2)</a>
+    <li><a href="#ref-for-window②">3.2. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-window③">4.2. Event handlers</a> <a href="#ref-for-window④">(2)</a> <a href="#ref-for-window⑤">(3)</a> <a href="#ref-for-window⑥">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-windoweventhandlers">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers">https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-windoweventhandlers">3.4. Miscellaneous extensions</a> <a href="#ref-for-windoweventhandlers①">(2)</a>
+    <li><a href="#ref-for-windoweventhandlers">4.2. Event handlers</a> <a href="#ref-for-windoweventhandlers①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-windowpostmessageoptions">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions">https://html.spec.whatwg.org/multipage/window-object.html#windowpostmessageoptions</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-windowpostmessageoptions">3.1. The portal element</a> <a href="#ref-for-windowpostmessageoptions①">(2)</a> <a href="#ref-for-windowpostmessageoptions②">(3)</a> <a href="#ref-for-windowpostmessageoptions③">(4)</a>
-    <li><a href="#ref-for-windowpostmessageoptions④">3.2. The PortalHost interface</a> <a href="#ref-for-windowpostmessageoptions⑤">(2)</a> <a href="#ref-for-windowpostmessageoptions⑥">(3)</a> <a href="#ref-for-windowpostmessageoptions⑦">(4)</a>
+    <li><a href="#ref-for-windowpostmessageoptions">3. The portal element</a> <a href="#ref-for-windowpostmessageoptions①">(2)</a> <a href="#ref-for-windowpostmessageoptions②">(3)</a> <a href="#ref-for-windowpostmessageoptions③">(4)</a>
+    <li><a href="#ref-for-windowpostmessageoptions④">3.1. Portal hosts</a> <a href="#ref-for-windowpostmessageoptions⑤">(2)</a> <a href="#ref-for-windowpostmessageoptions⑥">(3)</a> <a href="#ref-for-windowpostmessageoptions⑦">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-windowproxy">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy">https://html.spec.whatwg.org/multipage/window-object.html#windowproxy</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-windowproxy">2. Concepts</a>
-    <li><a href="#ref-for-windowproxy①">3.1. The portal element</a>
-    <li><a href="#ref-for-windowproxy②">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-windowproxy">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-windowproxy①">3. The portal element</a>
+    <li><a href="#ref-for-windowproxy②">4.1. The MessageEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-active-document">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#active-document">https://html.spec.whatwg.org/multipage/browsers.html#active-document</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-active-document">3.1. The portal element</a> <a href="#ref-for-active-document①">(2)</a>
+    <li><a href="#ref-for-active-document">3. The portal element</a> <a href="#ref-for-active-document①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document-window">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window">https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-document-window">2. Concepts</a>
+    <li><a href="#ref-for-concept-document-window">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-becomes-browsing-context-connected">
    <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected">https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-connected</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-becomes-browsing-context-connected">3.1. The portal element</a>
+    <li><a href="#ref-for-becomes-browsing-context-connected">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-becomes-browsing-context-disconnected">
    <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-disconnected">https://html.spec.whatwg.org/multipage/infrastructure.html#becomes-browsing-context-disconnected</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-becomes-browsing-context-disconnected">3.1. The portal element</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-the-body-element">
-   <a href="https://html.spec.whatwg.org/multipage/sections.html#the-body-element">https://html.spec.whatwg.org/multipage/sections.html#the-body-element</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-the-body-element">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-becomes-browsing-context-disconnected">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-window-bc">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#window-bc">https://html.spec.whatwg.org/multipage/window-object.html#window-bc</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-window-bc">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-window-bc">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-browsing-context-group">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-group">https://html.spec.whatwg.org/multipage/browsers.html#browsing-context-group</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-browsing-context-group">3.1. The portal element</a>
+    <li><a href="#ref-for-browsing-context-group">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-browsing-context-connected">
    <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#browsing-context-connected">https://html.spec.whatwg.org/multipage/infrastructure.html#browsing-context-connected</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-browsing-context-connected">2. Concepts</a>
-    <li><a href="#ref-for-browsing-context-connected①">3.1. The portal element</a>
+    <li><a href="#ref-for-browsing-context-connected">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-browsing-context-connected①">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-close-a-browsing-context">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context">https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-close-a-browsing-context">2. Concepts</a> <a href="#ref-for-close-a-browsing-context①">(2)</a> <a href="#ref-for-close-a-browsing-context②">(3)</a>
-    <li><a href="#ref-for-close-a-browsing-context③">3.1. The portal element</a> <a href="#ref-for-close-a-browsing-context④">(2)</a>
+    <li><a href="#ref-for-close-a-browsing-context">2. Portal browsing contexts</a> <a href="#ref-for-close-a-browsing-context①">(2)</a> <a href="#ref-for-close-a-browsing-context②">(3)</a>
+    <li><a href="#ref-for-close-a-browsing-context③">3. The portal element</a> <a href="#ref-for-close-a-browsing-context④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-creating-a-new-top-level-browsing-context">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-top-level-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#creating-a-new-top-level-browsing-context</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-creating-a-new-top-level-browsing-context">3.1. The portal element</a>
+    <li><a href="#ref-for-creating-a-new-top-level-browsing-context">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-messageevent-data">
    <a href="https://html.spec.whatwg.org/multipage/comms.html#dom-messageevent-data">https://html.spec.whatwg.org/multipage/comms.html#dom-messageevent-data</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-messageevent-data">3.1. The portal element</a>
-    <li><a href="#ref-for-dom-messageevent-data①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-dom-messageevent-data">3. The portal element</a>
+    <li><a href="#ref-for-dom-messageevent-data①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-a-browsing-context-is-discarded">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded">https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-a-browsing-context-is-discarded">2. Concepts</a> <a href="#ref-for-a-browsing-context-is-discarded①">(2)</a> <a href="#ref-for-a-browsing-context-is-discarded②">(3)</a>
-    <li><a href="#ref-for-a-browsing-context-is-discarded③">3.1. The portal element</a> <a href="#ref-for-a-browsing-context-is-discarded④">(2)</a> <a href="#ref-for-a-browsing-context-is-discarded⑤">(3)</a>
+    <li><a href="#ref-for-a-browsing-context-is-discarded">2. Portal browsing contexts</a> <a href="#ref-for-a-browsing-context-is-discarded①">(2)</a> <a href="#ref-for-a-browsing-context-is-discarded②">(3)</a>
+    <li><a href="#ref-for-a-browsing-context-is-discarded③">3. The portal element</a> <a href="#ref-for-a-browsing-context-is-discarded④">(2)</a> <a href="#ref-for-a-browsing-context-is-discarded⑤">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document-bc">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-document-bc">https://html.spec.whatwg.org/multipage/browsers.html#concept-document-bc</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-document-bc">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-document-bc">3. The portal element</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-handlers">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers">https://html.spec.whatwg.org/multipage/webappapis.html#event-handlers</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-handlers">4.2. Event handlers</a> <a href="#ref-for-event-handlers①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-handler-content-attributes">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes">https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-content-attributes</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-event-handler-content-attributes">3.1. The portal element</a>
-    <li><a href="#ref-for-event-handler-content-attributes①">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-event-handler-content-attributes">3. The portal element</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-event-handler-event-type">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-event-type">https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-event-type</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-event-handler-event-type">4.2. Event handlers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-handler-idl-attributes">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes">https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-event-handler-idl-attributes">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-event-handler-idl-attributes">4.2. Event handlers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-agent-event-loop">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop">https://html.spec.whatwg.org/multipage/webappapis.html#concept-agent-event-loop</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-agent-event-loop">2. Concepts</a> <a href="#ref-for-concept-agent-event-loop①">(2)</a> <a href="#ref-for-concept-agent-event-loop②">(3)</a>
-    <li><a href="#ref-for-concept-agent-event-loop③">3.1. The portal element</a> <a href="#ref-for-concept-agent-event-loop④">(2)</a>
-    <li><a href="#ref-for-concept-agent-event-loop⑤">3.2. The PortalHost interface</a> <a href="#ref-for-concept-agent-event-loop⑥">(2)</a> <a href="#ref-for-concept-agent-event-loop⑦">(3)</a>
-    <li><a href="#ref-for-concept-agent-event-loop⑧">3.3. The PortalActivateEvent interface</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-frameset">
-   <a href="https://html.spec.whatwg.org/multipage/obsolete.html#frameset">https://html.spec.whatwg.org/multipage/obsolete.html#frameset</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-frameset">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-concept-agent-event-loop">2. Portal browsing contexts</a> <a href="#ref-for-concept-agent-event-loop①">(2)</a> <a href="#ref-for-concept-agent-event-loop②">(3)</a>
+    <li><a href="#ref-for-concept-agent-event-loop③">3. The portal element</a> <a href="#ref-for-concept-agent-event-loop④">(2)</a>
+    <li><a href="#ref-for-concept-agent-event-loop⑤">3.1. Portal hosts</a> <a href="#ref-for-concept-agent-event-loop⑥">(2)</a> <a href="#ref-for-concept-agent-event-loop⑦">(3)</a>
+    <li><a href="#ref-for-concept-agent-event-loop⑧">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-the-iframe-element">
    <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-the-iframe-element">3.1. The portal element</a> <a href="#ref-for-the-iframe-element①">(2)</a>
-    <li><a href="#ref-for-the-iframe-element②">4.4. Integration with Fetch Metadata Request Headers</a>
+    <li><a href="#ref-for-the-iframe-element">3. The portal element</a> <a href="#ref-for-the-iframe-element①">(2)</a>
+    <li><a href="#ref-for-the-iframe-element②">5.3. Fetch Metadata Request Headers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-in-parallel">
    <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-in-parallel">2. Concepts</a>
+    <li><a href="#ref-for-in-parallel">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-limited-to-only-known-values">
    <a href="https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#limited-to-only-known-values">https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#limited-to-only-known-values</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-limited-to-only-known-values">3.1. The portal element</a>
+    <li><a href="#ref-for-limited-to-only-known-values">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-navigate">
    <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate">https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-navigate">3.1. The portal element</a>
+    <li><a href="#ref-for-navigate">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-nested-browsing-context">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-nested-browsing-context">2. Concepts</a>
-    <li><a href="#ref-for-nested-browsing-context①">3.1. The portal element</a> <a href="#ref-for-nested-browsing-context②">(2)</a> <a href="#ref-for-nested-browsing-context③">(3)</a>
-    <li><a href="#ref-for-nested-browsing-context④">4.1. Overview</a>
-    <li><a href="#ref-for-nested-browsing-context⑤">4.2. Integration with Content Security Policy</a> <a href="#ref-for-nested-browsing-context⑥">(2)</a>
-    <li><a href="#ref-for-nested-browsing-context⑦">4.4. Integration with Fetch Metadata Request Headers</a> <a href="#ref-for-nested-browsing-context⑧">(2)</a> <a href="#ref-for-nested-browsing-context⑨">(3)</a>
+    <li><a href="#ref-for-nested-browsing-context">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-nested-browsing-context①">3. The portal element</a> <a href="#ref-for-nested-browsing-context②">(2)</a> <a href="#ref-for-nested-browsing-context③">(3)</a>
+    <li><a href="#ref-for-nested-browsing-context④">5.1. Content Security Policy</a> <a href="#ref-for-nested-browsing-context⑤">(2)</a>
+    <li><a href="#ref-for-nested-browsing-context⑥">5.3. Fetch Metadata Request Headers</a> <a href="#ref-for-nested-browsing-context⑦">(2)</a> <a href="#ref-for-nested-browsing-context⑧">(3)</a>
+    <li><a href="#ref-for-nested-browsing-context⑨">6.1. Overview</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-settings-object-origin">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin">https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-settings-object-origin">3.1. The portal element</a> <a href="#ref-for-concept-settings-object-origin①">(2)</a>
-    <li><a href="#ref-for-concept-settings-object-origin②">3.2. The PortalHost interface</a> <a href="#ref-for-concept-settings-object-origin③">(2)</a> <a href="#ref-for-concept-settings-object-origin④">(3)</a>
+    <li><a href="#ref-for-concept-settings-object-origin">3. The portal element</a> <a href="#ref-for-concept-settings-object-origin①">(2)</a>
+    <li><a href="#ref-for-concept-settings-object-origin②">3.1. Portal hosts</a> <a href="#ref-for-concept-settings-object-origin③">(2)</a> <a href="#ref-for-concept-settings-object-origin④">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-parent-browsing-context">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-parent-browsing-context">4.2. Integration with Content Security Policy</a> <a href="#ref-for-parent-browsing-context①">(2)</a>
+    <li><a href="#ref-for-parent-browsing-context">5.1. Content Security Policy</a> <a href="#ref-for-parent-browsing-context①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-parse-a-url">
    <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#parse-a-url">https://html.spec.whatwg.org/multipage/urls-and-fetching.html#parse-a-url</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-parse-a-url">3.1. The portal element</a>
+    <li><a href="#ref-for-parse-a-url">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-messageevent-ports">
    <a href="https://html.spec.whatwg.org/multipage/comms.html#dom-messageevent-ports">https://html.spec.whatwg.org/multipage/comms.html#dom-messageevent-ports</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-messageevent-ports">3.1. The portal element</a>
-    <li><a href="#ref-for-dom-messageevent-ports①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-dom-messageevent-ports">3. The portal element</a>
+    <li><a href="#ref-for-dom-messageevent-ports①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-prompt-to-unload-a-document">
    <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#prompt-to-unload-a-document">https://html.spec.whatwg.org/multipage/browsing-the-web.html#prompt-to-unload-a-document</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-prompt-to-unload-a-document">2. Concepts</a>
-    <li><a href="#ref-for-prompt-to-unload-a-document①">3.1. The portal element</a>
+    <li><a href="#ref-for-prompt-to-unload-a-document">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-prompt-to-unload-a-document①">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-queue-a-task">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task">https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-queue-a-task">2. Concepts</a> <a href="#ref-for-queue-a-task①">(2)</a> <a href="#ref-for-queue-a-task②">(3)</a>
-    <li><a href="#ref-for-queue-a-task③">3.1. The portal element</a>
-    <li><a href="#ref-for-queue-a-task④">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-queue-a-task⑤">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-queue-a-task">2. Portal browsing contexts</a> <a href="#ref-for-queue-a-task①">(2)</a> <a href="#ref-for-queue-a-task②">(3)</a>
+    <li><a href="#ref-for-queue-a-task③">3. The portal element</a>
+    <li><a href="#ref-for-queue-a-task④">3.1. Portal hosts</a>
+    <li><a href="#ref-for-queue-a-task⑤">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-global-object-realm">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-global-object-realm">https://html.spec.whatwg.org/multipage/webappapis.html#concept-global-object-realm</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-global-object-realm">2. Concepts</a>
-    <li><a href="#ref-for-concept-global-object-realm①">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-global-object-realm">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-concept-global-object-realm①">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-referrer-policy-attribute">
    <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#referrer-policy-attribute">https://html.spec.whatwg.org/multipage/urls-and-fetching.html#referrer-policy-attribute</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-referrer-policy-attribute">3.1. The portal element</a>
+    <li><a href="#ref-for-referrer-policy-attribute">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-relevant-settings-object">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-relevant-settings-object">3.1. The portal element</a>
-    <li><a href="#ref-for-relevant-settings-object①">3.2. The PortalHost interface</a> <a href="#ref-for-relevant-settings-object②">(2)</a>
+    <li><a href="#ref-for-relevant-settings-object">3. The portal element</a>
+    <li><a href="#ref-for-relevant-settings-object①">3.1. Portal hosts</a> <a href="#ref-for-relevant-settings-object②">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-resulting-url-record">
    <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#resulting-url-record">https://html.spec.whatwg.org/multipage/urls-and-fetching.html#resulting-url-record</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-resulting-url-record">3.1. The portal element</a>
+    <li><a href="#ref-for-resulting-url-record">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-same-origin">
    <a href="https://html.spec.whatwg.org/multipage/origin.html#same-origin">https://html.spec.whatwg.org/multipage/origin.html#same-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-same-origin">3.1. The portal element</a>
-    <li><a href="#ref-for-same-origin①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-same-origin">3. The portal element</a>
+    <li><a href="#ref-for-same-origin①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-same-origin-domain">
    <a href="https://html.spec.whatwg.org/multipage/origin.html#same-origin-domain">https://html.spec.whatwg.org/multipage/origin.html#same-origin-domain</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-same-origin-domain">3.1. The portal element</a>
+    <li><a href="#ref-for-same-origin-domain">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-ascii-serialisation-of-an-origin">
    <a href="https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin">https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-ascii-serialisation-of-an-origin">3.1. The portal element</a>
-    <li><a href="#ref-for-ascii-serialisation-of-an-origin①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-ascii-serialisation-of-an-origin">3. The portal element</a>
+    <li><a href="#ref-for-ascii-serialisation-of-an-origin①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-session-history">
    <a href="https://html.spec.whatwg.org/multipage/history.html#session-history">https://html.spec.whatwg.org/multipage/history.html#session-history</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-session-history">2. Concepts</a>
+    <li><a href="#ref-for-session-history">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-messageevent-source">
    <a href="https://html.spec.whatwg.org/multipage/comms.html#dom-messageevent-source">https://html.spec.whatwg.org/multipage/comms.html#dom-messageevent-source</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-messageevent-source">3.1. The portal element</a> <a href="#ref-for-dom-messageevent-source①">(2)</a>
-    <li><a href="#ref-for-dom-messageevent-source②">3.2. The PortalHost interface</a> <a href="#ref-for-dom-messageevent-source③">(2)</a>
+    <li><a href="#ref-for-dom-messageevent-source">3. The portal element</a> <a href="#ref-for-dom-messageevent-source①">(2)</a>
+    <li><a href="#ref-for-dom-messageevent-source②">3.1. Portal hosts</a> <a href="#ref-for-dom-messageevent-source③">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-environment-target-browsing-context">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context">https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-environment-target-browsing-context">4.2. Integration with Content Security Policy</a>
-    <li><a href="#ref-for-concept-environment-target-browsing-context①">4.3. Integration with RFC 7034</a>
-    <li><a href="#ref-for-concept-environment-target-browsing-context②">4.4. Integration with Fetch Metadata Request Headers</a>
+    <li><a href="#ref-for-concept-environment-target-browsing-context">5.1. Content Security Policy</a>
+    <li><a href="#ref-for-concept-environment-target-browsing-context①">5.2. RFC 7034</a>
+    <li><a href="#ref-for-concept-environment-target-browsing-context②">5.3. Fetch Metadata Request Headers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-task-source">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source">https://html.spec.whatwg.org/multipage/webappapis.html#task-source</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-task-source">2. Concepts</a> <a href="#ref-for-task-source①">(2)</a>
+    <li><a href="#ref-for-task-source">2. Portal browsing contexts</a> <a href="#ref-for-task-source①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-top-level-browsing-context">
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-top-level-browsing-context">1. Introduction</a>
-    <li><a href="#ref-for-top-level-browsing-context①">3.1. The portal element</a> <a href="#ref-for-top-level-browsing-context②">(2)</a>
-    <li><a href="#ref-for-top-level-browsing-context③">3.3. The PortalActivateEvent interface</a>
-    <li><a href="#ref-for-top-level-browsing-context④">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-top-level-browsing-context①">3. The portal element</a> <a href="#ref-for-top-level-browsing-context②">(2)</a>
+    <li><a href="#ref-for-top-level-browsing-context③">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-unload">
    <a href="https://html.spec.whatwg.org/multipage/indices.html#event-unload">https://html.spec.whatwg.org/multipage/indices.html#event-unload</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-event-unload">2. Concepts</a>
+    <li><a href="#ref-for-event-unload">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-valid-non-empty-url-potentially-surrounded-by-spaces">
    <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#valid-non-empty-url-potentially-surrounded-by-spaces">https://html.spec.whatwg.org/multipage/urls-and-fetching.html#valid-non-empty-url-potentially-surrounded-by-spaces</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-valid-non-empty-url-potentially-surrounded-by-spaces">3.1. The portal element</a>
+    <li><a href="#ref-for-valid-non-empty-url-potentially-surrounded-by-spaces">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-assert">
    <a href="https://infra.spec.whatwg.org/#assert">https://infra.spec.whatwg.org/#assert</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-assert">2. Concepts</a> <a href="#ref-for-assert①">(2)</a> <a href="#ref-for-assert②">(3)</a> <a href="#ref-for-assert③">(4)</a>
-    <li><a href="#ref-for-assert④">3.1. The portal element</a> <a href="#ref-for-assert⑤">(2)</a> <a href="#ref-for-assert⑥">(3)</a>
+    <li><a href="#ref-for-assert">2. Portal browsing contexts</a> <a href="#ref-for-assert①">(2)</a> <a href="#ref-for-assert②">(3)</a> <a href="#ref-for-assert③">(4)</a>
+    <li><a href="#ref-for-assert④">3. The portal element</a> <a href="#ref-for-assert⑤">(2)</a> <a href="#ref-for-assert⑥">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-boolean">
    <a href="https://infra.spec.whatwg.org/#boolean">https://infra.spec.whatwg.org/#boolean</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-boolean">3.1. The portal element</a>
+    <li><a href="#ref-for-boolean">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-html-namespace">
    <a href="https://infra.spec.whatwg.org/#html-namespace">https://infra.spec.whatwg.org/#html-namespace</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-html-namespace">2. Concepts</a>
+    <li><a href="#ref-for-html-namespace">2. Portal browsing contexts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-referrer-policy">
    <a href="https://w3c.github.io/webappsec-referrer-policy/#referrer-policy">https://w3c.github.io/webappsec-referrer-policy/#referrer-policy</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-referrer-policy">3.1. The portal element</a>
+    <li><a href="#ref-for-referrer-policy">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-serviceworker">
    <a href="https://w3c.github.io/ServiceWorker/#serviceworker">https://w3c.github.io/ServiceWorker/#serviceworker</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-serviceworker">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-serviceworker">4.1. The MessageEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-url-origin">
    <a href="https://url.spec.whatwg.org/#concept-url-origin">https://url.spec.whatwg.org/#concept-url-origin</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-url-origin">3.1. The portal element</a>
-    <li><a href="#ref-for-concept-url-origin①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-concept-url-origin">3. The portal element</a>
+    <li><a href="#ref-for-concept-url-origin①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-url-scheme">
    <a href="https://url.spec.whatwg.org/#concept-url-scheme">https://url.spec.whatwg.org/#concept-url-scheme</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-url-scheme">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-url-scheme">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-url">
    <a href="https://url.spec.whatwg.org/#concept-url">https://url.spec.whatwg.org/#concept-url</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-url">3.1. The portal element</a>
+    <li><a href="#ref-for-concept-url">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-url-parser">
    <a href="https://url.spec.whatwg.org/#concept-url-parser">https://url.spec.whatwg.org/#concept-url-parser</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-url-parser">3.1. The portal element</a>
-    <li><a href="#ref-for-concept-url-parser①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-concept-url-parser">3. The portal element</a>
+    <li><a href="#ref-for-concept-url-parser①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMException">
    <a href="https://heycam.github.io/webidl/#idl-DOMException">https://heycam.github.io/webidl/#idl-DOMException</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMException">3.1. The portal element</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a> <a href="#ref-for-idl-DOMException③">(4)</a> <a href="#ref-for-idl-DOMException④">(5)</a>
-    <li><a href="#ref-for-idl-DOMException⑤">3.2. The PortalHost interface</a> <a href="#ref-for-idl-DOMException⑥">(2)</a>
-    <li><a href="#ref-for-idl-DOMException⑦">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-idl-DOMException">3. The portal element</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a> <a href="#ref-for-idl-DOMException③">(4)</a> <a href="#ref-for-idl-DOMException④">(5)</a>
+    <li><a href="#ref-for-idl-DOMException⑤">3.1. Portal hosts</a> <a href="#ref-for-idl-DOMException⑥">(2)</a>
+    <li><a href="#ref-for-idl-DOMException⑦">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMString">
    <a href="https://heycam.github.io/webidl/#idl-DOMString">https://heycam.github.io/webidl/#idl-DOMString</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMString">3.1. The portal element</a>
-    <li><a href="#ref-for-idl-DOMString①">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-idl-DOMString">3. The portal element</a>
+    <li><a href="#ref-for-idl-DOMString①">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-Exposed">
    <a href="https://heycam.github.io/webidl/#Exposed">https://heycam.github.io/webidl/#Exposed</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-Exposed">3.1. The portal element</a>
-    <li><a href="#ref-for-Exposed①">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-Exposed②">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-Exposed">3. The portal element</a>
+    <li><a href="#ref-for-Exposed①">3.1. Portal hosts</a>
+    <li><a href="#ref-for-Exposed②">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-invalidstateerror">
    <a href="https://heycam.github.io/webidl/#invalidstateerror">https://heycam.github.io/webidl/#invalidstateerror</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-invalidstateerror">3.1. The portal element</a> <a href="#ref-for-invalidstateerror①">(2)</a> <a href="#ref-for-invalidstateerror②">(3)</a> <a href="#ref-for-invalidstateerror③">(4)</a>
-    <li><a href="#ref-for-invalidstateerror④">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-invalidstateerror⑤">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-invalidstateerror">3. The portal element</a> <a href="#ref-for-invalidstateerror①">(2)</a> <a href="#ref-for-invalidstateerror②">(3)</a> <a href="#ref-for-invalidstateerror③">(4)</a>
+    <li><a href="#ref-for-invalidstateerror④">3.1. Portal hosts</a>
+    <li><a href="#ref-for-invalidstateerror⑤">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-NewObject">
    <a href="https://heycam.github.io/webidl/#NewObject">https://heycam.github.io/webidl/#NewObject</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-NewObject">3.1. The portal element</a>
+    <li><a href="#ref-for-NewObject">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-syntaxerror">
    <a href="https://heycam.github.io/webidl/#syntaxerror">https://heycam.github.io/webidl/#syntaxerror</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-syntaxerror">3.1. The portal element</a>
-    <li><a href="#ref-for-syntaxerror①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-syntaxerror">3. The portal element</a>
+    <li><a href="#ref-for-syntaxerror①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-USVString">
    <a href="https://heycam.github.io/webidl/#idl-USVString">https://heycam.github.io/webidl/#idl-USVString</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-USVString">3.1. The portal element</a> <a href="#ref-for-idl-USVString①">(2)</a>
-    <li><a href="#ref-for-idl-USVString②">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-idl-USVString">3. The portal element</a> <a href="#ref-for-idl-USVString①">(2)</a>
+    <li><a href="#ref-for-idl-USVString②">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dfn-frozen-array-type">
    <a href="https://heycam.github.io/webidl/#dfn-frozen-array-type">https://heycam.github.io/webidl/#dfn-frozen-array-type</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dfn-frozen-array-type">3.1. The portal element</a>
-    <li><a href="#ref-for-dfn-frozen-array-type①">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-dfn-frozen-array-type">3. The portal element</a>
+    <li><a href="#ref-for-dfn-frozen-array-type①">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-object">
    <a href="https://heycam.github.io/webidl/#idl-object">https://heycam.github.io/webidl/#idl-object</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-object">3.1. The portal element</a> <a href="#ref-for-idl-object①">(2)</a>
-    <li><a href="#ref-for-idl-object②">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-idl-object">3. The portal element</a> <a href="#ref-for-idl-object①">(2)</a>
+    <li><a href="#ref-for-idl-object②">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-this">
    <a href="https://heycam.github.io/webidl/#this">https://heycam.github.io/webidl/#this</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-this">3.1. The portal element</a> <a href="#ref-for-this①">(2)</a> <a href="#ref-for-this②">(3)</a> <a href="#ref-for-this③">(4)</a>
-    <li><a href="#ref-for-this④">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-this⑤">3.3. The PortalActivateEvent interface</a> <a href="#ref-for-this⑥">(2)</a> <a href="#ref-for-this⑦">(3)</a> <a href="#ref-for-this⑧">(4)</a> <a href="#ref-for-this⑨">(5)</a>
-    <li><a href="#ref-for-this①⓪">3.4. Miscellaneous extensions</a> <a href="#ref-for-this①①">(2)</a>
+    <li><a href="#ref-for-this">3. The portal element</a> <a href="#ref-for-this①">(2)</a> <a href="#ref-for-this②">(3)</a> <a href="#ref-for-this③">(4)</a>
+    <li><a href="#ref-for-this④">3.1. Portal hosts</a> <a href="#ref-for-this⑤">(2)</a> <a href="#ref-for-this⑥">(3)</a>
+    <li><a href="#ref-for-this⑦">3.2. The PortalActivateEvent interface</a> <a href="#ref-for-this⑧">(2)</a> <a href="#ref-for-this⑨">(3)</a> <a href="#ref-for-this①⓪">(4)</a> <a href="#ref-for-this①①">(5)</a>
    </ul>
   </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -3260,7 +3302,6 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
      <li><span class="dfn-paneled" id="term-for-concept-document-window" style="color:initial">associated document</span>
      <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-connected" style="color:initial">becomes browsing-context connected</span>
      <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-disconnected" style="color:initial">becomes browsing-context disconnected</span>
-     <li><span class="dfn-paneled" id="term-for-the-body-element" style="color:initial">body</span>
      <li><span class="dfn-paneled" id="term-for-window-bc" style="color:initial">browsing context <small>(for Window)</small></span>
      <li><span class="dfn-paneled" id="term-for-browsing-context-group" style="color:initial">browsing context group</span>
      <li><span class="dfn-paneled" id="term-for-browsing-context-connected" style="color:initial">browsing-context connected</span>
@@ -3269,10 +3310,11 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-data" style="color:initial">data</span>
      <li><span class="dfn-paneled" id="term-for-a-browsing-context-is-discarded" style="color:initial">discard a browsing context</span>
      <li><span class="dfn-paneled" id="term-for-concept-document-bc" style="color:initial">document browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-event-handlers" style="color:initial">event handler</span>
      <li><span class="dfn-paneled" id="term-for-event-handler-content-attributes" style="color:initial">event handler content attribute</span>
+     <li><span class="dfn-paneled" id="term-for-event-handler-event-type" style="color:initial">event handler event type</span>
      <li><span class="dfn-paneled" id="term-for-event-handler-idl-attributes" style="color:initial">event handler idl attribute</span>
      <li><span class="dfn-paneled" id="term-for-concept-agent-event-loop" style="color:initial">event loop</span>
-     <li><span class="dfn-paneled" id="term-for-frameset" style="color:initial">frameset</span>
      <li><span class="dfn-paneled" id="term-for-the-iframe-element" style="color:initial">iframe</span>
      <li><span class="dfn-paneled" id="term-for-in-parallel" style="color:initial">in parallel</span>
      <li><span class="dfn-paneled" id="term-for-limited-to-only-known-values" style="color:initial">limited to only known values</span>
@@ -3391,6 +3433,10 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
     <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-object"><c- b>object</c-></a>> <a data-default="[]" data-type="sequence<object> " href="#dom-portalactivateoptions-transfer"><code><c- g>transfer</c-></code></a> = [];
 };
 
+<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window"><c- g>Window</c-></a> {
+    <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost"><c- g>portalHost</c-></a>;
+};
+
 [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->]
 <c- b>interface</c-> <a href="#portalhost"><code><c- g>PortalHost</c-></code></a> : <a class="n" data-link-type="idl-name" href="https://dom.spec.whatwg.org/#eventtarget"><c- n>EventTarget</c-></a> {
     <c- b>void</c-> <a class="idl-code" data-link-type="method" href="#dom-portalhost-postmessage"><c- g>postMessage</c-></a>(<c- b>any</c-> <a href="#dom-portalhost-postmessage-message-targetorigin-transfer-message"><code><c- g>message</c-></code></a>, <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><c- b>USVString</c-></a> <a href="#dom-portalhost-postmessage-message-targetorigin-transfer-targetorigin"><code><c- g>targetOrigin</c-></code></a>, <c- b>optional</c-> <c- b>sequence</c->&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-object"><c- b>object</c-></a>> <a href="#dom-portalhost-postmessage-message-targetorigin-transfer-transfer"><code><c- g>transfer</c-></code></a> = []);
@@ -3414,10 +3460,6 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
 
 <c- b>typedef</c-> (<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy"><c- n>WindowProxy</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/web-messaging.html#messageport"><c- n>MessagePort</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://w3c.github.io/ServiceWorker/#serviceworker"><c- n>ServiceWorker</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#htmlportalelement"><c- n>HTMLPortalElement</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#portalhost"><c- n>PortalHost</c-></a>) <a href="#typedefdef-messageeventsource"><code><c- g>MessageEventSource</c-></code></a>;
 
-<c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window"><c- g>Window</c-></a> {
-    <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost"><c- g>portalHost</c-></a>;
-};
-
 <c- b>partial</c-> <c- b>interface</c-> <c- b>mixin</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/webappapis.html#windoweventhandlers"><c- g>WindowEventHandlers</c-></a> {
     <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler"><c- n>EventHandler</c-></a> <a data-type="EventHandler" href="#dom-windoweventhandlers-onportalactivate"><code><c- g>onportalactivate</c-></code></a>;
 };
@@ -3433,330 +3475,323 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
    <div class="issue"> It might be convenient to not immediately detach the portal element, but instead to do so
     in a microtask. This would allow developers to reinsert the <code><a data-link-type="element" href="#elementdef-portal">portal</a></code> element without losing
     its browsing context. <a href="#issue-833dc9f1"> ↵ </a></div>
-   <div class="issue"> We should expand this section further. <a href="#issue-6b2c0ac1"> ↵ </a></div>
    <div class="issue"> <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-activate">activate(options)</a></code> should also respect the CSP <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#navigate-to">navigate-to</a> directive. <a href="#issue-0bcb49e2"> ↵ </a></div>
+   <div class="issue"> We should expand this section further. Much of what was formerly there is in <a href="#other-spec-updates">§ 5 Updates to other specifications</a> now. Once we have a more comprehensive view of all the security-related
+    spec updates, we should summarize them in a non-normative fashion here. <a href="#issue-8e856747"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="portal-state">
    <b><a href="#portal-state">#portal-state</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-portal-state">2. Concepts</a> <a href="#ref-for-portal-state①">(2)</a> <a href="#ref-for-portal-state②">(3)</a> <a href="#ref-for-portal-state③">(4)</a> <a href="#ref-for-portal-state④">(5)</a> <a href="#ref-for-portal-state⑤">(6)</a> <a href="#ref-for-portal-state⑥">(7)</a> <a href="#ref-for-portal-state⑦">(8)</a> <a href="#ref-for-portal-state⑧">(9)</a>
-    <li><a href="#ref-for-portal-state⑨">3.1. The portal element</a> <a href="#ref-for-portal-state①⓪">(2)</a>
-    <li><a href="#ref-for-portal-state①①">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-portal-state①②">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-portal-state">2. Portal browsing contexts</a> <a href="#ref-for-portal-state①">(2)</a> <a href="#ref-for-portal-state②">(3)</a> <a href="#ref-for-portal-state③">(4)</a> <a href="#ref-for-portal-state④">(5)</a> <a href="#ref-for-portal-state⑤">(6)</a> <a href="#ref-for-portal-state⑥">(7)</a> <a href="#ref-for-portal-state⑦">(8)</a> <a href="#ref-for-portal-state⑧">(9)</a>
+    <li><a href="#ref-for-portal-state⑨">3. The portal element</a> <a href="#ref-for-portal-state①⓪">(2)</a>
+    <li><a href="#ref-for-portal-state①①">3.1. Portal hosts</a> <a href="#ref-for-portal-state①②">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="portal-browsing-context">
    <b><a href="#portal-browsing-context">#portal-browsing-context</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-portal-browsing-context">2. Concepts</a> <a href="#ref-for-portal-browsing-context①">(2)</a> <a href="#ref-for-portal-browsing-context②">(3)</a>
-    <li><a href="#ref-for-portal-browsing-context③">3.1. The portal element</a> <a href="#ref-for-portal-browsing-context④">(2)</a> <a href="#ref-for-portal-browsing-context⑤">(3)</a> <a href="#ref-for-portal-browsing-context⑥">(4)</a> <a href="#ref-for-portal-browsing-context⑦">(5)</a>
-    <li><a href="#ref-for-portal-browsing-context⑧">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-portal-browsing-context⑨">3.4. Miscellaneous extensions</a> <a href="#ref-for-portal-browsing-context①⓪">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①①">4.1. Overview</a>
-    <li><a href="#ref-for-portal-browsing-context①②">4.2. Integration with Content Security Policy</a> <a href="#ref-for-portal-browsing-context①③">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①④">4.3. Integration with RFC 7034</a> <a href="#ref-for-portal-browsing-context①⑤">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①⑥">4.4. Integration with Fetch Metadata Request Headers</a> <a href="#ref-for-portal-browsing-context①⑦">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context">2. Portal browsing contexts</a> <a href="#ref-for-portal-browsing-context①">(2)</a> <a href="#ref-for-portal-browsing-context②">(3)</a>
+    <li><a href="#ref-for-portal-browsing-context③">3. The portal element</a> <a href="#ref-for-portal-browsing-context④">(2)</a> <a href="#ref-for-portal-browsing-context⑤">(3)</a> <a href="#ref-for-portal-browsing-context⑥">(4)</a> <a href="#ref-for-portal-browsing-context⑦">(5)</a>
+    <li><a href="#ref-for-portal-browsing-context⑧">3.1. Portal hosts</a> <a href="#ref-for-portal-browsing-context⑨">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①⓪">4.2. Event handlers</a> <a href="#ref-for-portal-browsing-context①①">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①②">5.1. Content Security Policy</a> <a href="#ref-for-portal-browsing-context①③">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①④">5.2. RFC 7034</a> <a href="#ref-for-portal-browsing-context①⑤">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①⑥">5.3. Fetch Metadata Request Headers</a> <a href="#ref-for-portal-browsing-context①⑦">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①⑧">6.1. Overview</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="host-element">
    <b><a href="#host-element">#host-element</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-host-element">2. Concepts</a> <a href="#ref-for-host-element①">(2)</a> <a href="#ref-for-host-element②">(3)</a> <a href="#ref-for-host-element③">(4)</a>
-    <li><a href="#ref-for-host-element④">3.1. The portal element</a> <a href="#ref-for-host-element⑤">(2)</a>
-    <li><a href="#ref-for-host-element⑥">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-host-element">2. Portal browsing contexts</a> <a href="#ref-for-host-element①">(2)</a> <a href="#ref-for-host-element②">(3)</a> <a href="#ref-for-host-element③">(4)</a>
+    <li><a href="#ref-for-host-element④">3. The portal element</a> <a href="#ref-for-host-element⑤">(2)</a>
+    <li><a href="#ref-for-host-element⑥">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="host-browsing-context">
    <b><a href="#host-browsing-context">#host-browsing-context</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-host-browsing-context">2. Concepts</a> <a href="#ref-for-host-browsing-context①">(2)</a>
-    <li><a href="#ref-for-host-browsing-context②">3.2. The PortalHost interface</a> <a href="#ref-for-host-browsing-context③">(2)</a>
-    <li><a href="#ref-for-host-browsing-context④">4.2. Integration with Content Security Policy</a>
-    <li><a href="#ref-for-host-browsing-context⑤">4.3. Integration with RFC 7034</a> <a href="#ref-for-host-browsing-context⑥">(2)</a>
+    <li><a href="#ref-for-host-browsing-context">2. Portal browsing contexts</a> <a href="#ref-for-host-browsing-context①">(2)</a>
+    <li><a href="#ref-for-host-browsing-context②">3.1. Portal hosts</a> <a href="#ref-for-host-browsing-context③">(2)</a>
+    <li><a href="#ref-for-host-browsing-context④">5.1. Content Security Policy</a>
+    <li><a href="#ref-for-host-browsing-context⑤">5.2. RFC 7034</a> <a href="#ref-for-host-browsing-context⑥">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="portal-task-source">
    <b><a href="#portal-task-source">#portal-task-source</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-portal-task-source">2. Concepts</a> <a href="#ref-for-portal-task-source①">(2)</a> <a href="#ref-for-portal-task-source②">(3)</a>
-    <li><a href="#ref-for-portal-task-source③">3.1. The portal element</a>
-    <li><a href="#ref-for-portal-task-source④">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-portal-task-source⑤">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-portal-task-source">2. Portal browsing contexts</a> <a href="#ref-for-portal-task-source①">(2)</a> <a href="#ref-for-portal-task-source②">(3)</a>
+    <li><a href="#ref-for-portal-task-source③">3. The portal element</a>
+    <li><a href="#ref-for-portal-task-source④">3.1. Portal hosts</a>
+    <li><a href="#ref-for-portal-task-source⑤">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="activate-a-portal-browsing-context">
    <b><a href="#activate-a-portal-browsing-context">#activate-a-portal-browsing-context</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-activate-a-portal-browsing-context">2. Concepts</a> <a href="#ref-for-activate-a-portal-browsing-context①">(2)</a>
-    <li><a href="#ref-for-activate-a-portal-browsing-context②">3.1. The portal element</a>
-    <li><a href="#ref-for-activate-a-portal-browsing-context③">3.2. The PortalHost interface</a> <a href="#ref-for-activate-a-portal-browsing-context④">(2)</a>
+    <li><a href="#ref-for-activate-a-portal-browsing-context">2. Portal browsing contexts</a> <a href="#ref-for-activate-a-portal-browsing-context①">(2)</a>
+    <li><a href="#ref-for-activate-a-portal-browsing-context②">3. The portal element</a>
+    <li><a href="#ref-for-activate-a-portal-browsing-context③">3.1. Portal hosts</a> <a href="#ref-for-activate-a-portal-browsing-context④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="adopt-the-predecessor-browsing-context">
    <b><a href="#adopt-the-predecessor-browsing-context">#adopt-the-predecessor-browsing-context</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-adopt-the-predecessor-browsing-context">2. Concepts</a> <a href="#ref-for-adopt-the-predecessor-browsing-context①">(2)</a>
-    <li><a href="#ref-for-adopt-the-predecessor-browsing-context②">3.1. The portal element</a>
-    <li><a href="#ref-for-adopt-the-predecessor-browsing-context③">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-adopt-the-predecessor-browsing-context">2. Portal browsing contexts</a> <a href="#ref-for-adopt-the-predecessor-browsing-context①">(2)</a>
+    <li><a href="#ref-for-adopt-the-predecessor-browsing-context②">3. The portal element</a>
+    <li><a href="#ref-for-adopt-the-predecessor-browsing-context③">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="elementdef-portal">
    <b><a href="#elementdef-portal">#elementdef-portal</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-elementdef-portal">2. Concepts</a> <a href="#ref-for-elementdef-portal①">(2)</a> <a href="#ref-for-elementdef-portal②">(3)</a>
-    <li><a href="#ref-for-elementdef-portal③">3.1. The portal element</a> <a href="#ref-for-elementdef-portal④">(2)</a> <a href="#ref-for-elementdef-portal⑤">(3)</a> <a href="#ref-for-elementdef-portal⑥">(4)</a> <a href="#ref-for-elementdef-portal⑦">(5)</a> <a href="#ref-for-elementdef-portal⑧">(6)</a> <a href="#ref-for-elementdef-portal⑨">(7)</a> <a href="#ref-for-elementdef-portal①⓪">(8)</a> <a href="#ref-for-elementdef-portal①①">(9)</a> <a href="#ref-for-elementdef-portal①②">(10)</a> <a href="#ref-for-elementdef-portal①③">(11)</a> <a href="#ref-for-elementdef-portal①④">(12)</a> <a href="#ref-for-elementdef-portal①⑤">(13)</a> <a href="#ref-for-elementdef-portal①⑥">(14)</a> <a href="#ref-for-elementdef-portal①⑦">(15)</a> <a href="#ref-for-elementdef-portal①⑧">(16)</a> <a href="#ref-for-elementdef-portal①⑨">(17)</a> <a href="#ref-for-elementdef-portal②⓪">(18)</a> <a href="#ref-for-elementdef-portal②①">(19)</a> <a href="#ref-for-elementdef-portal②②">(20)</a> <a href="#ref-for-elementdef-portal②③">(21)</a>
-    <li><a href="#ref-for-elementdef-portal②④">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-elementdef-portal">2. Portal browsing contexts</a> <a href="#ref-for-elementdef-portal①">(2)</a> <a href="#ref-for-elementdef-portal②">(3)</a>
+    <li><a href="#ref-for-elementdef-portal③">3. The portal element</a> <a href="#ref-for-elementdef-portal④">(2)</a> <a href="#ref-for-elementdef-portal⑤">(3)</a> <a href="#ref-for-elementdef-portal⑥">(4)</a> <a href="#ref-for-elementdef-portal⑦">(5)</a> <a href="#ref-for-elementdef-portal⑧">(6)</a> <a href="#ref-for-elementdef-portal⑨">(7)</a> <a href="#ref-for-elementdef-portal①⓪">(8)</a> <a href="#ref-for-elementdef-portal①①">(9)</a> <a href="#ref-for-elementdef-portal①②">(10)</a> <a href="#ref-for-elementdef-portal①③">(11)</a> <a href="#ref-for-elementdef-portal①④">(12)</a> <a href="#ref-for-elementdef-portal①⑤">(13)</a> <a href="#ref-for-elementdef-portal①⑥">(14)</a> <a href="#ref-for-elementdef-portal①⑦">(15)</a> <a href="#ref-for-elementdef-portal①⑧">(16)</a> <a href="#ref-for-elementdef-portal①⑨">(17)</a> <a href="#ref-for-elementdef-portal②⓪">(18)</a> <a href="#ref-for-elementdef-portal②①">(19)</a> <a href="#ref-for-elementdef-portal②②">(20)</a> <a href="#ref-for-elementdef-portal②③">(21)</a>
+    <li><a href="#ref-for-elementdef-portal②④">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement-guest-browsing-context">
    <b><a href="#htmlportalelement-guest-browsing-context">#htmlportalelement-guest-browsing-context</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement-guest-browsing-context">2. Concepts</a>
-    <li><a href="#ref-for-htmlportalelement-guest-browsing-context①">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-guest-browsing-context②">(2)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context③">(3)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context④">(4)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑤">(5)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑥">(6)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑦">(7)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑧">(8)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑨">(9)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①⓪">(10)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①①">(11)</a>
-    <li><a href="#ref-for-htmlportalelement-guest-browsing-context①②">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-htmlportalelement-guest-browsing-context">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-htmlportalelement-guest-browsing-context①">3. The portal element</a> <a href="#ref-for-htmlportalelement-guest-browsing-context②">(2)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context③">(3)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context④">(4)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑤">(5)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑥">(6)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑦">(7)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑧">(8)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context⑨">(9)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①⓪">(10)</a> <a href="#ref-for-htmlportalelement-guest-browsing-context①①">(11)</a>
+    <li><a href="#ref-for-htmlportalelement-guest-browsing-context①②">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement-just-adopted-flag">
    <b><a href="#htmlportalelement-just-adopted-flag">#htmlportalelement-just-adopted-flag</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement-just-adopted-flag">2. Concepts</a> <a href="#ref-for-htmlportalelement-just-adopted-flag①">(2)</a> <a href="#ref-for-htmlportalelement-just-adopted-flag②">(3)</a>
-    <li><a href="#ref-for-htmlportalelement-just-adopted-flag③">3.1. The portal element</a>
+    <li><a href="#ref-for-htmlportalelement-just-adopted-flag">2. Portal browsing contexts</a> <a href="#ref-for-htmlportalelement-just-adopted-flag①">(2)</a> <a href="#ref-for-htmlportalelement-just-adopted-flag②">(3)</a>
+    <li><a href="#ref-for-htmlportalelement-just-adopted-flag③">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-attrdef-portal-src">
    <b><a href="#element-attrdef-portal-src">#element-attrdef-portal-src</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-attrdef-portal-src">3.1. The portal element</a> <a href="#ref-for-element-attrdef-portal-src①">(2)</a> <a href="#ref-for-element-attrdef-portal-src②">(3)</a> <a href="#ref-for-element-attrdef-portal-src③">(4)</a> <a href="#ref-for-element-attrdef-portal-src④">(5)</a>
+    <li><a href="#ref-for-element-attrdef-portal-src">3. The portal element</a> <a href="#ref-for-element-attrdef-portal-src①">(2)</a> <a href="#ref-for-element-attrdef-portal-src②">(3)</a> <a href="#ref-for-element-attrdef-portal-src③">(4)</a> <a href="#ref-for-element-attrdef-portal-src④">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="element-attrdef-portal-referrerpolicy">
    <b><a href="#element-attrdef-portal-referrerpolicy">#element-attrdef-portal-referrerpolicy</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-element-attrdef-portal-referrerpolicy">3.1. The portal element</a> <a href="#ref-for-element-attrdef-portal-referrerpolicy①">(2)</a>
+    <li><a href="#ref-for-element-attrdef-portal-referrerpolicy">3. The portal element</a> <a href="#ref-for-element-attrdef-portal-referrerpolicy①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement">
    <b><a href="#htmlportalelement">#htmlportalelement</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement">2. Concepts</a>
-    <li><a href="#ref-for-htmlportalelement①">3.1. The portal element</a>
-    <li><a href="#ref-for-htmlportalelement②">3.3. The PortalActivateEvent interface</a>
-    <li><a href="#ref-for-htmlportalelement③">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-htmlportalelement">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-htmlportalelement①">3. The portal element</a>
+    <li><a href="#ref-for-htmlportalelement②">3.2. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-htmlportalelement③">4.1. The MessageEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-htmlportalelement-onmessage">
    <b><a href="#dom-htmlportalelement-onmessage">#dom-htmlportalelement-onmessage</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-htmlportalelement-onmessage">3.1. The portal element</a>
+    <li><a href="#ref-for-dom-htmlportalelement-onmessage">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-htmlportalelement-onmessageerror">
    <b><a href="#dom-htmlportalelement-onmessageerror">#dom-htmlportalelement-onmessageerror</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-htmlportalelement-onmessageerror">3.1. The portal element</a>
+    <li><a href="#ref-for-dom-htmlportalelement-onmessageerror">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-portalactivateoptions">
    <b><a href="#dictdef-portalactivateoptions">#dictdef-portalactivateoptions</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dictdef-portalactivateoptions">3.1. The portal element</a>
+    <li><a href="#ref-for-dictdef-portalactivateoptions">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-portalactivateoptions-data">
    <b><a href="#dom-portalactivateoptions-data">#dom-portalactivateoptions-data</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-portalactivateoptions-data">3.1. The portal element</a>
+    <li><a href="#ref-for-dom-portalactivateoptions-data">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-portalactivateoptions-transfer">
    <b><a href="#dom-portalactivateoptions-transfer">#dom-portalactivateoptions-transfer</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-portalactivateoptions-transfer">3.1. The portal element</a>
+    <li><a href="#ref-for-dom-portalactivateoptions-transfer">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-htmlportalelement-src">
    <b><a href="#dom-htmlportalelement-src">#dom-htmlportalelement-src</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-htmlportalelement-src">3.1. The portal element</a>
+    <li><a href="#ref-for-dom-htmlportalelement-src">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-htmlportalelement-referrerpolicy">
    <b><a href="#dom-htmlportalelement-referrerpolicy">#dom-htmlportalelement-referrerpolicy</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-htmlportalelement-referrerpolicy">3.1. The portal element</a>
+    <li><a href="#ref-for-dom-htmlportalelement-referrerpolicy">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-htmlportalelement-activate">
    <b><a href="#dom-htmlportalelement-activate">#dom-htmlportalelement-activate</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-htmlportalelement-activate">2. Concepts</a> <a href="#ref-for-dom-htmlportalelement-activate①">(2)</a>
-    <li><a href="#ref-for-dom-htmlportalelement-activate②">3.1. The portal element</a>
-    <li><a href="#ref-for-dom-htmlportalelement-activate③">4.2. Integration with Content Security Policy</a>
+    <li><a href="#ref-for-dom-htmlportalelement-activate">2. Portal browsing contexts</a> <a href="#ref-for-dom-htmlportalelement-activate①">(2)</a>
+    <li><a href="#ref-for-dom-htmlportalelement-activate②">3. The portal element</a>
+    <li><a href="#ref-for-dom-htmlportalelement-activate③">5.1. Content Security Policy</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-htmlportalelement-postmessage">
    <b><a href="#dom-htmlportalelement-postmessage">#dom-htmlportalelement-postmessage</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-htmlportalelement-postmessage">3.1. The portal element</a>
+    <li><a href="#ref-for-dom-htmlportalelement-postmessage">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-htmlportalelement-postmessage-message-options">
    <b><a href="#dom-htmlportalelement-postmessage-message-options">#dom-htmlportalelement-postmessage-message-options</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-htmlportalelement-postmessage-message-options">3.1. The portal element</a> <a href="#ref-for-dom-htmlportalelement-postmessage-message-options①">(2)</a>
+    <li><a href="#ref-for-dom-htmlportalelement-postmessage-message-options">3. The portal element</a> <a href="#ref-for-dom-htmlportalelement-postmessage-message-options①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement-may-have-a-guest-browsing-context">
    <b><a href="#htmlportalelement-may-have-a-guest-browsing-context">#htmlportalelement-may-have-a-guest-browsing-context</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context">2. Concepts</a>
-    <li><a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context①">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context②">(2)</a> <a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context③">(3)</a> <a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context④">(4)</a>
+    <li><a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context①">3. The portal element</a> <a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context②">(2)</a> <a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context③">(3)</a> <a href="#ref-for-htmlportalelement-may-have-a-guest-browsing-context④">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement-close-a-portal-element">
    <b><a href="#htmlportalelement-close-a-portal-element">#htmlportalelement-close-a-portal-element</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement-close-a-portal-element">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-close-a-portal-element①">(2)</a> <a href="#ref-for-htmlportalelement-close-a-portal-element②">(3)</a>
+    <li><a href="#ref-for-htmlportalelement-close-a-portal-element">3. The portal element</a> <a href="#ref-for-htmlportalelement-close-a-portal-element①">(2)</a> <a href="#ref-for-htmlportalelement-close-a-portal-element②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="htmlportalelement-set-the-source-url-of-a-portal-element">
    <b><a href="#htmlportalelement-set-the-source-url-of-a-portal-element">#htmlportalelement-set-the-source-url-of-a-portal-element</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-htmlportalelement-set-the-source-url-of-a-portal-element">3.1. The portal element</a> <a href="#ref-for-htmlportalelement-set-the-source-url-of-a-portal-element①">(2)</a> <a href="#ref-for-htmlportalelement-set-the-source-url-of-a-portal-element②">(3)</a> <a href="#ref-for-htmlportalelement-set-the-source-url-of-a-portal-element③">(4)</a>
+    <li><a href="#ref-for-htmlportalelement-set-the-source-url-of-a-portal-element">3. The portal element</a> <a href="#ref-for-htmlportalelement-set-the-source-url-of-a-portal-element①">(2)</a> <a href="#ref-for-htmlportalelement-set-the-source-url-of-a-portal-element②">(3)</a> <a href="#ref-for-htmlportalelement-set-the-source-url-of-a-portal-element③">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="eventdef-htmlportalelement-message">
    <b><a href="#eventdef-htmlportalelement-message">#eventdef-htmlportalelement-message</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-eventdef-htmlportalelement-message">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-eventdef-htmlportalelement-message">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="eventdef-htmlportalelement-messageerror">
    <b><a href="#eventdef-htmlportalelement-messageerror">#eventdef-htmlportalelement-messageerror</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-eventdef-htmlportalelement-messageerror">3.2. The PortalHost interface</a>
+    <li><a href="#ref-for-eventdef-htmlportalelement-messageerror">3.1. Portal hosts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="portal-host-object">
    <b><a href="#portal-host-object">#portal-host-object</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-portal-host-object">3.1. The portal element</a>
-    <li><a href="#ref-for-portal-host-object①">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-portal-host-object②">3.4. Miscellaneous extensions</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="portalhost">
-   <b><a href="#portalhost">#portalhost</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-portalhost">2. Concepts</a>
-    <li><a href="#ref-for-portalhost①">3.2. The PortalHost interface</a> <a href="#ref-for-portalhost②">(2)</a>
-    <li><a href="#ref-for-portalhost③">3.4. Miscellaneous extensions</a> <a href="#ref-for-portalhost④">(2)</a> <a href="#ref-for-portalhost⑤">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-portalhost-postmessage">
-   <b><a href="#dom-portalhost-postmessage">#dom-portalhost-postmessage</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-portalhost-postmessage">3.2. The PortalHost interface</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-portalhost-postmessage-message-options">
-   <b><a href="#dom-portalhost-postmessage-message-options">#dom-portalhost-postmessage-message-options</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-portalhost-postmessage-message-options">3.2. The PortalHost interface</a> <a href="#ref-for-dom-portalhost-postmessage-message-options①">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="eventdef-portalhost-message">
-   <b><a href="#eventdef-portalhost-message">#eventdef-portalhost-message</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-eventdef-portalhost-message">3.1. The portal element</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="eventdef-portalhost-messageerror">
-   <b><a href="#eventdef-portalhost-messageerror">#eventdef-portalhost-messageerror</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-eventdef-portalhost-messageerror">3.1. The portal element</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="portalactivateevent">
-   <b><a href="#portalactivateevent">#portalactivateevent</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-portalactivateevent">2. Concepts</a>
-    <li><a href="#ref-for-portalactivateevent①">3.3. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent②">(2)</a>
-    <li><a href="#ref-for-portalactivateevent③">3.4. Miscellaneous extensions</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-portalactivateevent-data">
-   <b><a href="#dom-portalactivateevent-data">#dom-portalactivateevent-data</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-portalactivateevent-data">2. Concepts</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dictdef-portalactivateeventinit">
-   <b><a href="#dictdef-portalactivateeventinit">#dictdef-portalactivateeventinit</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dictdef-portalactivateeventinit">3.3. The PortalActivateEvent interface</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="portalactivateevent-predecessor-browsing-context">
-   <b><a href="#portalactivateevent-predecessor-browsing-context">#portalactivateevent-predecessor-browsing-context</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-portalactivateevent-predecessor-browsing-context">2. Concepts</a>
-    <li><a href="#ref-for-portalactivateevent-predecessor-browsing-context①">3.3. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent-predecessor-browsing-context②">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="portalactivateevent-successor-window">
-   <b><a href="#portalactivateevent-successor-window">#portalactivateevent-successor-window</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-portalactivateevent-successor-window">2. Concepts</a>
-    <li><a href="#ref-for-portalactivateevent-successor-window①">3.3. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent-successor-window②">(2)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="portalactivateevent-activation-promise">
-   <b><a href="#portalactivateevent-activation-promise">#portalactivateevent-activation-promise</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-portalactivateevent-activation-promise">2. Concepts</a> <a href="#ref-for-portalactivateevent-activation-promise①">(2)</a>
-    <li><a href="#ref-for-portalactivateevent-activation-promise②">3.3. The PortalActivateEvent interface</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="portalactivateevent-adopted-predecessor-element">
-   <b><a href="#portalactivateevent-adopted-predecessor-element">#portalactivateevent-adopted-predecessor-element</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-portalactivateevent-adopted-predecessor-element">2. Concepts</a>
-    <li><a href="#ref-for-portalactivateevent-adopted-predecessor-element①">3.3. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent-adopted-predecessor-element②">(2)</a> <a href="#ref-for-portalactivateevent-adopted-predecessor-element③">(3)</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-portalactivateevent-adoptpredecessor">
-   <b><a href="#dom-portalactivateevent-adoptpredecessor">#dom-portalactivateevent-adoptpredecessor</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-portalactivateevent-adoptpredecessor">2. Concepts</a> <a href="#ref-for-dom-portalactivateevent-adoptpredecessor①">(2)</a>
-    <li><a href="#ref-for-dom-portalactivateevent-adoptpredecessor②">3.3. The PortalActivateEvent interface</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="typedefdef-messageeventsource">
-   <b><a href="#typedefdef-messageeventsource">#typedefdef-messageeventsource</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-typedefdef-messageeventsource">3.4. Miscellaneous extensions</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="dom-windoweventhandlers-onportalactivate">
-   <b><a href="#dom-windoweventhandlers-onportalactivate">#dom-windoweventhandlers-onportalactivate</a></b><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-dom-windoweventhandlers-onportalactivate">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-portal-host-object">3. The portal element</a>
+    <li><a href="#ref-for-portal-host-object①">3.1. Portal hosts</a> <a href="#ref-for-portal-host-object②">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-window-portalhost">
    <b><a href="#dom-window-portalhost">#dom-window-portalhost</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-window-portalhost">3.2. The PortalHost interface</a>
-    <li><a href="#ref-for-dom-window-portalhost①">3.4. Miscellaneous extensions</a>
+    <li><a href="#ref-for-dom-window-portalhost">3.1. Portal hosts</a> <a href="#ref-for-dom-window-portalhost①">(2)</a> <a href="#ref-for-dom-window-portalhost②">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="portalhost">
+   <b><a href="#portalhost">#portalhost</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-portalhost">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-portalhost①">3.1. Portal hosts</a> <a href="#ref-for-portalhost②">(2)</a> <a href="#ref-for-portalhost③">(3)</a> <a href="#ref-for-portalhost④">(4)</a>
+    <li><a href="#ref-for-portalhost⑤">4.1. The MessageEvent interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-portalhost-postmessage">
+   <b><a href="#dom-portalhost-postmessage">#dom-portalhost-postmessage</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-portalhost-postmessage">3.1. Portal hosts</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-portalhost-postmessage-message-options">
+   <b><a href="#dom-portalhost-postmessage-message-options">#dom-portalhost-postmessage-message-options</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-portalhost-postmessage-message-options">3.1. Portal hosts</a> <a href="#ref-for-dom-portalhost-postmessage-message-options①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="eventdef-portalhost-message">
+   <b><a href="#eventdef-portalhost-message">#eventdef-portalhost-message</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-eventdef-portalhost-message">3. The portal element</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="eventdef-portalhost-messageerror">
+   <b><a href="#eventdef-portalhost-messageerror">#eventdef-portalhost-messageerror</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-eventdef-portalhost-messageerror">3. The portal element</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="portalactivateevent">
+   <b><a href="#portalactivateevent">#portalactivateevent</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-portalactivateevent">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-portalactivateevent①">3.2. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent②">(2)</a>
+    <li><a href="#ref-for-portalactivateevent③">4.2. Event handlers</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-portalactivateevent-data">
+   <b><a href="#dom-portalactivateevent-data">#dom-portalactivateevent-data</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-portalactivateevent-data">2. Portal browsing contexts</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dictdef-portalactivateeventinit">
+   <b><a href="#dictdef-portalactivateeventinit">#dictdef-portalactivateeventinit</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dictdef-portalactivateeventinit">3.2. The PortalActivateEvent interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="portalactivateevent-predecessor-browsing-context">
+   <b><a href="#portalactivateevent-predecessor-browsing-context">#portalactivateevent-predecessor-browsing-context</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-portalactivateevent-predecessor-browsing-context">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-portalactivateevent-predecessor-browsing-context①">3.2. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent-predecessor-browsing-context②">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="portalactivateevent-successor-window">
+   <b><a href="#portalactivateevent-successor-window">#portalactivateevent-successor-window</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-portalactivateevent-successor-window">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-portalactivateevent-successor-window①">3.2. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent-successor-window②">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="portalactivateevent-activation-promise">
+   <b><a href="#portalactivateevent-activation-promise">#portalactivateevent-activation-promise</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-portalactivateevent-activation-promise">2. Portal browsing contexts</a> <a href="#ref-for-portalactivateevent-activation-promise①">(2)</a>
+    <li><a href="#ref-for-portalactivateevent-activation-promise②">3.2. The PortalActivateEvent interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="portalactivateevent-adopted-predecessor-element">
+   <b><a href="#portalactivateevent-adopted-predecessor-element">#portalactivateevent-adopted-predecessor-element</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-portalactivateevent-adopted-predecessor-element">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-portalactivateevent-adopted-predecessor-element①">3.2. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent-adopted-predecessor-element②">(2)</a> <a href="#ref-for-portalactivateevent-adopted-predecessor-element③">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-portalactivateevent-adoptpredecessor">
+   <b><a href="#dom-portalactivateevent-adoptpredecessor">#dom-portalactivateevent-adoptpredecessor</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-portalactivateevent-adoptpredecessor">2. Portal browsing contexts</a> <a href="#ref-for-dom-portalactivateevent-adoptpredecessor①">(2)</a>
+    <li><a href="#ref-for-dom-portalactivateevent-adoptpredecessor②">3.2. The PortalActivateEvent interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="typedefdef-messageeventsource">
+   <b><a href="#typedefdef-messageeventsource">#typedefdef-messageeventsource</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-typedefdef-messageeventsource">4.1. The MessageEvent interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="eventdef-window-portalactivate">
    <b><a href="#eventdef-window-portalactivate">#eventdef-window-portalactivate</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-eventdef-window-portalactivate">2. Concepts</a> <a href="#ref-for-eventdef-window-portalactivate①">(2)</a>
-    <li><a href="#ref-for-eventdef-window-portalactivate②">3.1. The portal element</a>
-    <li><a href="#ref-for-eventdef-window-portalactivate③">3.3. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-eventdef-window-portalactivate">2. Portal browsing contexts</a> <a href="#ref-for-eventdef-window-portalactivate①">(2)</a>
+    <li><a href="#ref-for-eventdef-window-portalactivate②">3. The portal element</a>
+    <li><a href="#ref-for-eventdef-window-portalactivate③">3.2. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-eventdef-window-portalactivate④">4.2. Event handlers</a>
    </ul>
   </aside>
 <script>/* script-dfn-panel */
