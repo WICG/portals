@@ -78,11 +78,17 @@ spec:url; type:dfn; text:scheme
   This specification extends [[HTML]] to define a new kind of [=top-level browsing context=],
   which can be embedded in another document, and a mechanism for replacing the contents of another
   top-level browsing context with the previously embedded context.
+
+  It is structured as a series of patches to HTML and other specifications, with each major section
+  indicating where each it would be placed in the event of eventual graduation from incubation.
 </section>
 
 <section>
-  Concepts {#concepts}
-  ====================
+  Portal browsing contexts {#concepts}
+  ====================================
+
+  <em>The following section would be added as a new sub-section of [[HTML]]'s
+  <a href="https://html.spec.whatwg.org/#windows">Browsing contexts</a> section.</em>
 
   Every [=browsing context=] has a <dfn>portal state</dfn>, which may be "`none`" (the default), "`portal`" or "`orphaned`".
   A [=nested browsing context=] always has the [=portal state=] "`none`".
@@ -276,11 +282,11 @@ spec:url; type:dfn; text:scheme
 </section>
 
 <section>
-  API {#api}
-  ==========
-
   The `portal` element {#the-portal-element}
-  ------------------------------------------
+  ==========================================
+
+  <em>The following section would be added as a new subsection of [[HTML]]'s
+  <a href="https://html.spec.whatwg.org/#embedded-content">Embedded content</a> section.</em>
 
   A <dfn element>portal</dfn> element allows for a [=portal browsing context=] to be embedded in an HTML document.
 
@@ -620,16 +626,44 @@ spec:url; type:dfn; text:scheme
     htmlportalelement-event-handler-content-attributes.html
   </wpt>
 
-  The `PortalHost` interface {#the-portalhost-interface}
+  Portal hosts {#the-portalhost-interface}
   ------------------------------------------------------
 
-  The <dfn>portal host object</dfn> of a {{Window}} is a {{PortalHost}}.
+  Every {{Window}} has a <dfn>portal host object</dfn>, which is a {{PortalHost}}. It is exposed
+  through the {{Window/portalHost}} attribute getter at times when the window may be in a
+  [=portal browsing context=].
 
   <div class="note">
-    The [=portal host object=] can be used to communicate with the [=host browsing context=].
-    Its operations throw if used while its context is not a [=portal browsing context=] (i.e. there is no host).
-    It is not accessible via {{Window/portalHost|window.portalHost}} at such times.
+    The [=portal host object=] can be used to communicate with the [=host browsing context=]. Its
+    operations throw if used while its context is not a [=portal browsing context=] (i.e. there is
+    no host), in the event that JavaScript code has saved a reference to it. At such times, the
+    {{Window/portalHost|window.portalHost}} getter will return null.
   </div>
+
+  <xmp class="idl">
+      partial interface Window {
+          readonly attribute PortalHost? portalHost;
+      };
+  </xmp>
+
+  <section algorithm="window-portalhost">
+    The <dfn attribute for="Window">portalHost</dfn> attribute's getter *must* run the following steps:
+
+    1. Let |context| be [=this=]'s [=Window/browsing context=].
+
+    1. If |context| is null or the [=portal state=] of |context| is not "`portal`", then return null.
+
+    1. Return [=this=]'s [=portal host object=].
+  </section>
+
+  <wpt>
+    portals-host-exposure.sub.html
+    portals-host-null.html
+  </wpt>
+
+  <hr>
+
+  The {{PortalHost}} interface definition is as follows:
 
   <xmp class="idl">
       [Exposed=Window]
@@ -808,8 +842,15 @@ spec:url; type:dfn; text:scheme
       portals-adopt-predecessor.html
     </wpt>
   </section>
+</section>
 
-  Miscellaneous extensions {#miscellaneous-extensions}
+<section>
+  Miscellaneous HTML updates {#miscellaneous-extensions}
+  ====================================================
+
+  <em>This section contains various small patches to miscellaneous areas of the HTML Standard.</em>
+
+  The {{MessageEvent}} interface {#patch-messageevent}
   ----------------------------------------------------
 
   The {{MessageEventSource}} union is extended to include the new interfaces
@@ -819,76 +860,66 @@ spec:url; type:dfn; text:scheme
   typedef (WindowProxy or MessagePort or ServiceWorker or HTMLPortalElement or PortalHost) MessageEventSource;
   </xmp>
 
-  A {{PortalHost}} is exposed at times when the window may be in a [=portal browsing context=].
+  Event handlers {#patch-event-handlers}
+  --------------------------------------
+
+  The table of [=event handlers=] which must be supported by {{Window}} objects, as [=event handler
+  IDL attributes=] on the {{Window}} objects themselves (i.e. the table containing `onafterprint`),
+  gets extended with the following row:
+
+  <table class="data" dfn-for="Window">
+    <thead>
+      <tr>
+        <th>[=Event handler=]</th>
+        <th>[=Event handler event type=]</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><dfn attribute for="Window"><code>onportalactivate</code></dfn></td>
+        <td>{{portalactivate}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  The corresponding {{WindowEventHandlers}} mixin gets extended as follows:
 
   <xmp class="idl">
-      partial interface Window {
-          readonly attribute PortalHost? portalHost;
-      };
-
       partial interface mixin WindowEventHandlers {
           attribute EventHandler onportalactivate;
       };
   </xmp>
 
-  <section algorithm="window-portalhost">
-    The <dfn attribute for="Window">portalHost</dfn> attribute's getter *must* run the following steps:
-
-    1. Let |context| be [=this=]'s [=Window/browsing context=].
-
-    1. If |context| is null or the [=portal state=] of |context| is not "`portal`", then return null.
-
-    1. Return [=this=]'s [=portal host object=].
-  </section>
-
-  <wpt>
-    portals-host-exposure.sub.html
-    portals-host-null.html
-  </wpt>
-
-  The following events are dispatched on {{Window}} objects:
+  The <a href="https://html.spec.whatwg.org/#events-2">Events index</a> is also updated with the
+  following additional row:
 
   <table class="data" dfn-for="Window">
     <thead>
       <tr>
-        <th>Event name</th>
+        <th>Event</th>
         <th>Interface</th>
-        <th>Dispatched when</th>
+        <th>Interesting targets</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><dfn event for="Window"><code>portalactivate</code></dfn></td>
         <td>{{PortalActivateEvent}}</td>
-        <td>The window is associated with a new [=top-level browsing context=] due to activation of its [=portal browsing context=].</td>
+        <td>{{Window}}</td>
+        <td>Fired at the {{Window}} of a [=portal browsing context=] when that [=portal browsing
+        context=] is activated.</td>
       </tr>
     </tbody>
   </table>
-
-  Like other [=event handler IDL attributes=] in the {{WindowEventHandlers}} interface mixin,
-  {{WindowEventHandlers/onportalactivate}} is exposed on all <{body}> and <{frameset}> elements
-  as a [=event handler content attribute=].
 </section>
 
 <section>
-  Security Considerations {#security-considerations}
-  ==================================================
+  Updates to other specifications {#other-spec-updates}
+  =====================================================
 
-  <div class="issue">
-    We should expand this section further.
-  </div>
-
-  Overview {#security-overview}
-  -----------------------------
-
-  *This section is non-normative.*
-
-  In general, a [=portal browsing context=] should respect policies that would apply to
-  a [=nested browsing context=], e.g. that would restrict whether a document can be embedded
-  in a document from another [=origin=].
-
-  Integration with Content Security Policy {#csp}
-  -----------------------------------------------
+  Content Security Policy {#csp}
+  ------------------------------
 
   This specification integrates with [[CSP]] as follows.
 
@@ -913,10 +944,14 @@ spec:url; type:dfn; text:scheme
     {{HTMLPortalElement/activate(options)}} should also respect the CSP [=navigate-to=] directive.
   </div>
 
-  Integration with RFC 7034 {#rfc7034}
-  ------------------------------------
+  RFC 7034 {#rfc7034}
+  -------------------
 
-  This specification integrates with [[RFC7034]], which defines the `X-Frame-Options` HTTP header, as follows.
+  This specification integrates with [[RFC7034]], which defines the `X-Frame-Options` HTTP header,
+  as follows. Note that [[HTML]] also has an open issue,
+  <a href="https://github.com/whatwg/html/issues/1230">whatwg/html#1230</a>, to define
+  `X-Frame-Options` processing, and perhaps these updates would be done as part of resolving that
+  issue.
 
   If a browser receives content with this header field in response to a navigation request whose
   [=target browsing context=] is a [=portal browsing context=], then the browser must apply the rules
@@ -930,23 +965,10 @@ spec:url; type:dfn; text:scheme
 
   1. Return |topLevelBrowsingContext|.
 
-  Integration with Fetch Metadata Request Headers {#fetch-metadata}
-  -----------------------------------------------------------------
+  Fetch Metadata Request Headers {#fetch-metadata}
+  ------------------------------------------------
 
   This specification integrates with [[FETCH-METADATA]] as follows.
-
-  <div class="note">
-    The effect of this is that the request for a document in a [=portal browsing context=]
-    will contain the following HTTP header, as though it were in a [=nested browsing context=].
-
-    ```
-    Sec-Fetch-Mode: nested-navigate
-    ```
-
-    Even though no spec patches are required to do so, implementations must also send
-    the appropriate fetch metadata headers as it would if the load were occurring in
-    an <{iframe}> element.
-  </div>
 
   <section algorithm="fetch-metadata-set-mode">
     The algorithm to [[FETCH-METADATA#abstract-opdef-set-mode|set the Sec-Fetch-Mode header]] for a request |r|
@@ -957,4 +979,38 @@ spec:url; type:dfn; text:scheme
         a [=portal browsing context=].
   </section>
 
+  <div class="note">
+    The effect of this is that the request for a document in a [=portal browsing context=]
+    will contain the following HTTP header, as though it were in a [=nested browsing context=].
+
+    ```
+    Sec-Fetch-Mode: nested-navigate
+    ```
+  </div>
+
+  <div class="note">
+    Per the existing processing model, the other fetch metadata headers will automatically have the
+    same values as they would would if the load were occurring in an <{iframe}> element, with no
+    spec updates needed.
+  </div>
+</section>
+
+<section>
+  Security Considerations {#security-considerations}
+  ==================================================
+
+  <div class="issue">
+    We should expand this section further. Much of what was formerly there is in
+    [[#other-spec-updates]] now. Once we have a more comprehensive view of all the security-related
+    spec updates, we should summarize them in a non-normative fashion here.
+  </div>
+
+  Overview {#security-overview}
+  -----------------------------
+
+  *This section is non-normative.*
+
+  In general, a [=portal browsing context=] should respect policies that would apply to
+  a [=nested browsing context=], e.g. that would restrict whether a document can be embedded
+  in a document from another [=origin=].
 </section>
