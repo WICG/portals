@@ -907,8 +907,8 @@ spec:url; type:dfn; text:scheme
         <td><dfn event for="Window"><code>portalactivate</code></dfn></td>
         <td>{{PortalActivateEvent}}</td>
         <td>{{Window}}</td>
-        <td>Fired at the {{Window}} when it is associated with a new [=top-level browsing context=]
-        due to activation of its [=portal browsing context=].</td>
+        <td>Fired at the {{Window}} of a [=portal browsing context=] when that [=portal browsing
+        context=] is activated.</td>
       </tr>
     </tbody>
   </table>
