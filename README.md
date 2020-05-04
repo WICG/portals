@@ -146,8 +146,7 @@ TODO:
 
 - Did we end up adding a default click behavior like links?
 - Discuss scrolling, including the problem of scroll handoff and its importance. Note that scroll handoff is a ??? in spec terms but we promise to spec something interoperably implementable, somehow.
-- When/if we update this explainer to discuss resize limitations, comment on how
-  that affects interactivity.
+- When/if we update this explainer to discuss resize limitations, comment on how that affects interactivity.
 
 ### Accessibility
 
