@@ -138,19 +138,9 @@ TODO:
 
 ### Interactivity
 
-Portals enable preloading, previewing and seamless transitions to another web
-page. They are expected to often be partially or fully offscreen, scaled,
-faded or otherwise styled in a way that makes them unnatural to interact with
-directly. Additionally, we expect many web pages to allow themselves to be
-loaded in a portal for the purposes of facilitating a seamless transition but be
-concerned about clickjacking and similar attacks from an embedder who may not be
-fully trusted.
+Portals enable preloading, previewing and seamless transitions to another web page. They are expected to often be partially or fully offscreen, scaled, faded or otherwise styled in a way that makes them unnatural to interact with directly. Additionally, we expect many web pages to allow themselves to be loaded in a portal for the purposes of facilitating a seamless transition but be concerned about clickjacking and similar attacks from an embedder who may not be fully trusted.
 
-Therefore the embedded content cannot be focused and does not receive input
-events. Instead, the `<portal>` element itself is focusable (similar to a button
-or link) and eligible to receive input events (such as clicks) in the host
-document. For instance, the host document may handle this click event to animate
-and activate the `<portal>` element and navigate to the target document.
+Therefore the embedded content cannot be focused and does not receive input events. Instead, the `<portal>` element itself is focusable (similar to a button or link) and eligible to receive input events (such as clicks) in the host document. For instance, the host document may handle this click event to animate and activate the `<portal>` element and navigate to the target document.
 
 TODO:
 
