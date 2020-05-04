@@ -320,7 +320,7 @@ spec:url; type:dfn; text:scheme
           [CEReactions] attribute DOMString referrerPolicy;
 
           [NewObject] Promise<void> activate(optional PortalActivateOptions options);
-          void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
+          void postMessage(any message, USVString targetOrigin, optional sequence<object> transfer = []);
           void postMessage(any message, optional WindowPostMessageOptions options);
 
           attribute EventHandler onmessage;
@@ -634,7 +634,7 @@ spec:url; type:dfn; text:scheme
   <xmp class="idl">
       [Exposed=Window]
       interface PortalHost : EventTarget {
-          void postMessage(any message, DOMString targetOrigin, optional sequence<object> transfer = []);
+          void postMessage(any message, USVString targetOrigin, optional sequence<object> transfer = []);
           void postMessage(any message, optional WindowPostMessageOptions options);
 
           attribute EventHandler onmessage;
