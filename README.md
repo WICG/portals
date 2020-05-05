@@ -171,7 +171,7 @@ Portals are somewhat reminiscent of iframes, but are different in enough signifi
 
 From a user's perspective, a portal behaves more like a "super link" than an iframe. That is, it has the same [interactivity](#interactivity) and [accessibility](#accessibility) model of being a single activatable element, which will cause a navigation of the page they're currently viewing. It'll be fancier than a link, in that the portal might display a preview of the portaled content, and the navigation experience will be quicker (and potentially animated, if the site author so chooses). But the ways in which it is fancier will generally not remind users of iframes, i.e. of scrollable viewports into an independently-interactive piece of content hosted on another page.
 
-From the perspective of implementers and specification authors, portals behave something like "popups that display inline". This is because they use the [top-level browsing context](https://html.spec.whatwg.org/#top-level-browsing-context) concept, instead of the [nested browsing context](https://html.spec.whatwg.org/#nested-browsing-context) concept. More specifically, [portal browsing contexts](https://wicg.github.io/portals/#portal-browsing-context) sit alongside [auxiliary browsing contexts](https://html.spec.whatwg.org/#auxiliary-browsing-context) (popups) as two distinct types of top-level browsing context, and much of the specification infrastructure is shared. This becomes even more true after activation, when the portal browsing context just becomes another tab.
+From the perspective of implementers and specification authors, portals behave something like "popups that display inline". This is because they use the [top-level browsing context](https://html.spec.whatwg.org/#top-level-browsing-context) concept, instead of the [nested browsing context](https://html.spec.whatwg.org/#nested-browsing-context) concept. More specifically, [portal browsing contexts](https://wicg.github.io/portals/#portal-browsing-context) sit alongside [auxiliary browsing contexts](https://html.spec.whatwg.org/#auxiliary-browsing-context) (popups) as two distinct types of top-level browsing context, and much of the specification infrastructure is shared. This becomes even more true after activation, when the portal browsing context becomes just another tab.
 
 Finally, the web developer dealing with a portal element's API sees the following differences from iframes:
 
@@ -179,13 +179,15 @@ Finally, the web developer dealing with a portal element's API sees the followin
 
 - Similarly, portaled `Window` objects are not accessible via accessors like `window.iframeName` or `window[0]`, and they cannot access related `Window` objects via `top` or `parent` (or `opener`).
 
-- Portals cannot be made to navigate in the way iframes (or popups) can, via `window.open(url, iframeName)`.
+- Navigations within a pre-activation portal do not affect session history. In contrast, navigating an iframe creates a new session history entry, and affects the resulting back button behavior.
+
+- Portals cannot be made to navigate from the outside in the way iframes (or popups) can, via `window.open(url, iframeName)`.
 
 - Portals can only load `http:` and `https:` URLs. This removes an entire category of confusing interactions regarding `about:blank`, `javascript:`, `blob:`, and `data:` URLs, as well as the `<iframe srcdoc="">` feature and its resulting `about:srcdoc` URLs. Notably, the portaled content will always have an origin derived from its URL, without any inheritance from the host document.
 
 - Portals have a simplified permissioning model, compared to iframe's combination of `allow=""` + `allowfullscreen=""` + `allowpaymentrequest=""` + `sandbox=""`. See [above](#permissions-and-policies) for more on this. (TODO: include a summary when we know what it is. Just `allow=""`?)
 
-TODO: summarize above sections that cause major differences, once they are written: privacy/restrictions, permissions/policies, session history. They may fit as bullets or they might need their own paragraph.
+TODO: summarize above sections that cause major differences, once they are written: privacy/restrictions, permissions/policies, maybe some more on session history. They may fit as bullets or they might need their own paragraph.
 
 ## Alternatives considered
 
