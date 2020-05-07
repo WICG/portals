@@ -133,7 +133,7 @@ TODO:
 
 Like iframes, portals can render their contents inline in another document. To ensure a smooth transition when activation occurs, and to limit the avenues for communication between the two documents, rendering generally occurs in the same way as it will when the portal is activated. This means that `document.visibilityState` and `document.hidden` will, like iframes, match the values in their host browsing context, even if they are offscreen. Similarly, `IntersectionObserver` will report intersections up to the portal contents viewport, but will assume that viewport is fully visible. Other behavior that depends on intersection with the viewport, such as lazy-loading images, behaves similarly.
 
-`requestAnimationFrame` should issue vsync callbacks as it would in the host document (in particular the host document should not control the frequency of animation updates), except that for performance reasons user agents may suspend or throttle callbacks to offscreen portals if the two documents are same-origin.
+`requestAnimationFrame` issues vsync callbacks as it would in the host document (in particular the host document should not control the frequency of animation updates), except that for performance reasons user agents may suspend or throttle callbacks to offscreen portals if the two documents are same-origin.
 
 Since documents can detect when they are embedded in a portal, they may choose to suspend, limit or delay animations or other rendering activity that is not essential to prerendering. Authors may also style the document differently while in a portal, but if so they should take care to ensure that this doesn't make activation jarring (e.g. they may wish to animate elements in after activation, or reserve space for elements to avoid layout shift).
 
@@ -141,6 +141,7 @@ TODO:
 
 - Discuss viewport size. Full viewport size at all times? Resizing OK or no? I'm sketchy on the plan here.
 - Discuss practices and patterns for authors of portaling sites, e.g. how to create a prerender (with a `display: none` portal) or an animated transition
+- Include more detailed samples of how authors would adapt for being in a portal and reacting to activation, including if applicable the resolution of https://github.com/WICG/portals/issues/3
 - Maybe this is where we discuss fallback content for non-supporting browsers?
 
 ### Interactivity
