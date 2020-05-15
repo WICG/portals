@@ -931,6 +931,10 @@ spec:url; type:dfn; text:scheme
         its [=target browsing context=] is a [=portal browsing context=], return `frame-src`.
   </section>
 
+  <wpt>
+    csp/frame-src.sub.html
+  </wpt>
+
   <section algorithm="csp-frame-ancestors-navigation-response">
     The [[CSP#frame-ancestors-navigation-response|frame-ancestors Navigation Response Check]]
     is modified as follows:
@@ -939,6 +943,10 @@ spec:url; type:dfn; text:scheme
 
     1. Replace all references to "[=parent browsing context=]" with "[=parent browsing context=] or [=host browsing context=]".
   </section>
+
+  <wpt>
+    csp/frame-ancestors.sub.html
+  </wpt>
 
   <div class="issue">
     {{HTMLPortalElement/activate(options)}} should also respect the CSP [=navigate-to=] directive.
@@ -964,6 +972,10 @@ spec:url; type:dfn; text:scheme
     1. Set |topLevelBrowsingContext| to its [=host browsing context=].
 
   1. Return |topLevelBrowsingContext|.
+
+  <wpt>
+    xfo/portals-xfo-deny.sub.html
+  </wpt>
 
   Fetch Metadata Request Headers {#fetch-metadata}
   ------------------------------------------------
