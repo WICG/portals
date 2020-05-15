@@ -1507,7 +1507,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-05-07">7 May 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-05-15">15 May 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2293,6 +2293,9 @@ to deliver the message.</p>
 its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context">target browsing context</a> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①②">portal browsing context</a>, return <code>frame-src</code>.</p>
      </ol>
     </section>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/csp/frame-src.sub.html">frame-src.sub.html</a> <a href="http://web-platform-tests.live/portals/csp/frame-src.sub.html" title="portals/csp/frame-src.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/csp/frame-src.sub.html"><small>(source)</small></a>
+    </ul>
     <section class="algorithm" data-algorithm="csp-frame-ancestors-navigation-response">
       The <a href="https://www.w3.org/TR/CSP3/#frame-ancestors-navigation-response">frame-ancestors Navigation Response Check</a> is modified as follows: 
      <ol>
@@ -2302,6 +2305,9 @@ its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappa
        <p>Replace all references to "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context" id="ref-for-parent-browsing-context">parent browsing context</a>" with "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context" id="ref-for-parent-browsing-context①">parent browsing context</a> or <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context④">host browsing context</a>".</p>
      </ol>
     </section>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/csp/frame-ancestors.sub.html">frame-ancestors.sub.html</a> <a href="http://web-platform-tests.live/portals/csp/frame-ancestors.sub.html" title="portals/csp/frame-ancestors.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/csp/frame-ancestors.sub.html"><small>(source)</small></a>
+    </ul>
     <div class="issue" id="issue-0bcb49e2"><a class="self-link" href="#issue-0bcb49e2"></a> <code class="idl"><a data-link-type="idl" href="#dom-htmlportalelement-activate" id="ref-for-dom-htmlportalelement-activate③">activate(options)</a></code> should also respect the CSP <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#navigate-to" id="ref-for-navigate-to">navigate-to</a> directive. </div>
     <h3 class="heading settled" data-level="5.2" id="rfc7034"><span class="secno">5.2. </span><span class="content">RFC 7034</span><a class="self-link" href="#rfc7034"></a></h3>
     <p>This specification integrates with <a data-link-type="biblio" href="#biblio-rfc7034">[RFC7034]</a>, which defines the <code>X-Frame-Options</code> HTTP header,
@@ -2321,6 +2327,9 @@ its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappa
      <li data-md>
       <p>Return <var>topLevelBrowsingContext</var>.</p>
     </ol>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/xfo/portals-xfo-deny.sub.html">portals-xfo-deny.sub.html</a> <a href="http://web-platform-tests.live/portals/xfo/portals-xfo-deny.sub.html" title="portals/xfo/portals-xfo-deny.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/xfo/portals-xfo-deny.sub.html"><small>(source)</small></a>
+    </ul>
     <h3 class="heading settled" data-level="5.3" id="fetch-metadata"><span class="secno">5.3. </span><span class="content">Fetch Metadata Request Headers</span><a class="self-link" href="#fetch-metadata"></a></h3>
     <p>This specification integrates with <a data-link-type="biblio" href="#biblio-fetch-metadata">[FETCH-METADATA]</a> as follows.</p>
     <section class="algorithm" data-algorithm="fetch-metadata-set-mode">
