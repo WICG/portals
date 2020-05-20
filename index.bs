@@ -469,6 +469,20 @@ spec:url; type:dfn; text:scheme
           supported.
         </p>
 
+    1. If |element|'s [=node document|document=]'s [=document/URL=]'s [=URL/scheme=] is not an
+        [=HTTP(S) scheme=], then return false.
+
+        <wpt>
+          about-blank-cannot-host.html
+        </wpt>
+
+        <p class="note">
+          This is to prevent problems later, if the portaled content attempts to
+          [=adopt the predecessor browsing context|adopt its predecessor=]. Since portaled content
+          can only have a [=HTTP(S) scheme=], adoption would fail, and so its simpler to restrict
+          things at this stage.
+        </p>
+
     1. If |element| is [=browsing-context connected=], then return true.
 
     1. If |element|'s [=just-adopted flag=] is true, then return true.
