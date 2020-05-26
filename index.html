@@ -2210,11 +2210,15 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
     <c- b>any</c-> <dfn class="idl-code" data-default="null" data-dfn-for="PortalActivateEventInit" data-dfn-type="dict-member" data-export data-type="any " id="dom-portalactivateeventinit-data"><code><c- g>data</c-></code><a class="self-link" href="#dom-portalactivateeventinit-data"></a></dfn> = <c- b>null</c->;
 };
 </pre>
-    <p>A <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent①">PortalActivateEvent</a></code> has an associated <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-predecessor-browsing-context">predecessor browsing context</dfn>,
+    <div class="note" role="note"> For now, there is no <code>ports</code> attribute on <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent①">PortalActivateEvent</a></code>, despite it being
+    used for data transfer in a similar way to <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑧">MessageEvent</a></code>. This omission is for simplicity,
+    and could be reconsidered if a use case is found. (See also <a href="https://github.com/whatwg/html/issues/4521">whatwg/html#4521</a> for a potential
+    expansion.) </div>
+    <p>A <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent②">PortalActivateEvent</a></code> has an associated <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-predecessor-browsing-context">predecessor browsing context</dfn>,
   which is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context③">top-level browsing context</a> or null, a <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-successor-window">successor window</dfn>, which is
   a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window②">Window</a></code>, an <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-activation-promise">activation promise</dfn>, which is a <a data-link-type="dfn" href="http://tc39.github.io/ecma262/#sec-promise-objects" id="ref-for-sec-promise-objects①">promise</a>, and a <dfn class="dfn-paneled" data-dfn-for="PortalActivateEvent" data-dfn-type="dfn" data-noexport id="portalactivateevent-adopted-predecessor-element">adopted predecessor element</dfn>, which is a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal②④">portal</a></code> element or null.</p>
     <section class="algorithm" data-algorithm="portalactivateevent-event-constructing-steps">
-      The <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-constructor-ext" id="ref-for-concept-event-constructor-ext">event constructing steps</a> for <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent②">PortalActivateEvent</a></code>, given an <var>event</var>, are as follows: 
+      The <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-constructor-ext" id="ref-for-concept-event-constructor-ext">event constructing steps</a> for <code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent③">PortalActivateEvent</a></code>, given an <var>event</var>, are as follows: 
      <ol>
       <li data-md>
        <p>Set <var>event</var>’s <a data-link-type="dfn" href="#portalactivateevent-predecessor-browsing-context" id="ref-for-portalactivateevent-predecessor-browsing-context①">predecessor browsing context</a> to null.</p>
@@ -2258,9 +2262,9 @@ to deliver the message.</p>
    <section>
     <h2 class="heading settled" data-level="4" id="miscellaneous-extensions"><span class="secno">4. </span><span class="content">Miscellaneous HTML updates</span><a class="self-link" href="#miscellaneous-extensions"></a></h2>
     <p><em>This section contains various small patches to miscellaneous areas of the HTML Standard.</em></p>
-    <h3 class="heading settled" data-level="4.1" id="patch-messageevent"><span class="secno">4.1. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑧">MessageEvent</a></code> interface</span><a class="self-link" href="#patch-messageevent"></a></h3>
+    <h3 class="heading settled" data-level="4.1" id="patch-messageevent"><span class="secno">4.1. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑨">MessageEvent</a></code> interface</span><a class="self-link" href="#patch-messageevent"></a></h3>
     <p>The <code class="idl"><a data-link-type="idl" href="#typedefdef-messageeventsource" id="ref-for-typedefdef-messageeventsource">MessageEventSource</a></code> union is extended to include the new interfaces
-  which can produce <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent⑨">MessageEvent</a></code> events.</p>
+  which can produce <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/comms.html#messageevent" id="ref-for-messageevent①⓪">MessageEvent</a></code> events.</p>
 <pre class="idl highlight def"><c- b>typedef</c-> (<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/window-object.html#windowproxy" id="ref-for-windowproxy②"><c- n>WindowProxy</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/web-messaging.html#messageport" id="ref-for-messageport②"><c- n>MessagePort</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="https://w3c.github.io/ServiceWorker/#serviceworker" id="ref-for-serviceworker"><c- n>ServiceWorker</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#htmlportalelement" id="ref-for-htmlportalelement③"><c- n>HTMLPortalElement</c-></a> <c- b>or</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost⑤"><c- n>PortalHost</c-></a>) <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export id="typedefdef-messageeventsource"><code><c- g>MessageEventSource</c-></code></dfn>;
 </pre>
     <h3 class="heading settled" data-level="4.2" id="patch-event-handlers"><span class="secno">4.2. </span><span class="content">Event handlers</span><a class="self-link" href="#patch-event-handlers"></a></h3>
@@ -2294,7 +2298,7 @@ to deliver the message.</p>
      <tbody>
       <tr>
        <td><dfn class="dfn-paneled idl-code" data-dfn-for="Window" data-dfn-type="event" data-export id="eventdef-window-portalactivate"><code>portalactivate</code></dfn>
-       <td><code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent③">PortalActivateEvent</a></code>
+       <td><code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent④">PortalActivateEvent</a></code>
        <td><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window⑤">Window</a></code>
        <td>Fired at the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window⑥">Window</a></code> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing context</a> when that <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①②">portal browsing
         context</a> is activated.
@@ -2804,7 +2808,8 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
    <ul>
     <li><a href="#ref-for-messageevent">3. The portal element</a> <a href="#ref-for-messageevent①">(2)</a> <a href="#ref-for-messageevent②">(3)</a> <a href="#ref-for-messageevent③">(4)</a>
     <li><a href="#ref-for-messageevent④">3.1. Portal hosts</a> <a href="#ref-for-messageevent⑤">(2)</a> <a href="#ref-for-messageevent⑥">(3)</a> <a href="#ref-for-messageevent⑦">(4)</a>
-    <li><a href="#ref-for-messageevent⑧">4.1. The MessageEvent interface</a> <a href="#ref-for-messageevent⑨">(2)</a>
+    <li><a href="#ref-for-messageevent⑧">3.2. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-messageevent⑨">4.1. The MessageEvent interface</a> <a href="#ref-for-messageevent①⓪">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-messageport">
@@ -3769,8 +3774,8 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
    <b><a href="#portalactivateevent">#portalactivateevent</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-portalactivateevent">2. Portal browsing contexts</a>
-    <li><a href="#ref-for-portalactivateevent①">3.2. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent②">(2)</a>
-    <li><a href="#ref-for-portalactivateevent③">4.2. Event handlers</a>
+    <li><a href="#ref-for-portalactivateevent①">3.2. The PortalActivateEvent interface</a> <a href="#ref-for-portalactivateevent②">(2)</a> <a href="#ref-for-portalactivateevent③">(3)</a>
+    <li><a href="#ref-for-portalactivateevent④">4.2. Event handlers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-portalactivateevent-data">
