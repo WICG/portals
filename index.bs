@@ -38,6 +38,8 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: becomes browsing-context disconnected; url: becomes-browsing-context-disconnected
         urlPrefix: origin.html
             text: origin; url: concept-origin
+        urlPrefix: parsing.html
+            text: completely loaded; url: completely-loaded
         urlPrefix: urls-and-fetching.html
             text: parse a URL; url: parse-a-url
             text: resulting URL record; url: resulting-url-record
@@ -607,6 +609,19 @@ spec:url; type:dfn; text:scheme
     It is therefore impossible to embed a [=portal browsing context=] in a
     [=nested browsing context=].
   </div>
+
+  Whenever a {{Document}} object |document| whose [=Document/browsing context=] is a
+  [=portal browsing context=] is marked as [=completely loaded=], run the following steps as part of
+  the queued task:
+
+  1. Let |element| be |document|'s [=Document/browsing context=]'s [=host element=].
+
+  1. [=Fire an event=] named {{HTMLElement/load!!event}} at |element|.
+
+  <wpt>
+    portal-onload-event.html
+    portals-cross-origin-load.sub.html
+  </wpt>
 
   The following events are dispatched on {{HTMLPortalElement}} objects:
 
