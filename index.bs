@@ -823,6 +823,14 @@ spec:url; type:dfn; text:scheme
       };
   </xmp>
 
+  <div class="note">
+    For now, there is no <code>ports</code> attribute on {{PortalActivateEvent}}, despite it being
+    used for data transfer in a similar way to {{MessageEvent}}. This omission is for simplicity,
+    and could be reconsidered if a use case is found. (See also
+    <a href="https://github.com/whatwg/html/issues/4521">whatwg/html#4521</a> for a potential
+    expansion.)
+  </div>
+
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
   which is a [=top-level browsing context=] or null, a <dfn for="PortalActivateEvent">successor window</dfn>, which is
   a {{Window}}, an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=], and a
