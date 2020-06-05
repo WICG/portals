@@ -107,16 +107,41 @@ The general idea of portals is summed up above: inset pre-rendering, activation,
 
 ### Privacy threat model and restrictions
 
+The Portals design is intended to comply with the [W3C Target Privacy Threat Model](https://w3cping.github.io/privacy-threat-model/). This section discusses the aspects of that threat model that are particularly relevant to Portals and how the design satisfies them.
+
+A portal can contain either a same-site or cross-site resource. Same-site portals don't present any privacy risks, but cross-site resources risk enabling [cross-site recognition](https://w3cping.github.io/privacy-threat-model/#model-cross-site-recognition) by creating a messaging channel across otherwise-partitioned domains.
+
+This design assumes that storage will be [partitioned](https://github.com/privacycg/storage-partitioning), even though that is not the status quo in all browsers. Because portaled documents can be activated into a top-level browsing context, they (eventually) live in the first-party storage partition of their origin. This means we have to prevent communication with the surrounding document to the same extent we prevent it with a cross-site link opened in a new tab.
+
+#### Channels that are blocked
+
+* [`postMessage()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) isn't allowed between a portal and its container.
+* The sequence of portal loads: The source page can encode its user ID into the order in which a sequence of URLs are loaded into portals. To prevent the target from correlating this ID with its own user ID without a navigation, documents loaded into portals are fetched without credentials and don't have access to either first-party storage or multi-keyed storage. They have to use [`requestStorageAccess()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/requestStorageAccess) (or another TBD mechanism) to get access while they're being activated.
+* Side channels:
+  * Portal Resize: Javascript outside the portal could use a sequence of portal resizes to send a user ID, so portals cannot be resized after creation.
+  * Portal initial size: Javascript outside the portal could use the initial size to send part of a user ID, so portals are always sized the same as the top-level tab that they'll be activated into.
+  * Intersection Observer: Won't give visibility information to script inside the portal, to avoid occlusion being used to send information.
+  * [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API) and whether `requestAnimationFrame()` callbacks run, as in normal iframes, match the visibility of the top-level page to prevent the page from encoding messages in visibility changes. However, this leads to the possibility that a portal and containing page could use the timing of user-caused visibility changes to join the user across site boundaries. Whether and how to prevent this is [still under discussion](https://github.com/WICG/portals/issues/193#issuecomment-639768218).
+
+#### Channels with 1 bit per user interaction
+
+* User clicks a link, and the target site decides between a 204 or other non-navigating response, vs a real response, based on the user's id on the target site. This requires [specialized code on the target server](https://w3cping.github.io/privacy-threat-model/#cap-run-on-server), which allows [full user ID transfer](https://w3cping.github.io/privacy-threat-model/#model-cross-site-recognition) by other means.
+
+#### Channels with a few noisy bits per user interaction
+
+* User clicks a portal, and the target site delays the load by an amount of time that depends on the user's ID. This is noisy because it's hard for the original site to know how much time to expect for that load on this user's machine, but it could encode several bits. This information is also available for normal navigations via the `pagehide` and `beforeunload` events. This requires [specialized code on the target server](https://w3cping.github.io/privacy-threat-model/#cap-run-on-server), which allows [full user ID transfer](https://w3cping.github.io/privacy-threat-model/#model-cross-site-recognition) by other means.
+
+#### Channels that match navigation
+
+* The url of the activated portal and the referring URL are available to normal navigations to the same extent they're available to a portal. Solutions to link decoration will apply to both.
+
+
 TODO:
 
-- Privacy threat model summary and goals. Focused on cross-origin threats.
-- Storage and communication restrictions summary
-- Brief discussion of side channels
-- Discuss pre-activation vs. post-activation, `requestStorageAccess()`, ...
+- More side channels?
 - Maybe this is also the place to discuss the fact that there's no sync access (even same-origin)?
-- Discuss "the origin model" explicitly. This uses the normal origin model (like iframes), but with restrictions similar to those already in place elsewhere in the platform (such as restricted storage).
 - This section might benefit from being split in two.
-- Note that design-discussions.md has a lot of stuff that might be useful here, and should probably be deleted if we're going to cover it here. (Or, we could keep using it as a place to put more details, and link to it from here.)
+- Note that design-discussions.md has discussion about hiding never-activated portals from their servers, which is a different sort of attack than the cross-site tracking we discuss here.
 
 ### Permissions and policies
 
