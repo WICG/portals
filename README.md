@@ -107,16 +107,35 @@ The general idea of portals is summed up above: inset pre-rendering, activation,
 
 ### Privacy threat model and restrictions
 
+The Portals design is intended to comply with the [W3C Target Privacy Threat Model](https://w3cping.github.io/privacy-threat-model/). This section discusses the aspects of that threat model that are particularly relevant to Portals and how the design satisfies them.
+
+A portal can contain either a same-site or cross-site resource. Same-site portals don't present any privacy risks, but cross-site resources risk enabling [cross-site recognition](https://w3cping.github.io/privacy-threat-model/#model-cross-site-recognition) by creating a messaging channel across otherwise-partitioned domains. For simplicity, when a cross-site channel needs to be blocked, we also block it for same-site cross-origin portals. In some cases, marked below, we even block it for same-origin portals.
+
+This design assumes that storage will be partitioned or blocked in line with the [storage partitioning proposal](https://github.com/privacycg/storage-partitioning), even though that is not the status quo in all browsers. Because portaled documents can be activated into a top-level browsing context, they (eventually) live in the first-party [storage shelf](https://storage.spec.whatwg.org/#storage-shelf) of their origin. This means we have to prevent communication with the surrounding document to the same extent we prevent it with a cross-site link opened in a new tab.
+
+#### Channels that are blocked
+
+* [`postMessage()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) isn't allowed between a cross-origin portal and its container.
+* Blocked by preventing fetches within portals from using credentials until they're activated:
+  * The sequence of portal loads: The source page can encode its user ID into the order in which a sequence of URLs are loaded into portals. To prevent the target from correlating this ID with its own user ID without a navigation, a document loaded into a cross-origin portal is fetched without credentials and doesn't have access to either first-party storage or multi-keyed storage. It has to use [`requestStorageAccess()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/requestStorageAccess) (or another TBD mechanism) to get access when it's activated.
+  * The site creates a portal, and the target site decides between a 204 and a real response based on the user's ID. Or the site delays the response by an amount of time that depends on the user's ID. Because the portal load is done without credentials, the site can't get its user ID in order to make this sort of decision.
+* Side channels, further discussed in [Rendering](#rendering):
+  * Portal Resize: JavaScript outside the portal could use a sequence of portal resizes to send a user ID, so a portal's content cannot observe any resizes after creation. If a portal is resized, that just rescales the view of the portal. For simplicity, this is the case for same-origin portals too.
+  * Portal initial size: JavaScript outside the portal could use the initial size to send part of a user ID, so portals are always sized the same as the top-level tab that they'll be activated into and then scaled into the portal element. For simplicity, this is the case for same-origin portals too.
+  * Intersection Observer: Won't give visibility information to script inside the portal, to avoid occlusion being used to send information.
+  * [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API) and the timing of `requestAnimationFrame()` callbacks match the visibility of the top-level page, as in iframes, to prevent the page from encoding messages in visibility changes. However, this leads to the possibility that a portal and containing page could use the timing of user-caused visibility changes to join the user across site boundaries. Whether and how to prevent this is [still under discussion](https://github.com/WICG/portals/issues/193#issuecomment-639768218).
+
+#### Channels that match navigation
+
+* The URL of the activated portal and the referring URL are available to normal navigations to the same extent they're available to a portal. Solutions to link decoration will apply to both.
+
+
 TODO:
 
-- Privacy threat model summary and goals. Focused on cross-origin threats.
-- Storage and communication restrictions summary
-- Brief discussion of side channels
-- Discuss pre-activation vs. post-activation, `requestStorageAccess()`, ...
+- More side channels?
 - Maybe this is also the place to discuss the fact that there's no sync access (even same-origin)?
-- Discuss "the origin model" explicitly. This uses the normal origin model (like iframes), but with restrictions similar to those already in place elsewhere in the platform (such as restricted storage).
 - This section might benefit from being split in two.
-- Note that design-discussions.md has a lot of stuff that might be useful here, and should probably be deleted if we're going to cover it here. (Or, we could keep using it as a place to put more details, and link to it from here.)
+- Note that design-discussions.md has discussion about hiding never-activated portals from their servers, which is a different sort of attack than the cross-site tracking we discuss here.
 
 ### Permissions and policies
 
