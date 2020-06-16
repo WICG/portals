@@ -159,9 +159,14 @@ TODO:
 
 ### Accessibility
 
+From an accessibility perspective, portals behave like a single activatable element (similar to a button). As discussed in the section above, portals are not interactive and don't receive input events and focus. As a result, the embedded contents of a portal are not exposed as elements in the accessibility tree.
+
+Portals come with accessibility defaults right out of the box. Their default ARIA role is `"button"`, and they are therefore visible to screen-readers as a button by default. The portal element is tab-focusable and keyboard activatable by default (any registered `click` event handlers will be run when a user hits `<space>` or `<enter>` while focused on the element).
+
+Portals also compute a default label from their embedded contents (by either using the title of the embedded page or concatenating all the visible text in the portal's viewport if the page doesn't have a title). This label can be overridden by authors using the `aria-label` attribute.
+
 TODO:
 
-- Discuss role and description.
 - Discuss best practices for authors of portaling pages.
 - Explicitly mention how authors should respect `prefers-reduced-motion` (and how this might happen automatically if they already turn off all CSS transitions/animations when that media query tests true).
 
