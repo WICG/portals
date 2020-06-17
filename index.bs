@@ -414,13 +414,13 @@ spec:url; type:dfn; text:scheme
         1. If |portalBrowsingContext|'s [=active document=]'s [=Document/origin=] is not
             [=same origin=] with |sourceOrigin|, then abort these steps.
 
+        1. Let |origin| be the [=serialization of an origin|serialization=] of |sourceOrigin|.
+
         1. Let |targetWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
         1. Let |portalHost| be the |targetWindow|'s [=portal host object=].
 
         1. Let |targetRealm| be the |targetWindow|'s [=global object/realm=].
-
-        1. Let |origin| be the [=serialization of an origin|serialization=] of |sourceOrigin|.
 
         1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|).
 
@@ -683,8 +683,7 @@ spec:url; type:dfn; text:scheme
   <xmp class="idl">
       [Exposed=Window]
       interface PortalHost : EventTarget {
-          void postMessage(any message, USVString targetOrigin, optional sequence<object> transfer = []);
-          void postMessage(any message, optional WindowPostMessageOptions options);
+          void postMessage(any message, optional PostMessageOptions options);
 
           attribute EventHandler onmessage;
           attribute EventHandler onmessageerror;
@@ -692,17 +691,9 @@ spec:url; type:dfn; text:scheme
   </xmp>
 
   <section algorithm="portalhost-postmessage">
-    The <dfn method for="PortalHost"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
-
-    1. Let |options| be « "{{WindowPostMessageOptions|targetOrigin}}" → |targetOrigin|, "{{PostMessageOptions|transfer}}" → |transfer| ».
-
-    1. Run the steps for {{PortalHost/postMessage(message, options)|postMessage}}(|message|, |options|).
-
     The <dfn method for="PortalHost"><code>postMessage(|message|, |options|)</code></dfn> method *must* run these steps:
 
-    1. Let |settings| be the [=relevant settings object=] of [=this=].
-
-    1. Let |browsingContext| be the [=responsible browsing context=] of |settings|.
+    1. Let |browsingContext| be [=this=]'s [=relevant global object=]'s [=Window/browsing context=].
 
     1. If |browsingContext| has a [=portal state=] other than "`portal`", throw an "{{InvalidStateError}}" {{DOMException}}.
 
@@ -710,20 +701,7 @@ spec:url; type:dfn; text:scheme
         It is possible that this browsing context will be [=activate a portal browsing context|activated=] in parallel
         to this message being sent; in such cases, messages may not be delivered.
 
-    1. Let |origin| be the [=serialization of an origin|serialization=] of |settings|'s [=environment settings object/origin=].
-
-    1. Let |targetOrigin| be |options|["{{WindowPostMessageOptions|targetOrigin}}"].
-
-    1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
-        [=environment settings object/origin=] of |settings|.
-
-    1. Otherwise, if |targetOrigin| is not a single U+002A ASTERISK character (*), then:
-
-        1. Let |parsedURL| be the result of running the [=URL parser=] on |targetOrigin|.
-
-        1. If |parsedURL| is failure, then throw a "{{SyntaxError}}" {{DOMException}}.
-
-        1. Set |targetOrigin| to |parsedURL|'s [=url/origin=].
+    1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s [=environment settings object/origin=].
 
     1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
 
@@ -744,9 +722,10 @@ spec:url; type:dfn; text:scheme
 
         1. Let |targetSettings| be the [=relevant settings object=] of |hostElement|.
 
-        1. If |targetOrigin| is not a single literal U+002A ASTERISK character
-            (*) and |targetSettings|'s [=environment settings object/origin=]
-            is not [=same origin=] with |targetOrigin|, then abort these steps.
+        1. If |targetSettings|'s [=environment settings object/origin=] is not [=same origin=] with
+            |sourceOrigin|, then abort these steps.
+
+        1. Let |origin| be the [=serialization of an origin|serialization=] of |sourceOrigin|.
 
         1. Let |targetRealm| be |targetSettings|'s [=environment settings object/realm=].
 
