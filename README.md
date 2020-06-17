@@ -184,9 +184,10 @@ Portals come with accessibility defaults right out of the box. Their default ARI
 
 Portals also compute a default label from their embedded contents (by either using the title of the embedded page or concatenating all the visible text in the portal's viewport if the page doesn't have a title). This label can be overridden by authors using the `aria-label` attribute.
 
+The current defaults should ensure that a portal can be accessed by screen readers and have a description without any work from authors. Authors should however implement a click event handler that activates the portal, to ensure they can be activated with screen readers. Portals that are hidden by their embedder until activation time should be marked with `aria-hidden="true"` by authors, so that they override the default behaviour and are invisible to screen readers as well.
+
 TODO:
 
-- Discuss best practices for authors of portaling pages.
 - Explicitly mention how authors should respect `prefers-reduced-motion` (and how this might happen automatically if they already turn off all CSS transitions/animations when that media query tests true).
 
 ### Session history, navigation, and bfcache
