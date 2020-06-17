@@ -159,7 +159,7 @@ TODO:
 
 ### Accessibility
 
-From an accessibility perspective, portals behave like a single activatable element (similar to a button). As discussed in the section above, portals are not interactive and don't receive input events and focus. As a result, the embedded contents of a portal are not exposed as elements in the accessibility tree.
+From an accessibility perspective, portals behave like a single activatable element (similar to a button). As discussed in the section above, the contents of portals are not interactive and don't receive input events and focus. As a result, the embedded contents of a portal are not exposed as elements in the accessibility tree.
 
 Portals come with accessibility defaults right out of the box. Their default ARIA role is `"button"`, and they are therefore visible to screen-readers as a button by default. The portal element is also intended to be focusable and keyboard activatable in the same way as a button.
 
