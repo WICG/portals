@@ -184,7 +184,7 @@ Portals come with accessibility defaults right out of the box. Their default ARI
 
 Portals also compute a default label from their embedded contents (by either using the title of the embedded page or concatenating all the visible text in the portal's viewport if the page doesn't have a title). This label can be overridden by authors using the `aria-label` attribute.
 
-The current defaults should ensure that a portal can be accessed by screen readers and have a description without any work from authors. Portals should be made to activate on click (by authors adding a click event handler on the portal element), making it easier for screen reader users to activate them (#174 discusses adding this as default behaviour). Authors should use `hidden=true` or `display: none` to hide portals that are meant to be hidden until activation time (this will also hide them from the accessibility tree).
+These defaults ensure that a portal can be accessed and described by assistive technology without any work from authors. Additionally, authors should add a click handler to activate the portal, even if it would otherwise be activated by some other gesture (e.g. a swipe), to ensure that assistive technology or keyboard users can activate the portal. ([#174](https://github.com/WICG/portals/issues/174) discusses adding this as default behavior.) Authors should use the `hidden` HTML attribute, or `display: none`, to hide portals that are meant to be hidden until activation time, e.g. portals that are only used for prerendering. (This will also hide them from the accessibility tree.)
 
 TODO:
 
