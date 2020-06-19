@@ -135,8 +135,8 @@ spec:url; type:dfn; text:scheme
 
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |successorBrowsingContext| in
-    place of |predecessorBrowsingContext| with data |serializeWithTransferResult|
-    and promise |promise|, run the following steps [=in parallel=]:
+    place of |predecessorBrowsingContext| with [=origin=] |sourceOrigin|, data
+    |serializeWithTransferResult|, and promise |promise|, run the following steps [=in parallel=]:
 
     1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`none`".
 
@@ -165,10 +165,16 @@ spec:url; type:dfn; text:scheme
 
         1. Let |targetRealm| be |successorWindow|'s [=global object/realm=].
 
-        1. Let |deserializeRecord| be [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|),
-            and let |dataClone| be |deserializeRecord|.\[[Deserialized]].
+        1. Let |dataClone| be null.
 
-            If this throws an exception, catch it, and let |dataClone| be null instead.
+        1. If |successorBrowsingContext|'s [=active document=]'s [=Document/origin=] is
+            [=same origin=] with |sourceOrigin|, then:
+
+            1. Let |deserializeRecord| be
+                [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|),
+                and set |dataClone| to |deserializeRecord|.\[[Deserialized]].
+
+                If this throws an exception, catch it and do nothing.
 
         1. Let |event| be the result of [=creating an event=] using {{PortalActivateEvent}} and |targetRealm|.
 
@@ -328,8 +334,7 @@ spec:url; type:dfn; text:scheme
           [CEReactions] attribute DOMString referrerPolicy;
 
           [NewObject] Promise<void> activate(optional PortalActivateOptions options);
-          void postMessage(any message, USVString targetOrigin, optional sequence<object> transfer = []);
-          void postMessage(any message, optional WindowPostMessageOptions options);
+          void postMessage(any message, optional PostMessageOptions options = {});
 
           attribute EventHandler onmessage;
           attribute EventHandler onmessageerror;
@@ -356,7 +361,7 @@ spec:url; type:dfn; text:scheme
         </wpt>
 
     1. Let |predecessorBrowsingContext| be the [=document browsing context|browsing context=] of
-        [=this=]'s [=node document|document=].
+        [=this=]'s [=node document=].
 
     1. If |predecessorBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
@@ -373,9 +378,12 @@ spec:url; type:dfn; text:scheme
 
     1. Let |promise| be a new [=promise=].
 
+    1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s
+        [=environment settings object/origin=].
+
     1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
-        in place of |predecessorBrowsingContext| with data |serializeWithTransferResult| and
-        promise |promise|.
+        in place of |predecessorBrowsingContext| with |sourceOrigin|, |serializeWithTransferResult|,
+        and |promise|.
 
     1. Return |promise|.
 
@@ -389,34 +397,13 @@ spec:url; type:dfn; text:scheme
   </section>
 
   <section algorithm="htmlportalelement-postmessage">
-    The <dfn method for="HTMLPortalElement"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
-
-    1. Let |options| be « "{{WindowPostMessageOptions|targetOrigin}}" → |targetOrigin|, "{{PostMessageOptions|transfer}}" → |transfer| ».
-
-    1. Run the steps for {{HTMLPortalElement/postMessage(message, options)|postMessage}}(|message|, |options|).
-
     The <dfn method for="HTMLPortalElement"><code>postMessage(|message|, |options|)</code></dfn> method *must* run these steps:
 
     1. Let |portalBrowsingContext| be the [=guest browsing context=] of [=this=].
 
     1. If |portalBrowsingContext| is null, throw an "{{InvalidStateError}}" {{DOMException}}.
 
-    1. Let |settings| be the [=relevant settings object=] of [=this=].
-
-    1. Let |origin| be the [=serialization of an origin|serialization=] of |settings|'s [=environment settings object/origin=].
-
-    1. Let |targetOrigin| be |options|["{{WindowPostMessageOptions|targetOrigin}}"].
-
-    1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
-        [=environment settings object/origin=] of |settings|.
-
-    1. Otherwise, if |targetOrigin| is not a single U+002A ASTERISK character (*), then:
-
-        1. Let |parsedURL| be the result of running the [=URL parser=] on |targetOrigin|.
-
-        1. If |parsedURL| is failure, then throw a "{{SyntaxError}}" {{DOMException}}.
-
-        1. Set |targetOrigin| to |parsedURL|'s [=url/origin=].
+    1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s [=environment settings object/origin=].
 
     1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
 
@@ -424,10 +411,10 @@ spec:url; type:dfn; text:scheme
 
     1. [=Queue a task=] from the [=portal task source=] to the [=event loop=] of |portalBrowsingContext| to run the following steps:
 
-        1. If |targetOrigin| is not a single literal U+002A ASTERISK character
-            (*) and the [=origin=] of |portalBrowsingContext|'s
-            [=active document=] is not [=same origin=] with |targetOrigin|, then
-            abort these steps.
+        1. If |portalBrowsingContext|'s [=active document=]'s [=Document/origin=] is not
+            [=same origin=] with |sourceOrigin|, then abort these steps.
+
+        1. Let |origin| be the [=serialization of an origin|serialization=] of |sourceOrigin|.
 
         1. Let |targetWindow| be |portalBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
@@ -696,8 +683,7 @@ spec:url; type:dfn; text:scheme
   <xmp class="idl">
       [Exposed=Window]
       interface PortalHost : EventTarget {
-          void postMessage(any message, USVString targetOrigin, optional sequence<object> transfer = []);
-          void postMessage(any message, optional WindowPostMessageOptions options);
+          void postMessage(any message, optional PostMessageOptions options);
 
           attribute EventHandler onmessage;
           attribute EventHandler onmessageerror;
@@ -705,17 +691,9 @@ spec:url; type:dfn; text:scheme
   </xmp>
 
   <section algorithm="portalhost-postmessage">
-    The <dfn method for="PortalHost"><code>postMessage(|message|, |targetOrigin|, |transfer|)</code></dfn> method *must* run these steps:
-
-    1. Let |options| be « "{{WindowPostMessageOptions|targetOrigin}}" → |targetOrigin|, "{{PostMessageOptions|transfer}}" → |transfer| ».
-
-    1. Run the steps for {{PortalHost/postMessage(message, options)|postMessage}}(|message|, |options|).
-
     The <dfn method for="PortalHost"><code>postMessage(|message|, |options|)</code></dfn> method *must* run these steps:
 
-    1. Let |settings| be the [=relevant settings object=] of [=this=].
-
-    1. Let |browsingContext| be the [=responsible browsing context=] of |settings|.
+    1. Let |browsingContext| be [=this=]'s [=relevant global object=]'s [=Window/browsing context=].
 
     1. If |browsingContext| has a [=portal state=] other than "`portal`", throw an "{{InvalidStateError}}" {{DOMException}}.
 
@@ -723,20 +701,7 @@ spec:url; type:dfn; text:scheme
         It is possible that this browsing context will be [=activate a portal browsing context|activated=] in parallel
         to this message being sent; in such cases, messages may not be delivered.
 
-    1. Let |origin| be the [=serialization of an origin|serialization=] of |settings|'s [=environment settings object/origin=].
-
-    1. Let |targetOrigin| be |options|["{{WindowPostMessageOptions|targetOrigin}}"].
-
-    1. If |targetOrigin| is a single U+002F SOLIDUS character (/), then set |targetOrigin| to the
-        [=environment settings object/origin=] of |settings|.
-
-    1. Otherwise, if |targetOrigin| is not a single U+002A ASTERISK character (*), then:
-
-        1. Let |parsedURL| be the result of running the [=URL parser=] on |targetOrigin|.
-
-        1. If |parsedURL| is failure, then throw a "{{SyntaxError}}" {{DOMException}}.
-
-        1. Set |targetOrigin| to |parsedURL|'s [=url/origin=].
+    1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s [=environment settings object/origin=].
 
     1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
 
@@ -757,9 +722,10 @@ spec:url; type:dfn; text:scheme
 
         1. Let |targetSettings| be the [=relevant settings object=] of |hostElement|.
 
-        1. If |targetOrigin| is not a single literal U+002A ASTERISK character
-            (*) and |targetSettings|'s [=environment settings object/origin=]
-            is not [=same origin=] with |targetOrigin|, then abort these steps.
+        1. If |targetSettings|'s [=environment settings object/origin=] is not [=same origin=] with
+            |sourceOrigin|, then abort these steps.
+
+        1. Let |origin| be the [=serialization of an origin|serialization=] of |sourceOrigin|.
 
         1. Let |targetRealm| be |targetSettings|'s [=environment settings object/realm=].
 
