@@ -1507,7 +1507,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-19">19 June 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-23">23 June 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1628,7 +1628,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
   portal browsing context.</p>
     <div class="note" role="note"> A <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal②">portal</a></code> element may only be a <a data-link-type="dfn" href="#host-element" id="ref-for-host-element">host element</a> while it is <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#browsing-context-connected" id="ref-for-browsing-context-connected">browsing-context connected</a> or during the dispatch of the <code class="idl"><a class="idl-code" data-link-type="event" href="#eventdef-window-portalactivate" id="ref-for-eventdef-window-portalactivate">portalactivate</a></code> event from which it was obtained
     using <code class="idl"><a data-link-type="idl" href="#dom-portalactivateevent-adoptpredecessor" id="ref-for-dom-portalactivateevent-adoptpredecessor">adoptPredecessor()</a></code>. </div>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="host-browsing-context">host browsing context</dfn> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①">portal browsing context</a> is its <a data-link-type="dfn" href="#host-element" id="ref-for-host-element①">host element</a>'s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document">document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context②">browsing context</a>.</p>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="host-browsing-context">host browsing context</dfn> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①">portal browsing context</a> is its <a data-link-type="dfn" href="#host-element" id="ref-for-host-element①">host element</a>'s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document">node document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context②">browsing context</a>.</p>
     <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-task-source">portal task source</dfn> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source" id="ref-for-task-source">task source</a> used for tasks related to the
   portal lifecycle and communication between a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context②">portal browsing context</a> and its <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context①">host browsing context</a>.</p>
     <section class="algorithm" data-algorithm="portal-browsing-context-activate">
@@ -1895,7 +1895,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
       To determine whether a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑧">portal</a></code> element <dfn class="dfn-paneled" data-dfn-for="HTMLPortalElement" data-dfn-type="dfn" data-noexport id="htmlportalelement-may-have-a-guest-browsing-context">may have a guest browsing context</dfn>, run the following steps: 
      <ol>
       <li data-md>
-       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document②">document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context③">browsing context</a> is not a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context①">top-level browsing context</a>, then return false.</p>
+       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document②">node document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context③">browsing context</a> is not a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context①">top-level browsing context</a>, then return false.</p>
        <ul class="wpt-tests-block">
         <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-nested.html">portals-nested.html</a> <a href="http://web-platform-tests.live/portals/portals-nested.html" title="portals/portals-nested.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-nested.html"><small>(source)</small></a>
        </ul>
@@ -1903,7 +1903,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
   use a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal⑨">portal</a></code> element in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context①">nested browsing context</a>, as this is not
   supported. </p>
       <li data-md>
-       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document③">document</a>'s <a data-link-type="dfn">URL</a>'s <a data-link-type="dfn">scheme</a> is not an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-scheme" id="ref-for-http-scheme">HTTP(S) scheme</a>, then return false.</p>
+       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document③">node document</a>'s <a data-link-type="dfn">URL</a>'s <a data-link-type="dfn">scheme</a> is not an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-scheme" id="ref-for-http-scheme">HTTP(S) scheme</a>, then return false.</p>
        <ul class="wpt-tests-block">
         <li class="wpt-test"><a href="https://wpt.fyi/results/portals/about-blank-cannot-host.html">about-blank-cannot-host.html</a> <a href="http://web-platform-tests.live/portals/about-blank-cannot-host.html" title="portals/about-blank-cannot-host.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/about-blank-cannot-host.html"><small>(source)</small></a>
        </ul>
@@ -1932,7 +1932,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
       <li data-md>
        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert④">Assert</a>: <var>element</var> <a data-link-type="dfn" href="#htmlportalelement-may-have-a-guest-browsing-context" id="ref-for-htmlportalelement-may-have-a-guest-browsing-context①">may have a guest browsing context</a>.</p>
       <li data-md>
-       <p>Let <var>hostBrowsingContext</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document④">document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context④">browsing context</a>.</p>
+       <p>Let <var>hostBrowsingContext</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document④">node document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context④">browsing context</a>.</p>
       <li data-md>
        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑤">Assert</a>: <var>hostBrowsingContext</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context②">top-level browsing context</a>.</p>
       <li data-md>
