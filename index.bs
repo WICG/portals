@@ -128,7 +128,7 @@ spec:url; type:dfn; text:scheme
   </div>
 
   The <dfn>host browsing context</dfn> of a [=portal browsing context=] is its
-  [=host element=]'s [=node document|document=]'s [=browsing context=].
+  [=host element=]'s [=node document=]'s [=browsing context=].
 
   The <dfn>portal task source</dfn> is a [=task source=] used for tasks related to the
   portal lifecycle and communication between a [=portal browsing context=] and its [=host browsing context=].
@@ -445,7 +445,7 @@ spec:url; type:dfn; text:scheme
   <section algorithm="htmlportalelement-may-have-guest-browsing-context">
     To determine whether a <{portal}> element <dfn for="HTMLPortalElement">may have a guest browsing context</dfn>, run the following steps:
 
-    1. If |element|'s [=node document|document=]'s [=browsing context=] is not a [=top-level browsing context=], then return false.
+    1. If |element|'s [=node document=]'s [=browsing context=] is not a [=top-level browsing context=], then return false.
 
         <wpt>
           portals-nested.html
@@ -457,7 +457,7 @@ spec:url; type:dfn; text:scheme
           supported.
         </p>
 
-    1. If |element|'s [=node document|document=]'s [=document/URL=]'s [=URL/scheme=] is not an
+    1. If |element|'s [=node document=]'s [=document/URL=]'s [=URL/scheme=] is not an
         [=HTTP(S) scheme=], then return false.
 
         <wpt>
@@ -493,7 +493,7 @@ spec:url; type:dfn; text:scheme
 
     1. [=Assert=]: |element| [=may have a guest browsing context=].
 
-    1. Let |hostBrowsingContext| be |element|'s [=node document|document=]'s [=browsing context=].
+    1. Let |hostBrowsingContext| be |element|'s [=node document=]'s [=browsing context=].
 
     1. [=Assert=]: |hostBrowsingContext| is a [=top-level browsing context=].
 
