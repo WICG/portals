@@ -471,6 +471,25 @@ spec:url; type:dfn; text:scheme
           things at this stage.
         </p>
 
+    1. If |element|'s [=node document=]'s [=active sandboxing flag set=] is not empty, then return
+        false.
+
+        <wpt>
+          no-portal-in-sandboxed-popup.html
+        </wpt>
+
+        <p class="note">
+          Since portals cannot be created in [=child browsing contexts=] anyway, this step is about
+          preventing portal uses in [=auxiliary browsing contexts=] spawned by sandboxed
+          <{iframe}>s, or pages using CSP's [=sandbox=] directive.
+        </p>
+
+        <p class="note">
+          This restriction is largely added for simplicity. If there are use cases for portals
+          inside sandboxed documents, we can enable them in the future, with appropriate opt-in. See
+          <a href="https://github.com/WICG/portals/issues/207">issue #207</a> for discussion.
+        </p>
+
     1. If |element| is [=browsing-context connected=], then return true.
 
     1. If |element|'s [=just-adopted flag=] is true, then return true.
