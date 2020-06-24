@@ -1507,7 +1507,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-23">23 June 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-24">24 June 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1911,6 +1911,16 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
   can only have a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-scheme" id="ref-for-http-scheme①">HTTP(S) scheme</a>, adoption would fail, and so its simpler to restrict
   things at this stage. </p>
       <li data-md>
+       <p>If <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document④">node document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#active-sandboxing-flag-set" id="ref-for-active-sandboxing-flag-set">active sandboxing flag set</a> is not empty, then return
+false.</p>
+       <ul class="wpt-tests-block">
+        <li class="wpt-test"><a href="https://wpt.fyi/results/portals/no-portal-in-sandboxed-popup.html">no-portal-in-sandboxed-popup.html</a> <a href="http://web-platform-tests.live/portals/no-portal-in-sandboxed-popup.html" title="portals/no-portal-in-sandboxed-popup.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/no-portal-in-sandboxed-popup.html"><small>(source)</small></a>
+       </ul>
+       <p class="note" role="note"> Since portals cannot be created in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#child-browsing-context" id="ref-for-child-browsing-context">child browsing contexts</a> anyway, this step is about
+  preventing portal uses in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#auxiliary-browsing-context" id="ref-for-auxiliary-browsing-context">auxiliary browsing contexts</a> spawned by sandboxed <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element①">iframe</a></code>s, or pages using CSP’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#sandbox" id="ref-for-sandbox">sandbox</a> directive. </p>
+       <p class="note" role="note"> This restriction is largely added for simplicity. If there are use cases for portals
+  inside sandboxed documents, we can enable them in the future, with appropriate opt-in. See <a href="https://github.com/WICG/portals/issues/207">issue #207</a> for discussion. </p>
+      <li data-md>
        <p>If <var>element</var> is <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#browsing-context-connected" id="ref-for-browsing-context-connected①">browsing-context connected</a>, then return true.</p>
       <li data-md>
        <p>If <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-just-adopted-flag" id="ref-for-htmlportalelement-just-adopted-flag③">just-adopted flag</a> is true, then return true.</p>
@@ -1932,7 +1942,7 @@ initialized to <var>messageClone</var>, and the <code class="idl"><a data-link-t
       <li data-md>
        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert④">Assert</a>: <var>element</var> <a data-link-type="dfn" href="#htmlportalelement-may-have-a-guest-browsing-context" id="ref-for-htmlportalelement-may-have-a-guest-browsing-context①">may have a guest browsing context</a>.</p>
       <li data-md>
-       <p>Let <var>hostBrowsingContext</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document④">node document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context④">browsing context</a>.</p>
+       <p>Let <var>hostBrowsingContext</var> be <var>element</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-node-document" id="ref-for-concept-node-document⑤">node document</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context④">browsing context</a>.</p>
       <li data-md>
        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert⑤">Assert</a>: <var>hostBrowsingContext</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context②">top-level browsing context</a>.</p>
       <li data-md>
@@ -1963,7 +1973,7 @@ the <a data-link-type="dfn" href="#host-element" id="ref-for-host-element⑤">ho
        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate" id="ref-for-navigate">Navigate</a> <var>guestBrowsingContext</var> to <var>resource</var>.</p>
      </ol>
      <div class="note" role="note">
-       Unlike an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element①">iframe</a></code> element, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①②">portal</a></code> element supports a state where
+       Unlike an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element②">iframe</a></code> element, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①②">portal</a></code> element supports a state where
       it has no associated browsing context. This is the initial state of a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①③">portal</a></code> element (i.e., it has no initial <code>about:blank</code> document;
       instead it navigates directly to the first parsable URL assigned to it). 
       <p>Similarly, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①④">portal</a></code> element responds to an unparsable <code><a data-link-type="element-sub" href="#element-attrdef-portal-src" id="ref-for-element-attrdef-portal-src③">src</a></code> URL by <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context④">closing</a> its browsing context, rather
@@ -2331,7 +2341,7 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
 </pre>
     </div>
     <div class="note" role="note"> Per the existing processing model, the other fetch metadata headers will automatically have the
-    same values as they would would if the load were occurring in an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element②">iframe</a></code> element, with no
+    same values as they would would if the load were occurring in an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element③">iframe</a></code> element, with no
     spec updates needed. </div>
    </section>
    <section>
@@ -2591,6 +2601,12 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
     <li><a href="#ref-for-navigate-to">5.1. Content Security Policy</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-sandbox">
+   <a href="https://w3c.github.io/webappsec-csp/#sandbox">https://w3c.github.io/webappsec-csp/#sandbox</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-sandbox">3. The portal element</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-document">
    <a href="https://dom.spec.whatwg.org/#document">https://dom.spec.whatwg.org/#document</a><b>Referenced in:</b>
    <ul>
@@ -2656,7 +2672,7 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
    <a href="https://dom.spec.whatwg.org/#concept-node-document">https://dom.spec.whatwg.org/#concept-node-document</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-node-document">2. Portal browsing contexts</a>
-    <li><a href="#ref-for-concept-node-document①">3. The portal element</a> <a href="#ref-for-concept-node-document②">(2)</a> <a href="#ref-for-concept-node-document③">(3)</a> <a href="#ref-for-concept-node-document④">(4)</a>
+    <li><a href="#ref-for-concept-node-document①">3. The portal element</a> <a href="#ref-for-concept-node-document②">(2)</a> <a href="#ref-for-concept-node-document③">(3)</a> <a href="#ref-for-concept-node-document④">(4)</a> <a href="#ref-for-concept-node-document⑤">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document-origin">
@@ -2834,10 +2850,22 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
     <li><a href="#ref-for-active-document①">3. The portal element</a> <a href="#ref-for-active-document②">(2)</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-active-sandboxing-flag-set">
+   <a href="https://html.spec.whatwg.org/multipage/origin.html#active-sandboxing-flag-set">https://html.spec.whatwg.org/multipage/origin.html#active-sandboxing-flag-set</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-active-sandboxing-flag-set">3. The portal element</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document-window">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window">https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-document-window">2. Portal browsing contexts</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-auxiliary-browsing-context">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#auxiliary-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#auxiliary-browsing-context</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-auxiliary-browsing-context">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-becomes-browsing-context-connected">
@@ -2869,6 +2897,12 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
    <ul>
     <li><a href="#ref-for-browsing-context-connected">2. Portal browsing contexts</a>
     <li><a href="#ref-for-browsing-context-connected①">3. The portal element</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-child-browsing-context">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#child-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#child-browsing-context</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-child-browsing-context">3. The portal element</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-close-a-browsing-context">
@@ -2946,8 +2980,8 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
   <aside class="dfn-panel" data-for="term-for-the-iframe-element">
    <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-the-iframe-element">3. The portal element</a> <a href="#ref-for-the-iframe-element①">(2)</a>
-    <li><a href="#ref-for-the-iframe-element②">5.3. Fetch Metadata Request Headers</a>
+    <li><a href="#ref-for-the-iframe-element">3. The portal element</a> <a href="#ref-for-the-iframe-element①">(2)</a> <a href="#ref-for-the-iframe-element②">(3)</a>
+    <li><a href="#ref-for-the-iframe-element③">5.3. Fetch Metadata Request Headers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-in-parallel">
@@ -3233,6 +3267,7 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
     <a data-link-type="biblio">[CSP]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-navigate-to" style="color:initial">navigate-to</span>
+     <li><span class="dfn-paneled" id="term-for-sandbox" style="color:initial">sandbox</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
@@ -3286,12 +3321,15 @@ a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-bro
      <li><span class="dfn-paneled" id="term-for-windowpostmessageoptions" style="color:initial">WindowPostMessageOptions</span>
      <li><span class="dfn-paneled" id="term-for-windowproxy" style="color:initial">WindowProxy</span>
      <li><span class="dfn-paneled" id="term-for-active-document" style="color:initial">active document</span>
+     <li><span class="dfn-paneled" id="term-for-active-sandboxing-flag-set" style="color:initial">active sandboxing flag set</span>
      <li><span class="dfn-paneled" id="term-for-concept-document-window" style="color:initial">associated document</span>
+     <li><span class="dfn-paneled" id="term-for-auxiliary-browsing-context" style="color:initial">auxiliary browsing context</span>
      <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-connected" style="color:initial">becomes browsing-context connected</span>
      <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-disconnected" style="color:initial">becomes browsing-context disconnected</span>
      <li><span class="dfn-paneled" id="term-for-window-bc" style="color:initial">browsing context <small>(for Window)</small></span>
      <li><span class="dfn-paneled" id="term-for-browsing-context-group" style="color:initial">browsing context group</span>
      <li><span class="dfn-paneled" id="term-for-browsing-context-connected" style="color:initial">browsing-context connected</span>
+     <li><span class="dfn-paneled" id="term-for-child-browsing-context" style="color:initial">child browsing context</span>
      <li><span class="dfn-paneled" id="term-for-close-a-browsing-context" style="color:initial">close a browsing context</span>
      <li><span class="dfn-paneled" id="term-for-completely-loaded" style="color:initial">completely loaded</span>
      <li><span class="dfn-paneled" id="term-for-creating-a-new-top-level-browsing-context" style="color:initial">create a new top-level browsing context</span>
