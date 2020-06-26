@@ -156,8 +156,8 @@ spec:url; type:dfn; text:scheme
 
     1. Let |successorWindow| be |successorBrowsingContext|'s associated {{WindowProxy}}'s \[[Window]] internal slot value.
 
-    1. [=Queue a task=] from the [=portal task source=]
-        to the [=event loop=] associated with |successorWindow| to run the following steps:
+    1. [=Queue a global task=] on the [=portal task source=] given |successorWindow| to run the
+        following steps:
 
         1. [=Assert=]: The [=portal state=] of |successorBrowsingContext| is "`portal`".
 
@@ -217,8 +217,9 @@ spec:url; type:dfn; text:scheme
 
         1. Otherwise:
 
-            1. [=Queue a task=] from the [=portal task source=] to the [=event loop=]
-                associated with |predecessorBrowsingContext| to resolve |promise| with undefined.
+            1. [=Queue a global task=] on the [=portal task source=] given
+                |predecessorBrowsingContext|'s [=browsing context/active window=] to resolve
+                |promise| with undefined.
 
             1. [=Close a browsing context|Close=] |predecessorBrowsingContext|.
 
@@ -254,9 +255,8 @@ spec:url; type:dfn; text:scheme
 
     1. [=Assert=]: |portalElement| is an {{HTMLPortalElement}}.
 
-    1. [=Queue a task=] from the [=portal task source=]
-        to the [=event loop=] associated with |predecessorBrowsingContext|
-        to run the following steps:
+    1. [=Queue a global task=] on the [=portal task source=] given |predecessorBrowsingContext|'s
+        [=browsing context/active window=] to run the following steps:
 
         1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`orphaned`".
 
@@ -409,7 +409,8 @@ spec:url; type:dfn; text:scheme
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
-    1. [=Queue a task=] from the [=portal task source=] to the [=event loop=] of |portalBrowsingContext| to run the following steps:
+    1. [=Queue a global task=] on the [=portal task source=] given |portalBrowsingContext|'s [=browsing context/active
+        window=] to run the following steps:
 
         1. If |portalBrowsingContext|'s [=active document=]'s [=Document/origin=] is not
             [=same origin=] with |sourceOrigin|, then abort these steps.
@@ -728,10 +729,7 @@ spec:url; type:dfn; text:scheme
 
     1. Let |hostElement| be the [=host element=] of |browsingContext|.
 
-    1. Let |hostBrowsingContext| be the [=host browsing context=] of |browsingContext|.
-
-    1. [=Queue a task=] from the [=portal task source=] to the [=event loop=]
-        associated with |hostBrowsingContext| to run the following steps:
+    1. [=Queue an element task=] on the [=portal task source=] given |hostElement| to run the following steps:
 
         1. If |browsingContext| is not the [=guest browsing context=] of |hostElement|, then abort these steps.
 
@@ -849,8 +847,9 @@ spec:url; type:dfn; text:scheme
 
     1. Set [=this=]'s [=PortalActivateEvent/adopted predecessor element=] to |adoptedPredecessorElement|.
 
-    1. [=Queue a task=] from the [=portal task source=] to the [=event loop=] associated with
-        |predecessorBrowsingContext| to resolve [=this=]'s [=activation promise=] with undefined.
+    1. [=Queue a global task=] on the [=portal task source=] given |predecessorBrowsingContext|'s
+        [=browsing context/active window=] to resolve [=this=]'s [=activation promise=] with
+        undefined.
 
         Note: Queuing this immediately makes it possible to send messages to the adopted
         portal during dispatch of the {{Window/portalactivate!!event}} event without
