@@ -630,6 +630,9 @@ spec:url; type:dfn; text:scheme
     portals-cross-origin-load.sub.html
   </wpt>
 
+  A <{portal}> element's [=activation behavior=] is to run the steps for
+  {{activate(options)}} with default options, discarding any thrown exception.
+
   The following events are dispatched on {{HTMLPortalElement}} objects:
 
   <table class="data" dfn-for="HTMLPortalElement">
