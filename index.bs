@@ -135,8 +135,8 @@ spec:url; type:dfn; text:scheme
 
   <section algorithm="portal-browsing-context-activate">
     To <dfn>activate a portal browsing context</dfn> |successorBrowsingContext| in
-    place of |predecessorBrowsingContext| with [=origin=] |sourceOrigin|, data
-    |serializeWithTransferResult|, and promise |promise|, run the following steps [=in parallel=]:
+    place of |predecessorBrowsingContext| with [=origin=] |sourceOrigin|, optional data
+    |serializeWithTransferResult|, and optional promise |promise|, run the following steps [=in parallel=]:
 
     1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`none`".
 
@@ -167,8 +167,8 @@ spec:url; type:dfn; text:scheme
 
         1. Let |dataClone| be null.
 
-        1. If |successorBrowsingContext|'s [=active document=]'s [=Document/origin=] is
-            [=same origin=] with |sourceOrigin|, then:
+        1. If |serializeWithTransferResult| is given and |successorBrowsingContext|'s [=active document=]'s
+            [=Document/origin=] is [=same origin=] with |sourceOrigin|, then:
 
             1. Let |deserializeRecord| be
                 [$StructuredDeserializeWithTransfer$](|serializeWithTransferResult|, |targetRealm|),
@@ -186,7 +186,7 @@ spec:url; type:dfn; text:scheme
 
         1. Set |event|'s [=PortalActivateEvent/successor window=] to |successorWindow|.
 
-        1. Set |event|'s [=PortalActivateEvent/activation promise=] to |promise|.
+        1. Set |event|'s [=PortalActivateEvent/activation promise=] to |promise|, if it is given, and null otherwise.
 
         1. [=Dispatch=] |event| to |successorWindow|.
 
@@ -217,7 +217,7 @@ spec:url; type:dfn; text:scheme
 
         1. Otherwise:
 
-            1. [=Queue a global task=] on the [=portal task source=] given
+            1. If |promise| is given, [=queue a global task=] on the [=portal task source=] given
                 |predecessorBrowsingContext|'s [=browsing context/active window=] to resolve
                 |promise| with undefined.
 
@@ -630,8 +630,32 @@ spec:url; type:dfn; text:scheme
     portals-cross-origin-load.sub.html
   </wpt>
 
-  A <{portal}> element's [=activation behavior=] is to run the steps for
-  {{activate(options)}} with default options, discarding any thrown exception.
+  <section algorithm="htmlportalelement-activation-behavior">
+    A <{portal}> element's [=activation behavior=] is to run the following steps:
+
+    1. Let |portalBrowsingContext| be the [=guest browsing context=] of [=this=].
+
+    1. If |portalBrowsingContext| is null, abort these steps.
+
+    1. Let |predecessorBrowsingContext| be the [=document browsing context|browsing context=] of
+        [=this=]'s [=node document=].
+
+    1. If |predecessorBrowsingContext| is null, abort these steps.
+
+    1. If the [=portal state=] of |predecessorBrowsingContext| is not "`none`", abort these steps.
+
+    1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s
+        [=environment settings object/origin=].
+
+    1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
+        in place of |predecessorBrowsingContext| with |sourceOrigin|.
+
+    <div class="note">
+      This is substantially similar to the steps in {{activate(options)}}, with default options.
+      User agents may wish to display suitable console messages under the same conditions that would
+      result in promise rejection in those steps.
+    </div>
+  </section>
 
   The following events are dispatched on {{HTMLPortalElement}} objects:
 
@@ -819,7 +843,7 @@ spec:url; type:dfn; text:scheme
 
   A {{PortalActivateEvent}} has an associated <dfn for="PortalActivateEvent">predecessor browsing context</dfn>,
   which is a [=top-level browsing context=] or null, a <dfn for="PortalActivateEvent">successor window</dfn>, which is
-  a {{Window}}, an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=], and a
+  a {{Window}}, an <dfn for="PortalActivateEvent">activation promise</dfn>, which is a [=promise=] or null, and a
   <dfn for="PortalActivateEvent">adopted predecessor element</dfn>, which is a <{portal}> element or null.
 
   <section algorithm="portalactivateevent-event-constructing-steps">
@@ -850,9 +874,8 @@ spec:url; type:dfn; text:scheme
 
     1. Set [=this=]'s [=PortalActivateEvent/adopted predecessor element=] to |adoptedPredecessorElement|.
 
-    1. [=Queue a global task=] on the [=portal task source=] given |predecessorBrowsingContext|'s
-        [=browsing context/active window=] to resolve [=this=]'s [=activation promise=] with
-        undefined.
+    1. If [=this=]'s [=activation promise=] is not null, [=queue a global task=] on the [=portal task source=]
+        given |predecessorBrowsingContext|'s [=browsing context/active window=] to resolve it with undefined.
 
         Note: Queuing this immediately makes it possible to send messages to the adopted
         portal during dispatch of the {{Window/portalactivate!!event}} event without
