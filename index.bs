@@ -631,20 +631,20 @@ spec:url; type:dfn; text:scheme
   </wpt>
 
   <section algorithm="htmlportalelement-activation-behavior">
-    A <{portal}> element's [=activation behavior=] is to run the following steps:
+    A <{portal}> element |el|'s [=activation behavior=] is to run the following steps:
 
-    1. Let |portalBrowsingContext| be the [=guest browsing context=] of [=this=].
+    1. Let |portalBrowsingContext| be the [=guest browsing context=] of |el|.
 
     1. If |portalBrowsingContext| is null, return.
 
     1. Let |predecessorBrowsingContext| be the [=document browsing context|browsing context=] of
-        [=this=]'s [=node document=].
+        |el|'s [=node document=].
 
     1. If |predecessorBrowsingContext| is null, return.
 
     1. If the [=portal state=] of |predecessorBrowsingContext| is not "`none`", return.
 
-    1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s
+    1. Let |sourceOrigin| be |el|'s [=relevant settings object=]'s
         [=environment settings object/origin=].
 
     1. Run the steps to [=activate a portal browsing context|activate=] |portalBrowsingContext|
