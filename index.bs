@@ -652,7 +652,7 @@ spec:url; type:dfn; text:scheme
 
     <div class="note">
       This is substantially similar to the steps in {{activate(options)}}, with default options.
-      User agents may wish to display suitable console messages under the same conditions that would
+      User agents might wish to display suitable console messages under the same conditions that would
       result in promise rejection in those steps.
     </div>
   </section>
