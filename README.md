@@ -33,7 +33,7 @@ Portals encompass some of the use cases that iframes currently do, but with bett
 A document can include a `<portal>` element, which renders the specified URL in a portal context:
 
 ```html
-<portal id="myPortal" src="https://www.example.com/"></portal>
+<portal id="myPortal" src="https://example.com/"></portal>
 ```
 
 This is somewhat like an iframe, in that it provides a rendering of the specified document at `https://example.com/`. However, a portal is much more restricted than an iframe: user interaction with it [does not pass through to the portaled document](#interactivity), and when the portaled document is cross-origin, capabilities like storage and `postMessage()` communication are [prohibited](#privacy-threat-model-and-restrictions) while rendering in the portal context. This allows portals to be used as a more-restricted view onto another document when the full capabilities of an iframe are not needed.
@@ -46,9 +46,9 @@ myPortal.activate();
 
 Unless prevented by the author, clicking a portal activates it as well, similarly to a link.
 
-At this point, the user will observe that their browser has navigated to `https://www.example.com/` (e.g., via changes to the URL bar contents and back/forward UI). Since `https://example.com/` was already loaded in the portal context, this navigation will occur seamlessly and instantly, without a network round-trip or document re-initialization.
+At this point, the user will observe that their browser has navigated to `https://example.com/` (e.g., via changes to the URL bar contents and back/forward UI). Since `https://example.com/` was already loaded in the portal context, this navigation will occur seamlessly and instantly, without a network round-trip or document re-initialization.
 
-For more advanced use cases, the `https://www.example.com/` document can react to activation, using the `portalactivate` event. It can use this event to adapt itself to its new context, and even to adopt its *predecessor* (the document which previously occupied the tab) into a new portal context.
+For more advanced use cases, the `https://example.com/` document can react to activation, using the `portalactivate` event. It can use this event to adapt itself to its new context, and even to adopt its *predecessor* (the document which previously occupied the tab) into a new portal context.
 
 ```js
 window.addEventListener('portalactivate', e => {
