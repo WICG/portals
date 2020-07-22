@@ -13,11 +13,16 @@ Portals encompass some of the use cases that iframes currently do, but with bett
 - [Objectives](#objectives)
 - [Details](#details)
   - [Privacy threat model and restrictions](#privacy-threat-model-and-restrictions)
-  - [Permissions and policies](#permissions-and-policies)
+    - [Storage access blocking](#storage-access-blocking)
+    - [Communications channels that are blocked](#communications-channels-that-are-blocked)
+    - [Communications channels that match navigation](#communications-channels-that-match-navigation)
+    - [TODO](#todo)
+  - [Other restrictions while portaled](#other-restrictions-while-portaled)
   - [Rendering](#rendering)
   - [Interactivity](#interactivity)
   - [Accessibility](#accessibility)
   - [Session history, navigation, and bfcache](#session-history-navigation-and-bfcache)
+  - [Opt-in](#opt-in)
 - [Summary of differences between portals and iframes](#summary-of-differences-between-portals-and-iframes)
 - [Alternatives considered](#alternatives-considered)
   - [A new attribute on an existing element](#a-new-attribute-on-an-existing-element)
@@ -36,7 +41,7 @@ A document can include a `<portal>` element, which renders the specified URL in 
 <portal id="myPortal" src="https://www.example.com/"></portal>
 ```
 
-This is somewhat like an iframe, in that it provides a rendering of the specified document at `https://example.com/`. However, a portal is much more restricted than an iframe: user interaction with it [does not pass through to the portaled document](#interactivity), and when the portaled document is cross-origin, capabilities like storage and `postMessage()` communication are [prohibited](#privacy-threat-model-and-restrictions) while rendering in the portal context. This allows portals to be used as a more-restricted view onto another document when the full capabilities of an iframe are not needed.
+This is somewhat like an iframe, in that it provides a rendering of the specified document at `https://example.com/`. However, a portal is much more restricted than an iframe: user interaction with it [does not pass through to the portaled document](#interactivity), and when the portaled document is cross-origin, capabilities like storage and `postMessage()` communication are [prohibited](#privacy-threat-model-and-restrictions) while rendering in the portal context. These restrictions, among other concerns, mean that the portaled document needs to declare itself as able to be portaled; see [below](#opt-in) for more information.
 
 In exchange for these restrictions, portals gain an additional capability that iframes do not have. A portal can be *activated*, which causes the embedding window to navigate, replacing its document with the portal:
 
@@ -107,46 +112,72 @@ The general idea of portals is summed up above: inset pre-rendering, activation,
 
 ### Privacy threat model and restrictions
 
-The Portals design is intended to comply with the [W3C Target Privacy Threat Model](https://w3cping.github.io/privacy-threat-model/). This section discusses the aspects of that threat model that are particularly relevant to Portals and how the design satisfies them.
+The Portals design is intended to comply with the [W3C Target Privacy Threat Model](https://w3cping.github.io/privacy-threat-model/). This section discusses the aspects of that threat model that are particularly relevant to portals and how the design satisfies them.
 
 A portal can contain either a same-site or cross-site resource. Same-site portals don't present any privacy risks, but cross-site resources risk enabling [cross-site recognition](https://w3cping.github.io/privacy-threat-model/#model-cross-site-recognition) by creating a messaging channel across otherwise-partitioned domains. For simplicity, when a cross-site channel needs to be blocked, we also block it for same-site cross-origin portals. In some cases, marked below, we even block it for same-origin portals.
 
-This design assumes that storage will be partitioned or blocked in line with the [storage partitioning proposal](https://github.com/privacycg/storage-partitioning), even though that is not the status quo in all browsers. Because portaled documents can be activated into a top-level browsing context, they (eventually) live in the first-party [storage shelf](https://storage.spec.whatwg.org/#storage-shelf) of their origin. This means we have to prevent communication with the surrounding document to the same extent we prevent it with a cross-site link opened in a new tab.
+Because portaled documents can be activated into a top-level browsing context, they (eventually) live in the first-party [storage shelf](https://storage.spec.whatwg.org/#storage-shelf) of their origin. This means that the usual plan of [storage partitioning](https://github.com/privacycg/storage-partitioning) does not suffice for portals as it does for iframes. Instead, we take the following measures to restrict cross-origin portals:
 
-#### Channels that are blocked
+- Prevent communication with the host document, to the same extent we prevent it with a cross-site link opened in a new tab.
+- Block all storage access while content is portaled.
 
-* [`postMessage()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) isn't allowed between a cross-origin portal and its container.
-* Blocked by preventing fetches within portals from using credentials until they're activated:
-  * The sequence of portal loads: The source page can encode its user ID into the order in which a sequence of URLs are loaded into portals. To prevent the target from correlating this ID with its own user ID without a navigation, a document loaded into a cross-origin portal is fetched without credentials and doesn't have access to either first-party storage or multi-keyed storage. It has to use [`requestStorageAccess()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/requestStorageAccess) (or another TBD mechanism) to get access when it's activated.
-  * The site creates a portal, and the target site decides between a 204 and a real response based on the user's ID. Or the site delays the response by an amount of time that depends on the user's ID. Because the portal load is done without credentials, the site can't get its user ID in order to make this sort of decision.
-* Side channels, further discussed in [Rendering](#rendering):
-  * Portal Resize: JavaScript outside the portal could use a sequence of portal resizes to send a user ID, so a portal's content cannot observe any resizes after creation. If a portal is resized, that just rescales the view of the portal. For simplicity, this is the case for same-origin portals too.
-  * Portal initial size: JavaScript outside the portal could use the initial size to send part of a user ID, so portals are always sized the same as the top-level tab that they'll be activated into and then scaled into the portal element. For simplicity, this is the case for same-origin portals too.
-  * Intersection Observer: Won't give visibility information to script inside the portal, to avoid occlusion being used to send information.
-  * [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API) and the timing of `requestAnimationFrame()` callbacks match the visibility of the top-level page, as in iframes, to prevent the page from encoding messages in visibility changes. However, this leads to the possibility that a portal and containing page could use the timing of user-caused visibility changes to join the user across site boundaries. Whether and how to prevent this is [still under discussion](https://github.com/WICG/portals/issues/193#issuecomment-639768218).
+If we allowed communication, then the portaled content could be given the user ID from the host site. Then, after activation gives the portaled page access to first-party storage, it would join that user ID with information from its own first-party storage to perform cross-site tracking.
 
-#### Channels that match navigation
+If we allowed access to unpartitioned storage, then side channels available pre-activation (e.g., server-side timing correlation) could potentially be used to join two separate user identifiers, one from the host site and one from the portaled site's unpartitioned storage.
 
-* The URL of the activated portal and the referring URL are available to normal navigations to the same extent they're available to a portal. Solutions to link decoration will apply to both.
+The below subsections explore the implementation of these restrictions in more detail.
 
+#### Storage access blocking
 
-TODO:
+Portaled pages that are cross-origin to their host will have no access to storage, similar to how an opaque-origin `<iframe>` behaves. (See this [discussion on the spec mechanism](https://github.com/whatwg/storage/issues/18#issuecomment-615336554).)
+
+We could attempt to address the threat by providing partitioned or ephemeral storage access, but then it is unclear how to transition to _unpartitioned_ storage upon activation. It would likely require some kind of web-developer-written merging logic. Completely blocking storage access is thus deemed simpler; portaled pages should not be doing anything which requires persistent storage before activation.
+
+This means that most existing content will appear "broken" when portaled by a cross-origin host. This necessitates an explicit opt-in to allow cross-origin content to be portaled, [discussed below](#opt-in). Such content might optionally "upgrade" itself to a credentialed view upon activation, as shown in the [example](#example) above.
+
+For a more concrete example, consider `https://aggregator.example/` which wants to prerender this GitHub repository using a `<portal>`. To make this work, GitHub would need to add the opt-in to allow the page to be portaled. Additionally, GitHub should add code to adapt their UI to show the logged-in view upon activation, by removing the "Join GitHub today" banner, and retrieving the user's credentials from storage and using them to replace the signed-out header with the signed-in header. Without such adapter code, activating the portal would show the user a logged-out view of GitHub in the top-level tab that the portal has been activated into. This would be a bad and confusing user experience, since the user is logged in to GitHub in all of their other top-level tabs.
+
+#### Communications channels that are blocked
+
+- [`postMessage()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) isn't allowed between a cross-origin portal and its container.
+- Blocked by preventing fetches within portals from using credentials until they're activated:
+  - The sequence of portal loads: The source page can encode its user ID into the order in which a sequence of URLs are loaded into portals. To prevent the target from correlating this ID with its own user ID without a navigation, a document loaded into a cross-origin portal is fetched without credentials and doesn't have access to either first-party storage or multi-keyed storage. It has to use [`requestStorageAccess()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/requestStorageAccess) (or another TBD mechanism) to get access when it's activated.
+  - The site creates a portal, and the target site decides between a 204 and a real response based on the user's ID. Or the site delays the response by an amount of time that depends on the user's ID. Because the portal load is done without credentials, the site can't get its user ID in order to make this sort of decision.
+- Side channels, further discussed in [Rendering](#rendering):
+  - Portal resize: JavaScript outside the portal could use a sequence of portal resizes to send a user ID, so a portal's content cannot observe any resizes after creation. If a portal is resized, that just rescales the view of the portal. For simplicity, this is the case for same-origin portals too.
+  - Portal initial size: JavaScript outside the portal could use the initial size to send part of a user ID, so portals are always sized the same as the top-level tab that they'll be activated into and then scaled into the portal element. For simplicity, this is the case for same-origin portals too.
+  - [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API): Won't give visibility information to script inside the portal, to avoid occlusion being used to send information.
+  - [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API) and the timing of `requestAnimationFrame()` callbacks match the visibility of the top-level page, as in iframes, to prevent the page from encoding messages in visibility changes. However, this leads to the possibility that a portal and containing page could use the timing of user-caused visibility changes to join the user across site boundaries. Whether and how to prevent this is [still under discussion](https://github.com/WICG/portals/issues/193#issuecomment-639768218).
+
+#### Communications channels that match navigation
+
+As mentioned above, we prevent communications "to the same extent we prevent it with a cross-site link opened in a new tab". In particular:
+
+- The URL of the activated portal and the referring URL are available to portals to the same extent they're available to normal navigations. Solutions to link decoration will apply to both.
+
+#### TODO
 
 - More side channels?
-- Maybe this is also the place to discuss the fact that there's no sync access (even same-origin)?
-- This section might benefit from being split in two.
 - Note that design-discussions.md has discussion about hiding never-activated portals from their servers, which is a different sort of attack than the cross-site tracking we discuss here.
 
-### Permissions and policies
+### Other restrictions while portaled
+
+Apart from the privacy-related restrictions to communications and storage, while portaled, pages are additionally restricted in various ways, to prevent them from interfering with content outside of their rendering area:
+
+- Any features that are controlled by the [Permissions API](https://w3c.github.io/permissions/) ([list](https://w3c.github.io/permissions/#permission-registry)) will be automatically denied without prompting.
+
+- Any features controlled by [Permissions Policy](https://w3c.github.io/webappsec-permissions-policy/) ([list](https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md)) will be disabled, unless their default allowlist is `*`. There is no ability for the host page to delegate these permissions. (In particular, there is no counterpart to `<iframe>`'s `allow=""` attribute.)
+
+- If `window.open()` is used to open a new window (instead of navigate an `<iframe>` inside the portaled content), then it will instead do nothing and return `null`.
+
+After activation, these restrictions are lifted: the portaled content is treated like a normal top-level browsing context, and is able to use all these features in the normal way. The `portalactivate` event can be used to request permissions upon activation, if necessary. (Although doing so gives a user experience equivalent to requesting permissions on load, and thus is rarely the best design.)
 
 TODO:
 
-- Discuss default portaled state. You get no permissions; you inherit (how?) policies. Policies = CSP, document policies, feature policies, referrer policy, ... Anything else?
-- Discuss how things change post-activation.
-- Discuss practices and patterns for site authors, probably mostly from the point of view of someone being portaled that wants to do something permission-requiring once activated.
-- Explicitly point out how activation makes this different from iframes in certain ways, but we still share a lot of the infrastructure.
+- Do these restrictions also apply to same-origin portals?
+- Discuss CSP, document policies, `sandbox=""`, referrer policy... any other policies? Might not belong in this section.
 - Briefly discuss permissions and policies that people might want to impose on portals, including some that aren't proposed yet (like blocking scripts or network access). Note that these will be developed independently, for iframes and portals alike.
-- Somewhere we need to discuss our plans for `X-Frame-Options`, CSP `frame-ancestors`, and portal-specific variants of those? This might be the place for that?
+- Ideally Permissions Policy would become a superset of the Permissions API, and we could use that infrastructure exclusively to shut things down. Currently that is not the case so we have to consult both.
 
 ### Rendering
 
@@ -197,6 +228,16 @@ TODO:
 - Outline our solution for these, in terms of observable effects for users (not in terms of spec primitives).
 - Maybe compare/contrast with iframes. Is it helpful or confusing to talk about how portals are more like popups than iframes? (I.e. they are top-level browsing contexts in spec terms.)
 
+### Opt-in
+
+Because of the [restrictions](#other-restrictions-while-portaled) on portaled content, especially the [storage restrictions](#storage-access-blocking), most existing content is not prepared to be rendered in a portal. As such, content will need to opt-in to being portaled; any content that does not so opt-in will cause the portal to fail to load.
+
+TODO:
+
+- Actually describe the opt-in, once we decide what it is.
+- Explain relation to `X-Frame-Options` and CSP `frame-ancestors`. These opt-outs probably become unnecessary if we have an explicit opt-in?
+- Explain relation to clickjacking. (Which might not be a concern anyway since portals are not deeply interactive?)
+
 ## Summary of differences between portals and iframes
 
 Portals are somewhat reminiscent of iframes, but are different in enough significant ways that we propose them as a new element.
@@ -217,9 +258,13 @@ Finally, the web developer dealing with a portal element's API sees the followin
 
 - Portals can only load `http:` and `https:` URLs. This removes an entire category of confusing interactions regarding `about:blank`, `javascript:`, `blob:`, and `data:` URLs, as well as the `<iframe srcdoc="">` feature and its resulting `about:srcdoc` URLs. Notably, the portaled content will always have an origin derived from its URL, without any inheritance from the host document.
 
-- Portals have a simplified permissioning model, compared to iframe's combination of `allow=""` + `allowfullscreen=""` + `allowpaymentrequest=""` + `sandbox=""`. See [above](#permissions-and-policies) for more on this. (TODO: include a summary when we know what it is. Just `allow=""`?)
+- Pre-activation, portals [cannot cause effects outside of their rendered area](#other-restrictions-while-portaled). In particular, they cannot use features that require permissions; there is no equivalent of `<iframe>`'s `allow=""` attribute which lets portaled pages act on behalf of their host.
 
-TODO: summarize above sections that cause major differences, once they are written: privacy/restrictions, permissions/policies, maybe some more on session history. They may fit as bullets or they might need their own paragraph.
+- Pre-activation, portals [do not have access to storage](#storage-access-blocking); in exchange, they get full access to unpartitioned first-party storage after activation. (In contrast, iframes are moving toward having access to [partitioned storage](https://github.com/privacycg/storage-partitioning) throughout their lifetime.)
+
+- TODO: what's our plan for CSP and `sandbox=""`?
+
+TODO: summarize above sections that cause major differences, once they are written: session history, rendering. Clickjacking? They may fit as bullets or they might need their own paragraph.
 
 ## Alternatives considered
 
