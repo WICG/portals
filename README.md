@@ -151,9 +151,11 @@ For a more concrete example, consider `https://aggregator.example/` which wants 
 
 #### Communications channels that match navigation
 
-As mentioned above, we prevent communications "to the same extent we prevent it with a cross-site link opened in a new tab". In particular:
+As mentioned above, we prevent communications to the same extent we prevent it with a cross-site link opened in a new tab. In particular:
 
-- The URL of the activated portal and the referring URL are available to portals to the same extent they're available to normal navigations. Solutions to link decoration will apply to both.
+- The URL of the portal and the referring URL are available to portals after activation to the same extent they're available to normal navigations. Solutions to link decoration will apply to both.
+
+Note that since a non-activated portal has no storage access, it cannot join any information stored in the URL with any of the portaled site's data. So it's only activation, which gives full first-party storage access, which creates a navigation-equivalent communications channel. This equivalence makes sense, as activating a portal is much like clicking a link.
 
 #### TODO
 
@@ -235,7 +237,7 @@ Because of the [restrictions](#other-restrictions-while-portaled) on portaled co
 TODO:
 
 - Actually describe the opt-in, once we decide what it is.
-- Explain relation to `X-Frame-Options` and CSP `frame-ancestors`. These opt-outs probably become unnecessary if we have an explicit opt-in?
+- Explain relation to `X-Frame-Options` and CSP `frame-ancestors`. These opt-outs probably become unnecessary if we have an explicit opt-in? [#232](https://github.com/WICG/portals/issues/232)
 - Explain relation to clickjacking. (Which might not be a concern anyway since portals are not deeply interactive?)
 
 ## Summary of differences between portals and iframes
