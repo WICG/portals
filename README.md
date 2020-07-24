@@ -263,7 +263,9 @@ When it comes to the host page's CSP, it has the following mechanisms available 
 
 [Document Policy](https://w3c.github.io/webappsec-permissions-policy/document-policy.html) provides a means for documents to configure restrictions on themselves. The impact on portals is the same as with iframes: the `<portal>` element, like the `<iframe>` element, gets a `policy=""` attribute, which can be used to set a required document policy that the portaled page must send via its own `Document-Policy` HTTP response header.
 
-This could be used, for example, by an aggregator which wants to enforce that content previewed in a `<portal>` follows performance best practices. You can see a similar [`<iframe>` example in the document policy explainer](https://github.com/w3c/webappsec-permissions-policy/blob/master/document-policy-explainer.md#enforcing-performance-best-practices-on-embedded-content). Note that because document policies are set once for a document, and are applied by the portaled content to itself, they would apply even after activation.
+This could be used, for example, by an aggregator which wants to enforce that content previewed in a `<portal>` follows performance best practices. You can see a similar [`<iframe>` example in the document policy explainer](https://github.com/w3c/webappsec-permissions-policy/blob/master/document-policy-explainer.md#enforcing-performance-best-practices-on-embedded-content).
+
+Note that because document policies are set once for a document, and are applied by the portaled content to itself, they would apply even after the portaled page is activated. However, upon activation, we would remove the document policy from the newly top-level browsing context's required document policies. Now that the browsing context is no longer a guest, the host does not have the ability to prevent navigation within it.
 
 ## Summary of differences between portals and iframes
 
