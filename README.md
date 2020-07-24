@@ -24,6 +24,7 @@ Portals encompass some of the use cases that iframes currently do, but with bett
   - [Session history, navigation, and bfcache](#session-history-navigation-and-bfcache)
   - [Opt-in](#opt-in)
   - [CSP integration](#csp-integration)
+  - [Document Policy integration](#document-policy-integration)
 - [Summary of differences between portals and iframes](#summary-of-differences-between-portals-and-iframes)
 - [Alternatives considered](#alternatives-considered)
   - [A new attribute on an existing element](#a-new-attribute-on-an-existing-element)
@@ -178,8 +179,7 @@ After activation, these restrictions are lifted: the portaled content is treated
 TODO:
 
 - Do these restrictions also apply to same-origin portals?
-- Discuss document policies, `sandbox=""`, referrer policy... any other policies? Might not belong in this section.
-- Briefly discuss permissions and policies that people might want to impose on portals, including some that aren't proposed yet (like blocking scripts or network access). Note that these will be developed independently, for iframes and portals alike.
+- Discuss `sandbox=""`, referrer policy... any other policies? Might not belong in this section.
 - Ideally Permissions Policy would become a superset of the Permissions API, and we could use that infrastructure exclusively to shut things down. Currently that is not the case so we have to consult both.
 
 ### Rendering
@@ -258,6 +258,12 @@ When it comes to the host page's CSP, it has the following mechanisms available 
 - [`child-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/child-src) is expanded to include portals, in addition to frames and workers.
 - [`default-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src), which serves as a fallback for all fetch directives, will apply to portals.
 - [`navigate-to`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/navigate-to) prevents portal activation (based on the guest browsing context's current URL).
+
+### Document Policy integration
+
+[Document Policy](https://w3c.github.io/webappsec-permissions-policy/document-policy.html) provides a means for documents to configure restrictions on themselves. The impact on portals is the same as with iframes: the `<portal>` element, like the `<iframe>` element, gets a `policy=""` attribute, which can be used to set a required document policy that the portaled page must send via its own `Document-Policy` HTTP response header.
+
+This could be used, for example, by an aggregator which wants to enforce that content previewed in a `<portal>` follows performance best practices. You can see a similar [`<iframe>` example in the document policy explainer](https://github.com/w3c/webappsec-permissions-policy/blob/master/document-policy-explainer.md#enforcing-performance-best-practices-on-embedded-content). Note that because document policies are set once for a document, and are applied by the portaled content to itself, they would apply even after activation.
 
 ## Summary of differences between portals and iframes
 
