@@ -23,6 +23,7 @@ Portals encompass some of the use cases that iframes currently do, but with bett
   - [Accessibility](#accessibility)
   - [Session history, navigation, and bfcache](#session-history-navigation-and-bfcache)
   - [Opt-in](#opt-in)
+  - [CSP integration](#csp-integration)
 - [Summary of differences between portals and iframes](#summary-of-differences-between-portals-and-iframes)
 - [Alternatives considered](#alternatives-considered)
   - [A new attribute on an existing element](#a-new-attribute-on-an-existing-element)
@@ -177,7 +178,7 @@ After activation, these restrictions are lifted: the portaled content is treated
 TODO:
 
 - Do these restrictions also apply to same-origin portals?
-- Discuss CSP, document policies, `sandbox=""`, referrer policy... any other policies? Might not belong in this section.
+- Discuss document policies, `sandbox=""`, referrer policy... any other policies? Might not belong in this section.
 - Briefly discuss permissions and policies that people might want to impose on portals, including some that aren't proposed yet (like blocking scripts or network access). Note that these will be developed independently, for iframes and portals alike.
 - Ideally Permissions Policy would become a superset of the Permissions API, and we could use that infrastructure exclusively to shut things down. Currently that is not the case so we have to consult both.
 
@@ -240,6 +241,24 @@ TODO:
 - Explain relation to `X-Frame-Options` and CSP `frame-ancestors`. These opt-outs probably become unnecessary if we have an explicit opt-in? [#232](https://github.com/WICG/portals/issues/232)
 - Explain relation to clickjacking. (Which might not be a concern anyway since portals are not deeply interactive?)
 
+### CSP integration
+
+CSP has various interactions with embedded content and navigations. We propose the following integrations for portals.
+
+A portaled page can apply CSP as normal. In terms of the CSP applied by the portaled content to itself, being portaled has the following minor impacts, analogous to similar impacts on iframed content:
+
+- The [`frame-ancestors`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors) CSP directive, applied to the portaled content, might prevent the content from loading if it is portaled. (See [#232](https://github.com/WICG/portals/issues/232) for ongoing discussion on this point.)
+- [CSP Embedded Enforcement](https://w3c.github.io/webappsec-cspee/) can be used by the host page, via a `csp=""` attribute on the `<portal>` element, to require that the portaled content apply certain CSP directives if it wants to load in the portal.
+
+(Note that since portals do not allow hosting of `data:` URLs, `javascript:` URLs, `about:blank`, etc., there is never any inheritance from the host's CSP into the guest browsing context, like there sometimes is with iframes and their nested browsing context.)
+
+When it comes to the host page's CSP, it has the following mechanisms available to prevent content from being loaded into a portal, or being activated:
+
+- A new [fetch directive](https://w3c.github.io/webappsec-csp/#directives-fetch), `portal-src`, is introduced, which can be used to restrict what URLs can be loaded into `<portal>` elements.
+- [`child-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/child-src) is expanded to include portals, in addition to frames and workers.
+- [`default-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src), which serves as a fallback for all fetch directives, will apply to portals.
+- [`navigate-to`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/navigate-to) prevents portal activation (based on the guest browsing context's current URL).
+
 ## Summary of differences between portals and iframes
 
 Portals are somewhat reminiscent of iframes, but are different in enough significant ways that we propose them as a new element.
@@ -258,13 +277,13 @@ Finally, the web developer dealing with a portal element's API sees the followin
 
 - Portals cannot be made to navigate from the outside in the way iframes (or popups) can, via `window.open(url, iframeName)`.
 
-- Portals can only load `http:` and `https:` URLs. This removes an entire category of confusing interactions regarding `about:blank`, `javascript:`, `blob:`, and `data:` URLs, as well as the `<iframe srcdoc="">` feature and its resulting `about:srcdoc` URLs. Notably, the portaled content will always have an origin derived from its URL, without any inheritance from the host document.
+- Portals can only load `http:` and `https:` URLs. This removes an entire category of confusing interactions regarding `about:blank`, `javascript:`, `blob:`, and `data:` URLs, as well as the `<iframe srcdoc="">` feature and its resulting `about:srcdoc` URLs. Notably, the portaled content will always have an origin and CSP derived from its URL, without any inheritance from the host document.
 
 - Pre-activation, portals [cannot cause effects outside of their rendered area](#other-restrictions-while-portaled). In particular, they cannot use features that require permissions; there is no equivalent of `<iframe>`'s `allow=""` attribute which lets portaled pages act on behalf of their host.
 
 - Pre-activation, portals [do not have access to storage](#storage-access-blocking); in exchange, they get full access to unpartitioned first-party storage after activation. (In contrast, iframes are moving toward having access to [partitioned storage](https://github.com/privacycg/storage-partitioning) throughout their lifetime.)
 
-- TODO: what's our plan for CSP and `sandbox=""`?
+- TODO: what's our plan for `sandbox=""`?
 
 TODO: summarize above sections that cause major differences, once they are written: session history, rendering. Clickjacking? They may fit as bullets or they might need their own paragraph.
 
