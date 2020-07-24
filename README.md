@@ -195,7 +195,7 @@ From the developer's perspective, a portal context can be thought of as having a
 
 We want the history model for portals to conform to users' expectations of the back button. Specifically, the back button should take them back to the last thing they saw. To accommodate this, the portal context should not have an independent session history which we aggregate with its host context to present to the user. To illustrate how this could cause problems, consider `example.com/a.html` loading `b.html` in a portal, then navigating the portal to `c.html`, then activating the portal. If the user pressed the back button, it would not be appropriate to navigate the top level page to `b.html`, since this is a state the user has not seen before. Even for states that the user has seen previously, having a single navigation reintroduce potentially multiple history states maps poorly to the web's chronological history model, as opposed to the mental models for tab switching or mobile device style multitasking.
 
-Navigations within portals are subject to certain security restrictions. Notably, content that does not allow embedding (e.g. via `X-Frame-Options` [see above](#permissions-and-policies)) cannot load in a portal. Furthermore, both the portal host and the portal content must use an HTTP(S) scheme. This is in order to establish the origin of the content for it to be used safely.
+Navigations within portals are subject to certain security restrictions for loading embedded content ([see above](#permissions-and-policies)). Furthermore, both the portal host and the portal content must use an HTTP(S) scheme, in order to establish their origins.
 
 Navigation errors within portals may cause portal activation to be rejected. Instead of, for example, the user agent showing an error page to the user as with a conventional navigation, the promise returned by the activate method allows a page to gracefully handle the rejection. Furthermore, user agents have existing limitations on navigations initiated by the page where they may be ignored if they are considered to conflict with a user's intent to perform a different navigation. Such cases are not described by the existing navigation spec (see [#218](https://github.com/WICG/portals/issues/218)), but portal activations are subject to these limitations. In the case where another navigation takes precedence over portal activation, the promise returned by the activate method rejects.
 
@@ -206,6 +206,7 @@ TODO:
 - Outline our solution for these, in terms of observable effects for users (not in terms of spec primitives).
 - Describe an option for activating portals with replacement.
 - Describe an option for activating adopted portals which traverses session history.
+- Is it acceptable to reject activation when a portal is in an error state? Doing otherwise seems unergonomic ([#228](https://github.com/WICG/portals/issues/228)).
 - Currently, if no navigation has ever matured in the portal context, we reject activation. This is unergonomic (see [#191](https://github.com/WICG/portals/issues/191)). Explore options such as waiting to resolve/reject the promise while the initial navigation is in progress.
 
 ## Summary of differences between portals and iframes
