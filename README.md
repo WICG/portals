@@ -265,7 +265,7 @@ When it comes to the host page's CSP, it has the following mechanisms available 
 
 This could be used, for example, by an aggregator which wants to enforce that content previewed in a `<portal>` follows performance best practices. You can see a similar [`<iframe>` example in the document policy explainer](https://github.com/w3c/webappsec-permissions-policy/blob/master/document-policy-explainer.md#enforcing-performance-best-practices-on-embedded-content).
 
-Note that because document policies are set once for a document, and are applied by the portaled content to itself, they would apply even after the portaled page is activated. However, upon activation, we would remove the document policy from the newly top-level browsing context's required document policies. Now that the browsing context is no longer a guest, the host does not have the ability to prevent navigation within it.
+Note that because document policies are set once for a document, and are applied by the portaled content to itself, they would apply even after the portaled page is activated. However, upon activation, we would remove the document policy from the newly top-level browsing context's required document policies. This means that future loads would not be constrained by the `policy=""`-derived document policy. This makes sense: now that the browsing context is no longer a guest, the host must not have the ability to prevent navigation within it.
 
 ## Summary of differences between portals and iframes
 
