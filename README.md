@@ -222,13 +222,25 @@ Authors should respect the `prefers-reduced-motion` media query by conditionally
 
 ### Session history, navigation, and bfcache
 
+From the user's perspective, a portal activation behaves like a conventional navigation. The content of the portal is appended to session history with any existing forward history entries pruned. Any navigations within a portal do not affect session history.
+
+From the developer's perspective, a portal context can be thought of as having a trivial [session history](https://html.spec.whatwg.org/multipage/history.html#the-session-history-of-browsing-contexts) where only one entry, the current entry, exists. All navigations within the portal are effectively done with replacement. While APIs that operate on session history, such as [window.history](https://html.spec.whatwg.org/multipage/history.html#the-history-interface), can be called within portal contexts, they only operate on the portal's trivial session history. Consequently, portals cannot navigate their hosts using these APIs, unlike iframes.
+
+We want the history model for portals to conform to users' expectations of the back button. Specifically, the back button should take them back to the last thing they saw. To accommodate this, the portal context should not have an independent session history which we aggregate with its host context to present to the user. To illustrate how this could cause problems, consider `example.com/a.html` loading `b.html` in a portal, then navigating the portal to `c.html`, then activating the portal. If the user pressed the back button, it would not be appropriate to navigate the top level page to `b.html`, since this is a state the user has not seen before. Instead, the user is returned to `a.html` (potentially restored from adoption/bfcache) which is the last page they saw. Even for states that the user has seen previously, having a single navigation reintroduce potentially multiple history states maps poorly to the web's chronological history model, as opposed to the mental models for tab switching or mobile device style multitasking.
+
+Navigations within portals are subject to certain security restrictions for loading embedded content ([see above](#permissions-and-policies)). Furthermore, both the portal host and the portal content must use an HTTP(S) scheme, in order to establish their origins.
+
+Navigation errors within portals may cause portal activation to be rejected. Instead of, for example, the user agent showing an error page to the user as with a conventional navigation, the promise returned by the activate method allows a page to gracefully handle the rejection. Furthermore, user agents have existing limitations on navigations initiated by the page where they may be ignored if they are considered to conflict with a user's intent to perform a different navigation. Such cases are not described by the existing navigation spec (see [#218](https://github.com/WICG/portals/issues/218)), but portal activations are subject to these limitations. In the case where another navigation takes precedence over portal activation, the promise returned by the activate method rejects.
+
 TODO:
 
-- One-sentence reiteration of how activation is a navigation.
-- Talk about how session history is tricky.
 - Talk about how bfcache is tricky.
+- Describe reversing transitions on back with bfcache and adopted portals.
 - Outline our solution for these, in terms of observable effects for users (not in terms of spec primitives).
-- Maybe compare/contrast with iframes. Is it helpful or confusing to talk about how portals are more like popups than iframes? (I.e. they are top-level browsing contexts in spec terms.)
+- Describe an option for activating portals with replacement.
+- Describe an option for activating adopted portals which traverses session history.
+- Is it acceptable to reject activation when a portal is in an error state? Doing otherwise seems unergonomic ([#228](https://github.com/WICG/portals/issues/228)).
+- Currently, if no navigation has ever matured in the portal context, we reject activation. This is unergonomic (see [#191](https://github.com/WICG/portals/issues/191)). Explore options such as waiting to resolve/reject the promise while the initial navigation is in progress.
 
 ### Opt-in
 
@@ -254,7 +266,7 @@ Finally, the web developer dealing with a portal element's API sees the followin
 
 - Similarly, portaled `Window` objects are not accessible via accessors like `window.iframeName` or `window[0]`, and they cannot access related `Window` objects via `top` or `parent` (or `opener`).
 
-- Navigations within a pre-activation portal do not affect session history. In contrast, navigating an iframe creates a new session history entry, and affects the resulting back button behavior.
+- Navigations and history APIs within a pre-activation portal do not affect session history (see [above](#session-history-navigation-and-bfcache)). In contrast, navigating an iframe creates a new session history entry, and affects the resulting back button behavior.
 
 - Portals cannot be made to navigate from the outside in the way iframes (or popups) can, via `window.open(url, iframeName)`.
 
