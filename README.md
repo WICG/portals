@@ -168,7 +168,7 @@ Note that since a non-activated portal has no storage access, it cannot join any
 
 Apart from the privacy-related restrictions to communications and storage, while portaled, pages are additionally restricted in various ways, to prevent them from interfering with content outside of their rendering area:
 
-- Portals are top-level browsing contexts, and given their own [browsing context group](https://html.spec.whatwg.org/multipage/browsers.html#groupings-of-browsing-contexts). This means they cannot synchronously access their embedder, e.g. to navigate it or modify its DOM (even when same-origin).
+- Portals are top-level browsing contexts, and given their own [browsing context group](https://html.spec.whatwg.org/multipage/browsers.html#groupings-of-browsing-contexts). This means they cannot synchronously access their embedder, e.g. to navigate it or modify its DOM.
 
 - Any features that are controlled by the [Permissions API](https://w3c.github.io/permissions/) ([list](https://w3c.github.io/permissions/#permission-registry)) will be automatically denied without prompting.
 
@@ -180,9 +180,7 @@ After activation, these restrictions are lifted: the portaled content is treated
 
 _Note: ideally Permissions Policy would become a superset of the Permissions API and iframe sandboxing. Then we could use that infrastructure as the single place to impose and lift these restrictions. Currently that is not the case, so the spec will be more messy._
 
-TODO:
-
-- Do all of these restrictions also apply to same-origin portals? I lean towards "yes"?
+All of these restrictions apply uniformly to both same-origin and cross-origin portals, for simplicity. We could consider lifting some of them for same-origin portals in the future, if use cases arise.
 
 ### Rendering
 
@@ -269,6 +267,8 @@ When it comes to the host page's CSP, it has the following mechanisms available 
 - [`child-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/child-src) is expanded to include portals, in addition to frames and workers.
 - [`default-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src), which serves as a fallback for all fetch directives, will apply to portals.
 - [`navigate-to`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/navigate-to) prevents portal activation (based on the guest browsing context's current URL).
+
+This fetch directive design is not finalized; in particular the relationship to `frame-src` and `prefetch-src` is still up for discussion. We're tracking that in [#240](https://github.com/WICG/portals/issues/240).
 
 ### Embedder-imposed policies and delegation
 
