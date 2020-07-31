@@ -23,6 +23,8 @@ Portals encompass some of the use cases that iframes currently do, but with bett
   - [Accessibility](#accessibility)
   - [Session history, navigation, and bfcache](#session-history-navigation-and-bfcache)
   - [Opt-in](#opt-in)
+  - [CSP integration](#csp-integration)
+  - [Embedder-imposed policies and delegation](#embedder-imposed-policies-and-delegation)
 - [Summary of differences between portals and iframes](#summary-of-differences-between-portals-and-iframes)
 - [Alternatives considered](#alternatives-considered)
   - [A new attribute on an existing element](#a-new-attribute-on-an-existing-element)
@@ -166,20 +168,19 @@ Note that since a non-activated portal has no storage access, it cannot join any
 
 Apart from the privacy-related restrictions to communications and storage, while portaled, pages are additionally restricted in various ways, to prevent them from interfering with content outside of their rendering area:
 
+- Portals are top-level browsing contexts, and given their own [browsing context group](https://html.spec.whatwg.org/multipage/browsers.html#groupings-of-browsing-contexts). This means they cannot synchronously access their embedder, e.g. to navigate it or modify its DOM.
+
 - Any features that are controlled by the [Permissions API](https://w3c.github.io/permissions/) ([list](https://w3c.github.io/permissions/#permission-registry)) will be automatically denied without prompting.
 
 - Any features controlled by [Permissions Policy](https://w3c.github.io/webappsec-permissions-policy/) ([list](https://github.com/w3c/webappsec-permissions-policy/blob/master/features.md)) will be disabled, unless their default allowlist is `*`. There is no ability for the host page to delegate these permissions. (In particular, there is no counterpart to `<iframe>`'s `allow=""` attribute.)
 
-- If `window.open()` is used to open a new window (instead of navigate an `<iframe>` inside the portaled content), then it will instead do nothing and return `null`.
+- Popups, pointer lock, orientation lock, the presentation API, downloads, and modal dialogs (`alert()` etc.) all are disabled pre-activation. (These are features which are currently only possible to disable with through [iframe sandboxing](https://html.spec.whatwg.org/multipage/origin.html#sandboxing).)
 
 After activation, these restrictions are lifted: the portaled content is treated like a normal top-level browsing context, and is able to use all these features in the normal way. The `portalactivate` event can be used to request permissions upon activation, if necessary. (Although doing so gives a user experience equivalent to requesting permissions on load, and thus is rarely the best design.)
 
-TODO:
+_Note: ideally Permissions Policy would become a superset of the Permissions API and iframe sandboxing. Then we could use that infrastructure as the single place to impose and lift these restrictions. Currently that is not the case, so the spec will be more messy._
 
-- Do these restrictions also apply to same-origin portals?
-- Discuss CSP, document policies, `sandbox=""`, referrer policy... any other policies? Might not belong in this section.
-- Briefly discuss permissions and policies that people might want to impose on portals, including some that aren't proposed yet (like blocking scripts or network access). Note that these will be developed independently, for iframes and portals alike.
-- Ideally Permissions Policy would become a superset of the Permissions API, and we could use that infrastructure exclusively to shut things down. Currently that is not the case so we have to consult both.
+All of these restrictions apply uniformly to both same-origin and cross-origin portals, for simplicity. We could consider lifting some of them for same-origin portals in the future, if use cases arise.
 
 ### Rendering
 
@@ -252,6 +253,42 @@ TODO:
 - Explain relation to `X-Frame-Options` and CSP `frame-ancestors`. These opt-outs probably become unnecessary if we have an explicit opt-in? [#232](https://github.com/WICG/portals/issues/232)
 - Explain relation to clickjacking. (Which might not be a concern anyway since portals are not deeply interactive?)
 
+### CSP integration
+
+CSP has various interactions with embedded content and navigations. We propose the following integrations for portals.
+
+A portaled page can apply CSP to itself as normal. Just like iframes, these policies are generally self-contained; only the [`frame-ancestors`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors) CSP directive's behavior will vary depending on whether the content is portaled or not. (See also [#232](https://github.com/WICG/portals/issues/232) for ongoing discussion on this point.)
+
+Note that since portals do not allow hosting of `data:` URLs, `javascript:` URLs, `about:blank`, etc., there is never any inheritance from the host's CSP into the guest browsing context, like there sometimes is with iframes and their nested browsing context.
+
+When it comes to the host page's CSP, it has the following mechanisms available to prevent content from being loaded into a portal, or being activated:
+
+- A new [fetch directive](https://w3c.github.io/webappsec-csp/#directives-fetch), `portal-src`, is introduced, which can be used to restrict what URLs can be loaded into `<portal>` elements.
+- [`child-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/child-src) is expanded to include portals, in addition to frames and workers.
+- [`default-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src), which serves as a fallback for all fetch directives, will apply to portals.
+- [`navigate-to`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/navigate-to) prevents portal activation (based on the guest browsing context's current URL).
+
+This fetch directive design is not finalized; in particular the relationship to `frame-src` and `prefetch-src` is still up for discussion. We're tracking that in [#240](https://github.com/WICG/portals/issues/240).
+
+### Embedder-imposed policies and delegation
+
+Portals, unlike iframes, do _not_ provide mechanisms for the embedder to impose policies or delegate permissions. Namely, there is no counterpart to the following `<iframe>` attributes:
+
+- `csp=""`, for triggering [CSP Embedded Enforcement](https://w3c.github.io/webappsec-cspee/)
+- `policy=""`, for triggering [Document Policy](https://w3c.github.io/webappsec-permissions-policy/document-policy.html)
+- `sandbox=""`, for triggering [sandboxing](https://html.spec.whatwg.org/multipage/origin.html#sandboxing)
+- `allow=""`/`allowfullscreen=""`/`allowpaymentrequest=""`, for triggering [Permissions Policy](https://w3c.github.io/webappsec-permissions-policy/)
+
+This is a design choice based on the fact that portaling a page is more like linking to it than it is like embedding it, as discussed [below](#summary-of-differences-between-portals-and-iframes).
+
+In particular, after portal activation, it doesn't make sense for the host page to impose policies or delegate permissions. At that point the portaled content has become a full top-level browsing context, out of the original host's control. It might even navigate to a completely unrelated site, e.g. through the user clicking on an outgoing link.
+
+So, any mechanism for supporting this kind of embedder control or delegation would need to switch off upon activation. But these features aren't designed to do that; they all are imposed for the entire lifetime of the browsing context. We could try to create variants of them that only lasted for a document's lifetime, instead of an entire browsing context's lifetime, but this would pile confusion on top of an already-complicated space.
+
+An additional reason for avoiding these mechanisms is that it makes writing portalable content even harder. Not only would the content author have to deal with browser-imposed pre-activation [communications and storage restrictions](https://github.com/WICG/portals#privacy-threat-model-and-restrictions) and [restrictions to prevent it from acting outside of its rendered area](https://github.com/WICG/portals#other-restrictions-while-portaled)—it would also have to deal with embedder-specific restrictions, which could vary from embedder to embedder. Since, unlike iframes, portaled content generally wants to be portaled by many different embedders (e.g. different content aggregators all using portals for prerendering), this kind of ecosystem fragmentation is undesirable.
+
+To conclude, instead of giving embedders this control as iframes do, we believe that the browser can take the role of mitigating any problematic features. For example, instead of requiring embedders to use `sandbox=""` to turn off modal `alert()`/`confirm()`/`prompt()` dialogs, or permissions policy to turn off autoplaying media, those features are [always disabled](https://github.com/WICG/portals#other-restrictions-while-portaled) in pre-activation portals. And because portals are isolated from communicating with their embedder pre-activation, any problems which CSP Embedded Enforcement would attempt to protect against will instead be caught by this communications barrier and prevented from impacting the embedder.
+
 ## Summary of differences between portals and iframes
 
 Portals are somewhat reminiscent of iframes, but are different in enough significant ways that we propose them as a new element.
@@ -276,7 +313,7 @@ Finally, the web developer dealing with a portal element's API sees the followin
 
 - Pre-activation, portals [do not have access to storage](#storage-access-blocking); in exchange, they get full access to unpartitioned first-party storage after activation. (In contrast, iframes are moving toward having access to [partitioned storage](https://github.com/privacycg/storage-partitioning) throughout their lifetime.)
 
-- TODO: what's our plan for CSP and `sandbox=""`?
+- Portals, like links but unlike iframes, [cannot have policies imposed on them](#embedder-imposed-policies-and-delegation) by the embedding page.
 
 TODO: summarize above sections that cause major differences, once they are written: session history, rendering. Clickjacking? They may fit as bullets or they might need their own paragraph.
 
