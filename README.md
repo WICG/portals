@@ -199,7 +199,7 @@ TODO:
 
 ### Interactivity
 
-Portals enable preloading, previewing and seamless transitions to another web page. They are expected to often be partially or fully offscreen, scaled, faded or otherwise styled in a way that makes them unnatural to interact with directly. Additionally, we expect many web pages to allow themselves to be loaded in a portal for the purposes of facilitating a seamless transition, but wish to mitigate certain kinds of threat (e.g. some forms of clickjacking) from an embedder who may not be fully trusted.
+Portals enable preloading, previewing and seamless transitions to another web page. They are expected to often be partially or fully offscreen, scaled, faded or otherwise styled in a way that makes them unnatural to interact with directly. Additionally, we expect many web pages to allow themselves to be loaded in a portal for the purposes of facilitating a seamless transition, but wish to mitigate certain kinds of threat (e.g. some forms of [clickjacking](https://owasp.org/www-community/attacks/Clickjacking)) from an embedder who may not be fully trusted.
 
 Therefore the portal content cannot be focused and does not receive input events. Instead, the `<portal>` element itself is focusable (similar to a button or link) and eligible to receive input events (such as clicks) in the host document. For instance, the host document may handle this click event to animate and activate the `<portal>` element and navigate to the target document. If not handled, clicking will activate the `<portal>` immediately.
 
@@ -251,7 +251,6 @@ TODO:
 
 - Actually describe the opt-in, once we decide what it is.
 - Explain relation to `X-Frame-Options` and CSP `frame-ancestors`. These opt-outs probably become unnecessary if we have an explicit opt-in? [#232](https://github.com/WICG/portals/issues/232)
-- Explain relation to clickjacking. (Which might not be a concern anyway since portals are not deeply interactive?)
 
 ### CSP integration
 
@@ -299,6 +298,8 @@ From the perspective of implementers and specification authors, portals behave s
 
 Finally, the web developer dealing with a portal element's API sees the following differences from iframes:
 
+- Portaled content needs to [opt-in](#opt-in) to being portaled. Iframed content can only opt-out from being iframed (via `X-Frame-Options` or CSP's `frame-ancestors`).
+
 - Even same-origin portals do not provide synchronous DOM access to the portaled `Window` or `Document` objects, whereas iframes give such access via `frame.contentWindow`/`frame.contentDocument`. This gives a more uniform isolation boundary for more predictable performance and security.
 
 - Similarly, portaled `Window` objects are not accessible via accessors like `window.iframeName` or `window[0]`, and they cannot access related `Window` objects via `top` or `parent` (or `opener`).
@@ -315,7 +316,7 @@ Finally, the web developer dealing with a portal element's API sees the followin
 
 - Portals, like links but unlike iframes, [cannot have policies imposed on them](#embedder-imposed-policies-and-delegation) by the embedding page.
 
-TODO: summarize above sections that cause major differences, once they are written: session history, rendering. Clickjacking? They may fit as bullets or they might need their own paragraph.
+TODO: summarize above sections that cause major differences, once they are written: session history, rendering.
 
 ## Alternatives considered
 
@@ -351,12 +352,13 @@ Finally, we believe that attempting to classify a portal as a "type of iframe" o
 
 ## Security and privacy considerations
 
-TODO:
+_See also the [W3C TAG Security and Privacy Questionnaire answers](./security-and-privacy-questionnaire.md)._
 
-- Can reference privacy threat model and restrictions above (or however that splits into sections when written)
-- Eventually content here should be incorporated into the spec, but for now let's develop it in the explainer
+The main privacy concern with portals, as with all embedded content, is cross-site tracking. The threat model here is outlined in great detail [above](#privacy-threat-model-and-restrictions), as are the mitigations that portals apply to prevent such tracking. The summary is that portals are much better in this regard than iframes, and instead are designed to have the same privacy properties as links. That is, cross-site tracking is possible using link decoration on the `<portal>`'s `src=""` attribute, similar to the `<a>` element's `href=""`, but this tracking will only be possible once the portal activates/link navigates, which causes a very-user-visible full-page transition to the portaled/linked site.
 
-See also the [W3C TAG Security and Privacy Questionnaire answers](./security-and-privacy-questionnaire.md).
+On the security side, portals are a new element which can emit requests and run script. Although much of the potential damage that a portal could cause is mitigated by the privacy protections—e.g., unlike the `<iframe>` or `<script>` elements, there is no direct access to the host document—it is still important to provide control over portals through the usual mechanisms. This is where our [CSP integration](#csp-integration) comes in.
+
+Finally, any embedded content naturally gives rise to concerns about [clickjacking](https://owasp.org/www-community/attacks/Clickjacking). For portals, this is not a concern: user interaction [does not pass through to the portaled document](#interactivity).
 
 ## Stakeholder feedback
 
