@@ -44,7 +44,7 @@ Not in itself. Portaled content can use existing script execution and loading me
 
 ## Does this specification allow an origin to access other devices?
 
-No, only to web servers.
+No, only web servers.
 
 ## Does this specification allow an origin some measure of control over a user agent’s native UI?
 
