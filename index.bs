@@ -333,8 +333,8 @@ spec:url; type:dfn; text:scheme
           [CEReactions] attribute USVString src;
           [CEReactions] attribute DOMString referrerPolicy;
 
-          [NewObject] Promise<void> activate(optional PortalActivateOptions options);
-          void postMessage(any message, optional PostMessageOptions options = {});
+          [NewObject] Promise<undefined> activate(optional PortalActivateOptions options = {});
+          undefined postMessage(any message, optional PostMessageOptions options = {});
 
           attribute EventHandler onmessage;
           attribute EventHandler onmessageerror;
@@ -730,7 +730,7 @@ spec:url; type:dfn; text:scheme
   <xmp class="idl">
       [Exposed=Window]
       interface PortalHost : EventTarget {
-          void postMessage(any message, optional PostMessageOptions options);
+          undefined postMessage(any message, optional PostMessageOptions options = {});
 
           attribute EventHandler onmessage;
           attribute EventHandler onmessageerror;
