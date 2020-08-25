@@ -28,6 +28,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: create a new top-level browsing context; url: creating-a-new-top-level-browsing-context
         urlPrefix: browsing-the-web.html
             text: prompt to unload; url: prompt-to-unload-a-document
+            text: reserved environment; for: navigation params; url: navigation-params-reserved-environment
         urlPrefix: common-dom-interfaces.html
             text: limited to only known values; url: limited-to-only-known-values
             text: reflect; url: reflect
@@ -540,14 +541,15 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     1. [=Navigate=] |guestBrowsingContext| to |resource|.
 
     <div class="note">
-      Unlike an <{iframe}> element, a <{portal}> element supports a state where
-      it has no associated browsing context. This is the initial state of a
-      <{portal}> element (i.e., it has no initial `about:blank` document;
-      instead it navigates directly to the first parsable URL assigned to it).
+      Unlike an <{iframe}> element, a <{portal}> element supports a state where it has no associated
+      browsing context. This is the initial state of a <{portal}> element. That is, the [=portal
+      browsing context=] has no web-developer-visible initial `about:blank` {{Document}}; instead it
+      [=navigates=] directly to the first parsable URL assigned to it, and if the navigation cannot
+      finish successfully, it [=close a browsing context|closes=] the browsing context before the
+      navigation algorithm finishes.
 
-      Similarly, a <{portal}> element responds to an unparsable <{portal/src}>
-      URL by [=close a browsing context|closing=] its browsing context, rather
-      than by navigating to `about:blank`.
+      Similarly, a <{portal}> element responds to an unparsable <{portal/src}> URL by [=close a
+      browsing context|closing=] its browsing context, rather than by navigating to `about:blank`.
     </div>
   </section>
 
@@ -970,6 +972,69 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
   <wpt>
     portals-close-window.html
   </wpt>
+
+  Navigation {#patch-navigation}
+  ------------------------------
+
+  Patch the <a spec=HTML>navigate</a> algorithm to prevent certain navigations in a
+  portal as follows:
+
+  <div algorithm="navigate patch">
+    In <a spec=HTML>navigate</a>, in the case where <var ignore>resource</var> is a [=request=]
+    whose [=request/url=]'s [=url/scheme=] is "`javascript`", prepend the following step as the
+    first step of the queued task:
+
+    1. If |browsingContext|'s [=portal state=] is not "`none`", then [=close a portal
+        element|close=] |browsingContext|'s [=host element=] and abort these steps.
+  </div>
+
+  <div algorithm="process a navigate response patch">
+    In <a spec=HTML>process a navigate response</a>, append the following after the step which
+    establishes the value of |failure|, but before the step which uses it to display an error page:
+
+    1. If |browsingContext|'s [=portal state=] is not "`none`", and any of the following hold:
+
+          * |failure| is true;
+          * |response|'s [=response/url=] is null;
+          * |response| has a \``Content-Disposition`\` header specifying the `attachment`
+              disposition type; or
+          * |response|'s [=response/status=] is 204 or 205,
+
+        then:
+
+        1. If |browsingContext|'s only entry in its [=session history=] is the initial `about:blank`
+            {{Document}}, then:
+            1. [=Close a portal element|Close=] |browsingContext|'s [=host element=].
+            1. Run the [=environment discarding steps=] for <var ignore>navigationParam</var>'s
+                [=navigation params/reserved environment=].
+            1. Return.
+        1. Otherwise, return.
+
+        <p class="note">If |response| has a non-null [=response/url=], then that URL's
+        [=url/scheme=] will always be a [=HTTP(S) scheme=].</p>
+  </div>
+
+  <div algorithm="process a navigate URL scheme patch">
+    In <a spec=HTML>process a navigate URL scheme</a>, insert the following step before the step
+    which displays inline content:
+
+    1. Otherwise, if |browsingContext|'s [=portal state=] is not "`none`", then [=close a portal
+        element|close=] |browsingContext|'s [=host element=].
+  </div>
+
+  Downloading resources {#patch-downloading}
+  ------------------------------------------
+
+  Modify the <a spec=HTML>allowed to download</a> algorithm to ensure that portaled content never
+  performs downloads, by prepending the following steps:
+
+  <div algorithm="allowed to download patch">
+    1. If <var ignore>initiator browsing context</var>'s [=portal state=] is not "`none`", then
+        return false.
+
+    1. If <var ignore>instantiator browsing context</var>'s [=portal state=] is not "`none`", then
+        return false.
+  </div>
 
 </section>
 
