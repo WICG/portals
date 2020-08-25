@@ -363,7 +363,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. Let |serializeWithTransferResult| be
         [$StructuredSerializeWithTransfer$](|options|["{{PortalActivateOptions/data}}"],
-        |options|["`transfer`"]).
+        |options|["{{PostMessageOptions/transfer}}"]).
         Rethrow any exceptions.
 
     1. Let |promise| be a new [=promise=].
@@ -395,7 +395,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s [=environment settings object/origin=].
 
-    1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
+    1. Let |transfer| be |options|["{{PostMessageOptions/transfer}}"].
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
@@ -742,7 +742,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s [=environment settings object/origin=].
 
-    1. Let |transfer| be |options|["{{WindowPostMessageOptions|transfer}}"].
+    1. Let |transfer| be |options|["{{PostMessageOptions/transfer}}"].
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
