@@ -1507,7 +1507,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-08-25">25 August 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-08-27">27 August 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1557,6 +1557,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <ol class="toc">
       <li><a href="#patch-messageevent"><span class="secno">4.1</span> <span class="content">The <code class="idl"><span>MessageEvent</span></code> interface</span></a>
       <li><a href="#patch-event-handlers"><span class="secno">4.2</span> <span class="content">Event handlers</span></a>
+      <li><a href="#patch-window-apis"><span class="secno">4.3</span> <span class="content">APIs for creating and navigating browsing contexts by name</span></a>
      </ol>
     <li>
      <a href="#other-spec-updates"><span class="secno">5</span> <span class="content">Updates to other specifications</span></a>
@@ -2303,6 +2304,23 @@ to deliver the message.</p>
        <td>Fired at the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window⑥">Window</a></code> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing context</a> when that <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①②">portal browsing
         context</a> is activated.
     </table>
+    <h3 class="heading settled" data-level="4.3" id="patch-window-apis"><span class="secno">4.3. </span><span class="content">APIs for creating and navigating browsing contexts by name</span><a class="self-link" href="#patch-window-apis"></a></h3>
+    <p>Modify the definition of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#script-closable" id="ref-for-script-closable">script-closable</a> to prevent window closing while in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①③">portal browsing context</a>:</p>
+    <p>A <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context⑤">browsing context</a> is <dfn data-dfn-type="dfn" data-noexport id="script-closable">script-closable<a class="self-link" href="#script-closable"></a></dfn> if either of the following is true:</p>
+    <ul>
+     <li data-md>
+      <p>it is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#auxiliary-browsing-context" id="ref-for-auxiliary-browsing-context①">auxiliary browsing context</a> that was created by script (as opposed to by an action
+of the user); or</p>
+     <li data-md>
+      <p>
+       it is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context④">top-level browsing context</a> 
+       <ins>whose <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①④">portal state</a> is "<code>none</code>"</ins>
+        and whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/history.html#session-history" id="ref-for-session-history①">session history</a> contains only one <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code>.
+      </p>
+    </ul>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-close-window.html">portals-close-window.html</a> <a href="http://web-platform-tests.live/portals/portals-close-window.html" title="portals/portals-close-window.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-close-window.html"><small>(source)</small></a>
+    </ul>
    </section>
    <section>
     <h2 class="heading settled" data-level="5" id="other-spec-updates"><span class="secno">5. </span><span class="content">Updates to other specifications</span><a class="self-link" href="#other-spec-updates"></a></h2>
@@ -2313,7 +2331,7 @@ to deliver the message.</p>
      <ol>
       <li data-md>
        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-initiator" id="ref-for-concept-request-initiator">initiator</a> is "", its <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination" id="ref-for-concept-request-destination">destination</a> is "<code>document</code>", and
-its <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-reserved-client" id="ref-for-concept-request-reserved-client">reserved client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context">target browsing context</a> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①③">portal browsing
+its <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-reserved-client" id="ref-for-concept-request-reserved-client">reserved client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context">target browsing context</a> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①④">portal browsing
 context</a>, return <code>frame-src</code>.</p>
      </ol>
     </section>
@@ -2324,7 +2342,7 @@ context</a>, return <code>frame-src</code>.</p>
       The <a href="https://www.w3.org/TR/CSP3/#frame-ancestors-navigation-response">frame-ancestors Navigation Response Check</a> is modified as follows: 
      <ol>
       <li data-md>
-       <p>Replace all references to "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context④">nested browsing context</a>" with "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑤">nested browsing context</a> or <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①④">portal browsing context</a>".</p>
+       <p>Replace all references to "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context④">nested browsing context</a>" with "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑤">nested browsing context</a> or <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑤">portal browsing context</a>".</p>
       <li data-md>
        <p>Replace all references to "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context" id="ref-for-parent-browsing-context">parent browsing context</a>" with "<a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context" id="ref-for-parent-browsing-context①">parent browsing context</a> or <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context③">host browsing context</a>".</p>
      </ol>
@@ -2337,13 +2355,13 @@ context</a>, return <code>frame-src</code>.</p>
     <p>This specification integrates with <a data-link-type="biblio" href="#biblio-rfc7034">[RFC7034]</a>, which defines the <code>X-Frame-Options</code> HTTP header,
   as follows. Note that <a data-link-type="biblio" href="#biblio-html">[HTML]</a> also has an open issue, <a href="https://github.com/whatwg/html/issues/1230">whatwg/html#1230</a>, to define <code>X-Frame-Options</code> processing, and perhaps these updates would be done as part of resolving that
   issue.</p>
-    <p>If a browser receives content with this header field in response to a navigation request whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-reserved-client" id="ref-for-concept-request-reserved-client①">reserved client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context①">target browsing context</a> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑤">portal browsing
+    <p>If a browser receives content with this header field in response to a navigation request whose <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-reserved-client" id="ref-for-concept-request-reserved-client①">reserved client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context①">target browsing context</a> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑥">portal browsing
   context</a>, then the browser must apply the rules in <a data-link-type="biblio" href="#biblio-rfc7034">[RFC7034]</a> as though it were to be displayed
   in a frame in the <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context④">host browsing context</a> instead and as though the origin of the top-level
   browsing context <var>topLevelBrowsingContext</var> were the origin of the result of the following algorithm:</p>
     <ol>
      <li data-md>
-      <p>While <var>topLevelBrowsingContext</var> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑥">portal browsing context</a>:</p>
+      <p>While <var>topLevelBrowsingContext</var> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑦">portal browsing context</a>:</p>
       <ol>
        <li data-md>
         <p>Set <var>topLevelBrowsingContext</var> to its <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context⑤">host browsing context</a>.</p>
@@ -2363,11 +2381,11 @@ context</a>, return <code>frame-src</code>.</p>
       <li data-md>
        <p>Where the algorithm checks whether <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-reserved-client" id="ref-for-concept-request-reserved-client②">reserved client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context②">target
 browsing context</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑥">nested browsing context</a>, check instead whether it is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑦">nested
-browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑦">portal browsing context</a>.</p>
+browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑧">portal browsing context</a>.</p>
      </ol>
     </section>
     <div class="note" role="note">
-      The effect of this is that the request for a document in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑧">portal browsing context</a> will contain the following HTTP header, as though it were in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑧">nested browsing context</a>. 
+      The effect of this is that the request for a document in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑨">portal browsing context</a> will contain the following HTTP header, as though it were in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑧">nested browsing context</a>. 
 <pre>    Sec-Fetch-Mode: nested-navigate
 </pre>
     </div>
@@ -2381,7 +2399,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     spec updates, we should summarize them in a non-normative fashion here. </div>
     <h3 class="heading settled" data-level="6.1" id="security-overview"><span class="secno">6.1. </span><span class="content">Overview</span><a class="self-link" href="#security-overview"></a></h3>
     <p><em>This section is non-normative.</em></p>
-    <p>In general, a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑨">portal browsing context</a> should respect policies that would apply to
+    <p>In general, a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context②⓪">portal browsing context</a> should respect policies that would apply to
   a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑨">nested browsing context</a>, e.g. that would restrict whether a document can be embedded
   in a document from another <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①">origin</a>.</p>
    </section>
@@ -2397,7 +2415,6 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-activate-empty-browsing-context.html">portals-activate-empty-browsing-context.html</a> <a href="http://web-platform-tests.live/portals/portals-activate-empty-browsing-context.html" title="portals/portals-activate-empty-browsing-context.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-activate-empty-browsing-context.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-activate-network-error.html">portals-activate-network-error.html</a> <a href="http://web-platform-tests.live/portals/portals-activate-network-error.html" title="portals/portals-activate-network-error.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-activate-network-error.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-activate-while-unloading.html">portals-activate-while-unloading.html</a> <a href="http://web-platform-tests.live/portals/portals-activate-while-unloading.html" title="portals/portals-activate-while-unloading.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-activate-while-unloading.html"><small>(source)</small></a>
-     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-close-window.html">portals-close-window.html</a> <a href="http://web-platform-tests.live/portals/portals-close-window.html" title="portals/portals-close-window.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-close-window.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-focus.sub.html">portals-focus.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-focus.sub.html" title="portals/portals-focus.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-focus.sub.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-navigate-after-adoption.html">portals-navigate-after-adoption.html</a> <a href="http://web-platform-tests.live/portals/portals-navigate-after-adoption.html" title="portals/portals-navigate-after-adoption.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-navigate-after-adoption.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-repeated-activate.html">portals-repeated-activate.html</a> <a href="http://web-platform-tests.live/portals/portals-repeated-activate.html" title="portals/portals-repeated-activate.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-repeated-activate.html"><small>(source)</small></a>
@@ -2637,6 +2654,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <li><a href="#portalactivateevent-predecessor-browsing-context">predecessor browsing context</a><span>, in §3.2</span>
    <li><a href="#dom-htmlportalelement-referrerpolicy">referrerPolicy</a><span>, in §3</span>
    <li><a href="#element-attrdef-portal-referrerpolicy">referrerpolicy</a><span>, in §3</span>
+   <li><a href="#script-closable">script-closable</a><span>, in §4.3</span>
    <li><a href="#set-the-source-url-of-a-portal-element">set the source URL of a portal element</a><span>, in §3</span>
    <li>
     src
@@ -2662,6 +2680,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <a href="https://dom.spec.whatwg.org/#document">https://dom.spec.whatwg.org/#document</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-document">3. The portal element</a>
+    <li><a href="#ref-for-document①">4.3. APIs for creating and navigating browsing contexts by name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event">
@@ -2926,6 +2945,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <a href="https://html.spec.whatwg.org/multipage/browsers.html#auxiliary-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#auxiliary-browsing-context</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-auxiliary-browsing-context">3. The portal element</a>
+    <li><a href="#ref-for-auxiliary-browsing-context①">4.3. APIs for creating and navigating browsing contexts by name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-becomes-browsing-context-connected">
@@ -3168,6 +3188,12 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-same-origin-domain">3. The portal element</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-script-closable">
+   <a href="https://html.spec.whatwg.org/multipage/window-object.html#script-closable">https://html.spec.whatwg.org/multipage/window-object.html#script-closable</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-script-closable">4.3. APIs for creating and navigating browsing contexts by name</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-ascii-serialisation-of-an-origin">
    <a href="https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin">https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin</a><b>Referenced in:</b>
    <ul>
@@ -3179,6 +3205,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <a href="https://html.spec.whatwg.org/multipage/history.html#session-history">https://html.spec.whatwg.org/multipage/history.html#session-history</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-session-history">2. Portal browsing contexts</a>
+    <li><a href="#ref-for-session-history①">4.3. APIs for creating and navigating browsing contexts by name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-messageevent-source">
@@ -3208,6 +3235,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-top-level-browsing-context">1. Introduction</a>
     <li><a href="#ref-for-top-level-browsing-context①">3. The portal element</a> <a href="#ref-for-top-level-browsing-context②">(2)</a>
     <li><a href="#ref-for-top-level-browsing-context③">3.2. The PortalActivateEvent interface</a>
+    <li><a href="#ref-for-top-level-browsing-context④">4.3. APIs for creating and navigating browsing contexts by name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-postmessageoptions-transfer">
@@ -3438,6 +3466,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
      <li><span class="dfn-paneled" id="term-for-resulting-url-record" style="color:initial">resulting url record</span>
      <li><span class="dfn-paneled" id="term-for-same-origin" style="color:initial">same origin</span>
      <li><span class="dfn-paneled" id="term-for-same-origin-domain" style="color:initial">same origin-domain</span>
+     <li><span class="dfn-paneled" id="term-for-script-closable" style="color:initial">script-closable</span>
      <li><span class="dfn-paneled" id="term-for-ascii-serialisation-of-an-origin" style="color:initial">serialization of an origin</span>
      <li><span class="dfn-paneled" id="term-for-session-history" style="color:initial">session history</span>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-source" style="color:initial">source</span>
@@ -3586,6 +3615,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-portal-state">2. Portal browsing contexts</a> <a href="#ref-for-portal-state①">(2)</a> <a href="#ref-for-portal-state②">(3)</a> <a href="#ref-for-portal-state③">(4)</a> <a href="#ref-for-portal-state④">(5)</a> <a href="#ref-for-portal-state⑤">(6)</a> <a href="#ref-for-portal-state⑥">(7)</a> <a href="#ref-for-portal-state⑦">(8)</a> <a href="#ref-for-portal-state⑧">(9)</a>
     <li><a href="#ref-for-portal-state⑨">3. The portal element</a> <a href="#ref-for-portal-state①⓪">(2)</a> <a href="#ref-for-portal-state①①">(3)</a>
     <li><a href="#ref-for-portal-state①②">3.1. Portal hosts</a> <a href="#ref-for-portal-state①③">(2)</a>
+    <li><a href="#ref-for-portal-state①④">4.3. APIs for creating and navigating browsing contexts by name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="portal-browsing-context">
@@ -3595,10 +3625,11 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-portal-browsing-context③">3. The portal element</a> <a href="#ref-for-portal-browsing-context④">(2)</a> <a href="#ref-for-portal-browsing-context⑤">(3)</a> <a href="#ref-for-portal-browsing-context⑥">(4)</a> <a href="#ref-for-portal-browsing-context⑦">(5)</a> <a href="#ref-for-portal-browsing-context⑧">(6)</a>
     <li><a href="#ref-for-portal-browsing-context⑨">3.1. Portal hosts</a> <a href="#ref-for-portal-browsing-context①⓪">(2)</a>
     <li><a href="#ref-for-portal-browsing-context①①">4.2. Event handlers</a> <a href="#ref-for-portal-browsing-context①②">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①③">5.1. Content Security Policy</a> <a href="#ref-for-portal-browsing-context①④">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①⑤">5.2. RFC 7034</a> <a href="#ref-for-portal-browsing-context①⑥">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①⑦">5.3. Fetch Metadata Request Headers</a> <a href="#ref-for-portal-browsing-context①⑧">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①⑨">6.1. Overview</a>
+    <li><a href="#ref-for-portal-browsing-context①③">4.3. APIs for creating and navigating browsing contexts by name</a>
+    <li><a href="#ref-for-portal-browsing-context①④">5.1. Content Security Policy</a> <a href="#ref-for-portal-browsing-context①⑤">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①⑥">5.2. RFC 7034</a> <a href="#ref-for-portal-browsing-context①⑦">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①⑧">5.3. Fetch Metadata Request Headers</a> <a href="#ref-for-portal-browsing-context①⑨">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context②⓪">6.1. Overview</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="host-element">
