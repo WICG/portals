@@ -950,6 +950,24 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
       </tr>
     </tbody>
   </table>
+
+  APIs for creating and navigating browsing contexts by name {#patch-window-apis}
+  -------------------------------------------------------------------------------
+
+  Modify the definition of <a spec=HTML>script-closable</a> to prevent window closing while in a
+  [=portal browsing context=]:
+
+  A [=browsing context=] is <dfn noexport>script-closable</dfn> if either of the following is true:
+
+  * it is an [=auxiliary browsing context=] that was created by script (as opposed to by an action
+    of the user); or
+  * it is a [=top-level browsing context=] <ins>whose [=portal state=] is "`none`"</ins> and whose
+    [=session history=] contains only one {{Document}}.
+
+  <wpt>
+    portals-close-window.html
+  </wpt>
+
 </section>
 
 <section>
@@ -1082,7 +1100,6 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     portals-activate-empty-browsing-context.html
     portals-activate-network-error.html
     portals-activate-while-unloading.html
-    portals-close-window.html
     portals-focus.sub.html
     portals-navigate-after-adoption.html
     portals-repeated-activate.html
