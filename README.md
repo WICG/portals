@@ -247,27 +247,39 @@ TODO:
 
 Because of the [restrictions](#other-restrictions-while-portaled) on portaled content, especially the [storage restrictions](#storage-access-blocking), most existing content is not prepared to be rendered in a portal. As such, content will need to opt-in to being portaled; any content that does not so opt-in will cause the portal to fail to load.
 
-TODO:
+The current proposal for such an opt-in is being drafted in the [Alternate Loading Modes](https://github.com/jeremyroman/alternate-loading-modes) proposal. (This opt-in to privacy-preserving prerendering would be more general than just portals; thus, the separate proposal. Indeed, many of the parts of this document, such as the restrictions on portaled content, might be further generalized to other prerendering technologies in the future; we expect the layering to evolve over time.) To summarize, the portaled content would use a
 
-- Actually describe the opt-in, once we decide what it is.
-- Explain relation to `X-Frame-Options` and CSP `frame-ancestors`. These opt-outs probably become unnecessary if we have an explicit opt-in? [#232](https://github.com/WICG/portals/issues/232)
+```
+Supports-Loading-Mode: uncredentialed-prerender
+```
+
+header, or a
+
+```html
+<meta http-equiv="Supports-Loading-Mode" content="uncredentialed-prerender">
+```
+
+meta tag, to opt in. Without either of these present, the content would not be shown in the portal.
+
+Because this opt-in is available, portaled content does not make use of any of the existing opt-outs that other embedded content such as iframes use. For example, specifying the `X-Frame-Options` header, or the [`frame-ancestors`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors) CSP directive, does not change whether the content is portaled. This allows pages to allow themselves to be portaled via the opt-in, while also using these existing mechanisms to prevent themselves from being framed.
 
 ### CSP integration
 
 CSP has various interactions with embedded content and navigations. We propose the following integrations for portals.
 
-A portaled page can apply CSP to itself as normal. Just like iframes, these policies are generally self-contained; only the [`frame-ancestors`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors) CSP directive's behavior will vary depending on whether the content is portaled or not. (See also [#232](https://github.com/WICG/portals/issues/232) for ongoing discussion on this point.)
+A portaled page can apply CSP to itself as normal. Just like iframes, these policies are generally self-contained; none of them vary depending on whether the content is portaled or not. (For example, specifying `unsafe-eval` works the same for portaled content as for any other content.)
 
 Note that since portals do not allow hosting of `data:` URLs, `javascript:` URLs, `about:blank`, etc., there is never any inheritance from the host's CSP into the guest browsing context, like there sometimes is with iframes and their nested browsing context.
 
 When it comes to the host page's CSP, it has the following mechanisms available to prevent content from being loaded into a portal, or being activated:
 
 - A new [fetch directive](https://w3c.github.io/webappsec-csp/#directives-fetch), `portal-src`, is introduced, which can be used to restrict what URLs can be loaded into `<portal>` elements.
-- [`child-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/child-src) is expanded to include portals, in addition to frames and workers.
 - [`default-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src), which serves as a fallback for all fetch directives, will apply to portals.
 - [`navigate-to`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/navigate-to) prevents portal activation (based on the guest browsing context's current URL).
 
-This fetch directive design is not finalized; in particular the relationship to `frame-src` and `prefetch-src` is still up for discussion. We're tracking that in [#240](https://github.com/WICG/portals/issues/240).
+Note that `portal-src` does *not* fall back to `frame-src`, `child-src`, or `prefetch-src`, despite portals being arguably somewhat-like frames/children/prefetch hints. They are different enough that they need to be treated separately.
+
+A natural worry about not falling back to `frame-src` or similar is that portals might introduce new attack vectors to pages that set `frame-src` with the intention of protecting themselves from injected embedded content. However, we believe this is not the case. Portaled content is limited enough in how it communicates with the host page that the only relevant attack CSP can prevent is exfiltration of data via the `<portal>`'s `src=""` attribute. But if the page author is concerned about this sort of attack, then they also needs to prevent all resource loads in general, which means they will have set `default-src`. And since `portal-src` falls back to `default-src`, this means the attack is prevented even under our proposed scheme.
 
 ### Embedder-imposed policies and delegation
 

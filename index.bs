@@ -982,61 +982,90 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
   This specification integrates with [[CSP]] as follows.
 
-  <section algorithm="csp-effective-directive-for-a-request">
-    The algorithm for determining the [[CSP#effective-directive-for-a-request|effective directive for a request]]
-    |request| is modified by prepending the following:
+  <p class="issue">Although `navigate-to` works as expected while the content is portaled, we also
+  need to apply it to prevent activation (which is basically a navigation). This is not yet specced,
+  pending spec updates to the navigation and session history handling.</p>
 
-    1. If |request|'s [=request/initiator=] is "", its [=request/destination=] is "`document`", and
-        its [=request/reserved client=]'s [=environment/target browsing context=] is a [=portal browsing
-        context=], return `frame-src`.
-  </section>
+  The following new subsection of [[CSP#directives-fetch]] is added:
 
-  <wpt>
-    csp/frame-src.sub.html
-  </wpt>
+  ### `portal-src` ### {#portal-src-directive}
 
-  <section algorithm="csp-frame-ancestors-navigation-response">
-    The [[CSP#frame-ancestors-navigation-response|frame-ancestors Navigation Response Check]]
-    is modified as follows:
+  The <dfn export>portal-src</dfn> directive restricts the URLs which may be loaded into [=portal
+  browsing contexts=]. The syntax for the directive's name and value is described by the following
+  ABNF:
 
-    1. Replace all references to "[=nested browsing context=]" with "[=nested browsing context=] or [=portal browsing context=]".
+  <pre highlight="abnf">
+  directive-name  = "portal-src"
+  directive-value = <a grammar>serialized-source-list</a>
+  </pre>
 
-    1. Replace all references to "[=parent browsing context=]" with "[=parent browsing context=] or [=host browsing context=]".
-  </section>
+  <div class="example" id="example-portal-src">
+    Given a page with the following Content Security Policy:
 
-  <wpt>
-    csp/frame-ancestors.sub.html
-  </wpt>
+    <pre>
+      <a http-header>Content-Security-Policy</a>: <a>portal-src</a> https://example.com/
+    </pre>
 
-  <div class="issue">
-    {{HTMLPortalElement/activate(options)}} should also respect the CSP [=navigate-to=] directive.
+    Fetches for the following code will return a network errors, and thus result in [=close a portal
+    element|closing=] the portal, as the URL provided does not match `portal-src`'s [=source list=]:
+
+    <xmp highlight="html">
+      <portal src="https://example.org/"></portal>
+    </xmp>
   </div>
 
-  RFC 7034 {#rfc7034}
-  -------------------
+  #### `portal-src` Pre-request check #### {#portal-src-pre-request}
 
-  This specification integrates with [[RFC7034]], which defines the `X-Frame-Options` HTTP header,
-  as follows. Note that [[HTML]] also has an open issue,
-  <a href="https://github.com/whatwg/html/issues/1230">whatwg/html#1230</a>, to define
-  `X-Frame-Options` processing, and perhaps these updates would be done as part of resolving that
-  issue.
+  This directive's [=directive/pre-request check=] is as follows:
 
-  If a browser receives content with this header field in response to a navigation request whose
-  [=request/reserved client=]'s [=environment/target browsing context=] is a [=portal browsing
-  context=], then the browser must apply the rules in [[RFC7034]] as though it were to be displayed
-  in a frame in the [=host browsing context=] instead and as though the origin of the top-level
-  browsing context |topLevelBrowsingContext| were the origin of the result of the following algorithm:
+  <div algorithm="portal-src pre-request check">
+    Given a [=request=] |request| and a policy |policy|:
 
-  1. While |topLevelBrowsingContext| is a [=portal browsing context=]:
+    1. Let |name| be the result of executing [[CSP#effective-directive-for-a-request]] on |request|.
 
-    1. Set |topLevelBrowsingContext| to its [=host browsing context=].
+    1. If the result of executing [[CSP#should-directive-execute]] on |name|, `portal-src` and
+        |policy| is "`No`", return "`Allowed`".
 
-  1. Return |topLevelBrowsingContext|.
+    1. If the result of executing [[CSP#match-request-to-source-list]] on |request|, this directive's
+        [=directive/value=], and |policy| is "`Does Not Match`", return "`Blocked`".
 
-  <wpt>
-    xfo/portals-xfo-deny.sub.html
-    xfo/portals-xfo-sameorigin.html
-  </wpt>
+    1.  Return "`Allowed`".
+  </div>
+
+  #### `portal-src` Post-request check #### {#portal-src-post-request}
+
+  This directive's [=directive/post-request check=] is as follows:
+
+  <div algorithm="portal-src post-request check">
+    Given a [=request=] |request|, a [=response=] |response|, and a policy |policy|:
+
+    1. Let |name| be the result of executing [[CSP#effective-directive-for-a-request]] on |request|.
+
+    1. If the result of executing [[CSP#should-directive-execute]] on |name|, `portal-src` and
+        |policy| is "`No`", return "`Allowed`".
+
+    1. If the result of executing [[CSP#match-response-to-source-list]] on |response|, |request|,
+        this directive's [=directive/value=], and |policy| is "`Does Not Match`", return
+        "`Blocked`".
+
+    4.  Return "`Allowed`".
+  </div>
+
+  ### `default-src` ### {#default-src-patch}
+
+  The informative example text which expands it into all other fetch directives in
+  [[CSP#directive-default-src]] will need updating to include [=portal-src=].
+
+  ### Get fetch directive fallback list ### {#directive-fallback-list-patch}
+
+  The algorithm in [[CSP#directive-fallback-list]] needs updating to account for the new
+  [=portal-src=] fetch directive. Add a new case to step 1:
+
+  <dl class="switch">
+    : "`portal-src`"
+    ::
+        1. Return « "`portal-src`", "`default-src`" ».
+  </dl>
 
   Fetch Metadata Request Headers {#fetch-metadata}
   ------------------------------------------------
@@ -1108,5 +1137,14 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     portals-repeated-activate.html
     portals-set-src-after-activate.html
     predecessor-fires-unload.html
+  </wpt>
+
+  The following tests are actively incorrect and need to get updated:
+
+  <wpt>
+    csp/frame-ancestors.sub.html
+    xfo/portals-xfo-deny.sub.html
+    xfo/portals-xfo-sameorigin.html
+    csp/frame-src.sub.html
   </wpt>
 </section>
