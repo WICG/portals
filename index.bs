@@ -69,6 +69,9 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
   It is structured as a series of patches to HTML and other specifications, with each major section
   indicating where each it would be placed in the event of eventual graduation from incubation.
+
+  See also the <a href="https://github.com/WICG/portals">explainer</a> for more background and
+  motivation.
 </section>
 
 <section>
