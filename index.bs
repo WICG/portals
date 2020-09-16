@@ -519,9 +519,6 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
         Otherwise, let |url| be the [=resulting URL record=].
 
-    1. If the [=url/scheme=] of |url| is not an [=HTTP(S) scheme=], then [=close a portal element|close=]
-        |element| and return.
-
     1. If |element|'s [=HTMLPortalElement/guest browsing context=] is null, then run the following steps:
 
         1. Let |newBrowsingContext| be the result of
@@ -554,7 +551,6 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
   </section>
 
   <wpt>
-    portal-non-http-navigation.html
     portals-cross-origin-load.sub.html
     portals-referrer.html
     portals-referrer-inherit-header.html
@@ -1021,6 +1017,10 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     1. Otherwise, if |browsingContext|'s [=portal state=] is not "`none`", then [=close a portal
         element|close=] |browsingContext|'s [=host element=].
   </div>
+
+  <wpt>
+    portal-non-http-navigation.html
+  </wpt>
 
   Downloading resources {#patch-downloading}
   ------------------------------------------
