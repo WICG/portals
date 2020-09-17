@@ -1005,8 +1005,13 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
                 [=navigation params/reserved environment=].
         1. Return.
 
-        <p class="note">If |response| has a non-null [=response/url=], then that URL's
-        [=url/scheme=] will always be a [=HTTP(S) scheme=].</p>
+        <p class="note">If |response| has a non-null [=response/url=], then by the time we reach <a
+        spec=HTML>process a navigate response</a>, that URL's [=url/scheme=] will always be a
+        [=HTTP(S) scheme=]. <a spec=FETCH>Scheme fetch</a> translates all other request URL schemes
+        into null-[=response/url=] [=responses=]. And if a redirect causes a non-HTTP(S) response
+        URL, then earlier parts of the navigation algorithm will either translate them into a
+        (null-[=response/url=]) [=network error=], or call back into [=fetch=] (and thus <a
+        spec=FETCH>scheme fetch</a>).</p>
   </div>
 
   <div algorithm="process a navigate URL scheme patch">
