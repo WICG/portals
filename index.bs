@@ -1003,8 +1003,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
             1. [=Close a portal element|Close=] |browsingContext|'s [=host element=].
             1. Run the [=environment discarding steps=] for <var ignore>navigationParam</var>'s
                 [=navigation params/reserved environment=].
-            1. Return.
-        1. Otherwise, return.
+        1. Return.
 
         <p class="note">If |response| has a non-null [=response/url=], then that URL's
         [=url/scheme=] will always be a [=HTTP(S) scheme=].</p>
