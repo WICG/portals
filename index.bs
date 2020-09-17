@@ -975,15 +975,6 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
   Patch the <a spec=HTML>navigate</a> algorithm to prevent certain navigations in a
   portal as follows:
 
-  <div algorithm="navigate patch">
-    In <a spec=HTML>navigate</a>, in the case where <var ignore>resource</var> is a [=request=]
-    whose [=request/url=]'s [=url/scheme=] is "`javascript`", prepend the following step as the
-    first step of the queued task:
-
-    1. If |browsingContext|'s [=portal state=] is not "`none`", then [=close a portal
-        element|close=] |browsingContext|'s [=host element=] and abort these steps.
-  </div>
-
   <div algorithm="process a navigate response patch">
     In <a spec=HTML>process a navigate response</a>, append the following after the step which
     establishes the value of |failure|, but before the step which uses it to display an error page:
@@ -1012,6 +1003,9 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
         URL, then earlier parts of the navigation algorithm will either translate them into a
         (null-[=response/url=]) [=network error=], or call back into [=fetch=] (and thus <a
         spec=FETCH>scheme fetch</a>).</p>
+
+        <p class="note">Attempts to navigate to `javascript:` URLs will reach this part of the spec,
+        with |response|'s [=response/url=] always being null.</p>
   </div>
 
   <div algorithm="process a navigate URL scheme patch">
