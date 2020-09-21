@@ -68,6 +68,8 @@
  *
  ******************************************************************************/
 
+/* color variables included separately for reliability */
+
 /******************************************************************************/
 /*                                   Body                                     */
 /******************************************************************************/
@@ -92,7 +94,9 @@
 
 		/* Colors */
 		color: black;
+		color: var(--text);
 		background: white top left fixed no-repeat;
+		background-color: var(--bg);
 		background-size: 25px auto;
 	}
 
@@ -124,10 +128,13 @@
 	.head img[src*="logos/W3C"] {
 		display: block;
 		border: solid #1a5e9a;
+		border: solid var(--logo-bg);
 		border-width: .65rem .7rem .6rem;
 		border-radius: .4rem;
 		background: #1a5e9a;
+		background: var(--logo-bg);
 		color: white;
+		color: var(--logo-text);
 		font-weight: bold;
 	}
 
@@ -138,7 +145,9 @@
 
 	.head a:active > img[src*="logos/W3C"] {
 		background: #c00;
+		background: var(--logo-active-bg);
 		border-color: #c00;
+		border-color: var(--logo-active-bg);
 	}
 
 	/* see also additional rules in Link Styling section */
@@ -165,7 +174,6 @@
 			border-top-right-radius: 2rem;
 			box-shadow: 0 0 2px;
 			font-size: 1.5em;
-			color: black;
 		}
 		#toc-nav > a {
 			display: block;
@@ -175,23 +183,32 @@
 			padding: .1em 0.3em;
 			margin: 0;
 
-			background: white;
 			box-shadow: 0 0 2px;
 			border: none;
 			border-top-right-radius: 1.33em;
+
+			color: #707070;
+			color: var(--tocnav-normal-text);
 			background: white;
+			background: var(--tocnav-normal-bg);
 		}
+		#toc-nav > a:hover,
+		#toc-nav > a:focus {
+			color: black;
+			color: var(--tocnav-hover-text);
+			background: #f8f8f8;
+			background: var(--tocnav-hover-bg);
+		}
+		#toc-nav > a:active {
+			color: #c00;
+			color: var(--tocnav-active-text);
+			background: white;
+			background: var(--tocnav-active-bg);
+		}
+
 		#toc-nav > #toc-jump {
 			padding-bottom: 2em;
 			margin-bottom: -1.9em;
-		}
-
-		#toc-nav > a:hover,
-		#toc-nav > a:focus {
-			background: #f8f8f8;
-		}
-		#toc-nav > a:not(:hover):not(:focus) {
-			color: #707070;
 		}
 
 		/* statusbar gets in the way on keyboard focus; remove once browsers fix */
@@ -205,26 +222,6 @@
 		}
 		#toc-nav > a > span + span {
 			padding-right: 0.2em;
-		}
-
-		#toc-toggle-inline {
-			vertical-align: 0.05em;
-			font-size: 80%;
-			color: gray;
-			color: hsla(203,20%,40%,.7);
-			border-style: none;
-			background: transparent;
-			position: relative;
-		}
-		#toc-toggle-inline:hover:not(:active),
-		#toc-toggle-inline:focus:not(:active) {
-			text-shadow: 1px 1px silver;
-			top: -1px;
-			left: -1px;
-		}
-
-		#toc-nav :active {
-			color: #C00;
 		}
 	}
 
@@ -243,10 +240,14 @@
 			padding: 0 1em;
 			padding-left: 42px;
 			padding-left: calc(1em + 26px);
+			color: black;
+			color: var(--tocsidebar-text);
 			background: inherit;
 			background-color: #f7f8f9;
+			background-color: var(--tocsidebar-bg);
 			z-index: 1;
 			box-shadow: -.1em 0 .25em rgba(0,0,0,.1) inset;
+			box-shadow: -.1em 0 .25em var(--tocsidebar-shadow) inset;
 		}
 		body.toc-sidebar #toc h2 {
 			margin-top: .8rem;
@@ -256,6 +257,7 @@
 			font-weight: bold;
 			color: gray;
 			color: hsla(203,20%,40%,.7);
+			color: var(--tocsidebar-heading-text);
 		}
 		body.toc-sidebar #toc-jump:not(:focus) {
 			width: 0;
@@ -283,10 +285,14 @@
 			padding: 0 1em;
 			padding-left: 42px;
 			padding-left: calc(1em + 26px);
+			color: black;
+			color: var(--tocsidebar-text);
 			background: inherit;
 			background-color: #f7f8f9;
+			background-color: var(--tocsidebar-bg);
 			z-index: 1;
 			box-shadow: -.1em 0 .25em rgba(0,0,0,.1) inset;
+			box-shadow: -.1em 0 .25em var(--tocsidebar-shadow) inset;
 		}
 		body:not(.toc-inline) #toc h2 {
 			margin-top: .8rem;
@@ -296,6 +302,7 @@
 			font-weight: bold;
 			color: gray;
 			color: hsla(203,20%,40%,.7);
+			color: var(--tocsidebar-heading-text);
 		}
 
 		body:not(.toc-inline) {
@@ -338,7 +345,7 @@
 
 	h1, h2, h3 {
 		color: #005A9C;
-		background: transparent;
+		color: var(--heading-text);
 	}
 
 	h1 { font-size: 170%; }
@@ -365,11 +372,13 @@
 
 /** Section divider ***********************************************************/
 
-	:not(.head) > hr {
+	:not(.head) > :not(.head) + hr {
 		font-size: 1.5em;
 		text-align: center;
 		margin: 1em auto;
 		height: auto;
+		color: black;
+		color: var(--hr-text);
 		border: transparent solid 0;
 		background: transparent;
 	}
@@ -412,12 +421,15 @@
 	ol.algorithm ol:not(.algorithm),
 	.algorithm > ol ol:not(.algorithm) {
 	 border-left: 0.5em solid #DEF;
+	 border-left: 0.5em solid var(--algo-border);
 	}
 
 	/* Put nice boxes around each algorithm. */
 	[data-algorithm]:not(.heading) {
 	  padding: .5em;
-	  border: thin solid #ddd; border-radius: .5em;
+	  border: thin solid #ddd;
+	  border: thin solid var(--algo-border);
+	  border-radius: .5em;
 	  margin: .5em calc(-0.5em - 1px);
 	}
 	[data-algorithm]:not(.heading) > :first-child {
@@ -478,8 +490,20 @@
 
 /** Change Marking ************************************************************/
 
-	del { color: red;  text-decoration: line-through; }
-	ins { color: #080; text-decoration: underline;    }
+	del {
+		color: red;
+		color: var(--del-text);
+		background: transparent;
+		background: var(--del-bg);
+		text-decoration: line-through;
+	}
+	ins {
+		color: #080;
+		color: var(--ins-text);
+		background: transparent;
+		background: var(--ins-bg);
+		text-decoration: underline;
+	}
 
 /** Miscellaneous improvements to inline formatting ***************************/
 
@@ -497,9 +521,14 @@
 	pre, code, samp {
 		font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
 		font-size: .9em;
-		page-break-inside: avoid;
 		hyphens: none;
 		text-transform: none;
+		text-align: left;
+		text-align: start;
+		font-variant: normal;
+		orphans: 3;
+		widows: 3;
+		page-break-before: avoid;
 	}
 	pre code,
 	code code {
@@ -525,14 +554,19 @@
 	/* We hyperlink a lot, so make it less intrusive */
 	a[href] {
 		color: #034575;
+		color: var(--a-normal-text);
 		text-decoration: none;
 		border-bottom: 1px solid #707070;
+		border-bottom: 1px solid var(--a-normal-underline);
 		/* Need a bit of extending for it to look okay */
 		padding: 0 1px 0;
 		margin: 0 -1px 0;
 	}
 	a:visited {
-		border-bottom-color: #BBB;
+		color: #034575;
+		color: var(--a-visited-text);
+		border-bottom-color: #bbb;
+		border-bottom-color: var(--a-visited-underline);
 	}
 
 	/* Use distinguishing colors when user is interacting with the link */
@@ -540,12 +574,15 @@
 	a[href]:hover {
 		background: #f8f8f8;
 		background: rgba(75%, 75%, 75%, .25);
+		background: var(--a-hover-bg);
 		border-bottom-width: 3px;
 		margin-bottom: -2px;
 	}
 	a[href]:active {
-		color: #C00;
-		border-color: #C00;
+		color: #c00;
+		color: var(--a-active-text);
+		border-color: #c00;
+		border-color: var(--a-active-underline);
 	}
 
 	/* Backout above styling for W3C logo */
@@ -564,6 +601,11 @@
 		border-style: none;
 	}
 
+	img, svg {
+		/* Intentionally not color-scheme aware. */
+		background: white;
+	}
+
 	/* For autogen numbers, add
 	   .caption::before, figcaption::before { content: "Figure " counter(figure) ". "; }
 	*/
@@ -577,6 +619,7 @@
 	.figure object, .sidefigure object, figure object {
 		max-width: 100%;
 		margin: auto;
+		height: auto;
 	}
 	.figure pre, .sidefigure pre, figure pre {
 		text-align: left;
@@ -639,25 +682,46 @@
 		margin-bottom: 0;
 	}
 
+
+	.issue::before, .issue > .marker,
+	.example::before, .example > .marker,
+	.note::before, .note > .marker,
+	details.note > summary > .marker {
+		text-transform: uppercase;
+		padding-right: 1em;
+	}
+
+	.example::before, .example > .marker {
+		display: block;
+		padding-right: 0em;
+	}
+
 /** Blockquotes ***************************************************************/
 
 	blockquote {
 		border-color: silver;
+		border-color: var(--blockquote-border);
+		background: transparent;
+		background: var(--blockquote-bg);
+		color: currentcolor;
+		color: var(--blockquote-text);
 	}
 
 /** Open issue ****************************************************************/
 
 	.issue {
-		border-color: #E05252;
-		background: #FBE9E9;
+		border-color: #e05252;
+		border-color: var(--issue-border);
+		background: #fbe9e9;
+		background: var(--issue-bg);
+		color: black;
+		color: var(--issue-text);
 		counter-increment: issue;
 		overflow: auto;
 	}
 	.issue::before, .issue > .marker {
-		text-transform: uppercase;
-		color: #AE1E1E;
-		padding-right: 1em;
-		text-transform: uppercase;
+		color: #831616;
+		color: var(--issueheading-text);
 	}
 	/* Add .issue::before { content: "Issue " counter(issue) " "; } for autogen numbers,
 	   or use class="marker" to mark up the issue number in source. */
@@ -665,17 +729,19 @@
 /** Example *******************************************************************/
 
 	.example {
-		border-color: #E0CB52;
-		background: #FCFAEE;
+		border-color: #e0cb52;
+		border-color: var(--example-border);
+		background: #fcfaee;
+		background: var(--example-bg);
+		color: black;
+		color: var(--example-text);
 		counter-increment: example;
 		overflow: auto;
 		clear: both;
 	}
 	.example::before, .example > .marker {
-		text-transform: uppercase;
-		color: #827017;
-		min-width: 7.5em;
-		display: block;
+		color: #574b0f;
+		color: var(--exampleheading-text);
 	}
 	/* Add .example::before { content: "Example " counter(example) " "; } for autogen numbers,
 	   or use class="marker" to mark up the example number in source. */
@@ -683,27 +749,26 @@
 /** Non-normative Note ********************************************************/
 
 	.note {
-		border-color: #52E052;
-		background: #E9FBE9;
+		border-color: #52e052;
+		border-color: var(--note-border);
+		background: #e9fbe9;
+		background: var(--note-bg);
+		color: black;
+		color: var(--note-text);
 		overflow: auto;
 	}
 
 	.note::before, .note > .marker,
-	details.note > summary::before,
-	details.note > summary > .marker {
-		text-transform: uppercase;
-		display: block;
+	details.note > summary {
 		color: hsl(120, 70%, 30%);
+		color: var(--noteheading-text);
 	}
-	/* Add .note::before { content: "Note"; } for autogen label,
+	/* Add .note::before { content: "Note "; } for autogen label,
 	   or use class="marker" to mark up the label in source. */
 
-	details.note > summary {
-		display: block;
-		color: hsl(120, 70%, 30%);
-	}
 	details.note[open] > summary {
 		border-bottom: 1px silver solid;
+		border-bottom: 1px var(--notesummary-underline) solid;
 	}
 
 /** Assertion Box *************************************************************/
@@ -711,7 +776,11 @@
 
 	.assertion {
 		border-color: #AAA;
+		border-color: var(--assertion-border);
 		background: #EEE;
+		background: var(--assertion-bg);
+		color: black;
+		color: var(--assertion-text);
 	}
 
 /** Advisement Box ************************************************************/
@@ -719,15 +788,20 @@
 
 	.advisement {
 		border-color: orange;
+		border-color: var(--advisement-border);
 		border-style: none solid;
-		background: #FFEECC;
+		background: #fec;
+		background: var(--advisement-bg);
+		color: black;
+		color: var(--advisement-text);
 	}
 	strong.advisement {
 		display: block;
 		text-align: center;
 	}
-	.advisement > .marker {
-		color: #B35F00;
+	.advisement::before, .advisement > .marker {
+		color: #b35f00;
+		color: var(--advisementheading-text);
 	}
 
 /** Spec Obsoletion Notice ****************************************************/
@@ -743,27 +817,30 @@
 	.annoying-warning:not(details),
 	details.annoying-warning:not([open]) > summary,
 	details.annoying-warning[open] {
-		background: #fdd;
-		color: red;
-		font-weight: bold;
+		background: hsla(40,100%,50%,0.95);
+		background: var(--warning-bg);
+		color: black;
+		color: var(--warning-text);
 		padding: .75em 1em;
-		border: thick red;
-		border-style: solid;
-		border-radius: 1em;
+		border: red;
+		border: var(--warning-border);
+		border-style: solid none;
+		box-shadow: 0 2px 8px black;
+		text-align: center;
 	}
 	.annoying-warning :last-child {
 		margin-bottom: 0;
 	}
 
-@media not print {
-	details.annoying-warning[open] {
-		position: fixed;
-		left: 1em;
-		right: 1em;
-		bottom: 1em;
-		z-index: 1000;
+	@media not print {
+		details.annoying-warning[open] {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 2em;
+			z-index: 1000;
+		}
 	}
-}
 
 	details.annoying-warning:not([open]) > summary {
 		text-align: center;
@@ -773,9 +850,13 @@
 
 	.def {
 		padding: .5em 1em;
-		background: #DEF;
+		background: #def;
+		background: var(--def-bg);
 		margin: 1.2em 0;
-		border-left: 0.5em solid #8CCBF2;
+		border-left: 0.5em solid #8ccbf2;
+		border-left: 0.5em solid var(--def-border);
+		color: black;
+		color: var(--def-text);
 	}
 
 /******************************************************************************/
@@ -800,6 +881,7 @@
 		padding: 0.5em;
 		vertical-align: baseline;
 		border-bottom: 1px solid #bbd7e9;
+		border-bottom: 1px solid var(--defrow-border);
 	}
 
 	table.def > tbody > tr:last-child th,
@@ -820,10 +902,10 @@
 	}
 
 	/* A footnote at the bottom of a def table */
-	table.def           td.footnote {
+	table.def td.footnote {
 		padding-top: 0.6em;
 	}
-	table.def           td.footnote::before {
+	table.def td.footnote::before {
 		content: " ";
 		display: block;
 		height: 0.6em;
@@ -868,6 +950,7 @@
 		padding: 0.5em 1em;
 		border-width: 1px;
 		border-color: silver;
+		border-color: var(--datacell-border);
 		border-top-style: solid;
 	}
 
@@ -892,6 +975,7 @@
 	table.index tbody th:first-child  {
 		border-right: 2px solid;
 		border-top: 1px solid silver;
+		border-top: 1px solid var(--datacell-border);
 		padding-right: 1em;
 	}
 
@@ -903,13 +987,14 @@
 	table.complex.data th,
 	table.complex.data td {
 		border: 1px solid silver;
+		border: 1px solid var(--datacell-border);
 		text-align: center;
 	}
 
 	table.data.longlastcol td:last-child,
 	table.data td.long {
-	 vertical-align: baseline;
-	 text-align: left;
+		vertical-align: baseline;
+		text-align: left;
 	}
 
 	table.data img {
@@ -967,12 +1052,15 @@ Possible extra rowspan handling
 		display: block;
 		/* Reverse color scheme */
 		color: black;
-		border-color: #3980B5;
-		border-bottom-width: 3px !important;
-		margin-bottom: 0px !important;
+		color: var(--toclink-text);
+		border-color: #3980b5;
+		border-color: var(--toclink-underline);
 	}
 	.toc a:visited {
+		color: black;
+		color: var(--toclink-visited-text);
 		border-color: #054572;
+		border-color: var(--toclink-visited-underline);
 	}
 	.toc a:not(:focus):not(:hover) {
 		/* Allow colors to cascade through from link styling */
@@ -1027,6 +1115,15 @@ Possible extra rowspan handling
 			.toc > li li li li .secno    { margin-left: -6rem; }
 			.toc > li li li li li .secno { margin-left: -7rem; }
 		}
+		/* Loosen it on wide screens */
+		@media screen and (min-width: 78em) {
+			body:not(.toc-inline) :not(li) > .toc              { margin-left:  4rem; }
+			body:not(.toc-inline) .toc .secno                  { margin-left: -4rem; }
+			body:not(.toc-inline) .toc > li li li              { margin-left:  1rem; }
+			body:not(.toc-inline) .toc > li li li .secno       { margin-left: -5rem; }
+			body:not(.toc-inline) .toc > li li li li .secno    { margin-left: -6rem; }
+			body:not(.toc-inline) .toc > li li li li li .secno { margin-left: -7rem; }
+	}
 	/* } */
 
 	@supports (display:grid) and (display:contents) {
@@ -1068,9 +1165,12 @@ Possible extra rowspan handling
 			width: auto;
 			margin-right: 1rem;
 		}
-		#toc .content:hover {
+		#toc .content:hover,
+		#toc .content:focus {
 			background: rgba(75%, 75%, 75%, .25);
+			background: var(--a-hover-bg);
 			border-bottom: 3px solid #054572;
+			border-bottom: 3px solid var(--toclink-underline);
 			margin-bottom: -3px;
 		}
 		#toc li li li .content {
@@ -1101,6 +1201,7 @@ Possible extra rowspan handling
 		ul.index li a:hover + span,
 		ul.index li a:focus + span {
 			color: #707070;
+			color: var(--indexinfo-text);
 		}
 	}
 
@@ -1122,7 +1223,10 @@ Possible extra rowspan handling
 
 	table.index tr:hover td:not([rowspan]),
 	table.index tr:hover th:not([rowspan]) {
+		color: black;
+		color: var(--indextable-hover-text);
 		background: #f7f8f9;
+		background: var(--indextable-hover-bg);
 	}
 
 	/* The link in the first column in the property table (formerly a TD) */
@@ -1147,13 +1251,6 @@ Possible extra rowspan handling
 	@page {
 		margin: 1.5cm 1.1cm;
 	}
-
-/******************************************************************************/
-/*                                    Legacy                                  */
-/******************************************************************************/
-
-	/* This rule is inherited from past style sheets. No idea what it's for. */
-	.hide { display: none }
 
 
 
@@ -1227,7 +1324,7 @@ Possible extra rowspan handling
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
-    color: #005a9c;
+    color: var(--a-normal-text);
     font-size: inherit;
     font-family: inherit;
 }
@@ -1286,6 +1383,108 @@ pre .property::before, pre .property::after {
 [data-link-type=biblio] {
     white-space: pre;
 }</style>
+<style>/* style-colors */
+
+/* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
+:root {
+    color-scheme: light dark;
+
+    --text: black;
+    --bg: white;
+
+    --logo-bg: #1a5e9a;
+    --logo-active-bg: #c00;
+    --logo-text: white;
+
+    --tocnav-normal-text: #707070;
+    --tocnav-normal-bg: var(--bg);
+    --tocnav-hover-text: var(--tocnav-normal-text);
+    --tocnav-hover-bg: #f8f8f8;
+    --tocnav-active-text: #c00;
+    --tocnav-active-bg: var(--tocnav-normal-bg);
+
+    --tocsidebar-text: var(--text);
+    --tocsidebar-bg: #f7f8f9;
+    --tocsidebar-shadow: rgba(0,0,0,.1);
+    --tocsidebar-heading-text: hsla(203,20%,40%,.7);
+
+    --toclink-text: var(--text);
+    --toclink-underline: #3980b5;
+    --toclink-visited-text: var(--toclink-text);
+    --toclink-visited-underline: #054572;
+
+    --heading-text: #005a9c;
+
+    --hr-text: var(--text);
+
+    --algo-border: #def;
+
+    --del-text: red;
+    --del-bg: transparent;
+    --ins-text: #080;
+    --ins-bg: transparent;
+
+    --a-normal-text: #034575;
+    --a-normal-underline: #707070;
+    --a-visited-text: var(--a-normal-text);
+    --a-visited-underline: #bbb;
+    --a-hover-bg: rgba(75%, 75%, 75%, .25);
+    --a-active-text: #c00;
+    --a-active-underline: #c00;
+
+    --blockquote-border: silver;
+    --blockquote-bg: transparent;
+    --blockquote-text: currentcolor;
+
+    --issue-border: #e05252;
+    --issue-bg: #fbe9e9;
+    --issue-text: var(--text);
+    --issueheading-text: #831616;
+
+    --example-border: #e0cb52;
+    --example-bg: #fcfaee;
+    --example-text: var(--text);
+    --exampleheading-text: #574b0f;
+
+    --note-border: #52e052;
+    --note-bg: #e9fbe9;
+    --note-text: var(--text);
+    --noteheading-text: hsl(120, 70%, 30%);
+    --notesummary-underline: silver;
+
+    --assertion-border: #aaa;
+    --assertion-bg: #eee;
+    --assertion-text: black;
+
+    --advisement-border: orange;
+    --advisement-bg: #fec;
+    --advisement-text: var(--text);
+    --advisementheading-text: #b35f00;
+
+    --warning-border: red;
+    --warning-bg: hsla(40,100%,50%,0.95);
+    --warning-text: var(--text);
+
+    --def-border: #8ccbf2;
+    --def-bg: #def;
+    --def-text: var(--text);
+    --defrow-border: #bbd7e9;
+
+    --datacell-border: silver;
+
+    --indexinfo-text: #707070;
+
+    --indextable-hover-text: black;
+    --indextable-hover-bg: #f7f8f9;
+
+    --outdatedspec-bg: rgba(0, 0, 0, .5);
+    --outdatedspec-text: black;
+    --outdated-bg: maroon;
+    --outdated-text: white;
+    --outdated-shadow: red;
+
+    --editedrec-bg: darkorange;
+}</style>
 <style>/* style-counters */
 
 body {
@@ -1317,6 +1516,10 @@ figcaption:not(.no-marker)::before {
 }</style>
 <style>/* style-dfn-panel */
 
+:root {
+    --dfnpanel-bg: #ddd;
+    --dfnpanel-text: var(--text);
+}
 .dfn-panel {
     position: absolute;
     z-index: 35;
@@ -1328,8 +1531,8 @@ figcaption:not(.no-marker)::before {
     overflow: auto;
     padding: 0.5em 0.75em;
     font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
-    background: #DDDDDD;
-    color: black;
+    background: var(--dfnpanel-bg);
+    color: var(--dfnpanel-text);
     border: outset 0.2em;
 }
 .dfn-panel:not(.on) { display: none; }
@@ -1364,6 +1567,11 @@ figcaption:not(.no-marker)::before {
 }</style>
 <style>/* style-selflinks */
 
+:root {
+    --selflink-text: white;
+    --selflink-bg: gray;
+    --selflink-hover-text: black;
+}
 .heading, .issue, .note, .example, li, dt {
     position: relative;
 }
@@ -1393,8 +1601,8 @@ dfn > a.self-link {
     opacity: 0;
     width: 1.5em;
     height: 1.5em;
-    background: gray;
-    color: white;
+    background: var(--selflink-bg);
+    color: var(--selflink-text);
     font-style: normal;
     transition: opacity .2s, background-color .2s, color .2s;
 }
@@ -1402,17 +1610,23 @@ dfn:hover > a.self-link {
     opacity: 1;
 }
 dfn > a.self-link:hover {
-    color: black;
+    color: var(--selflink-hover-text);
 }
 
 a.self-link::before            { content: "¶"; }
 .heading > a.self-link::before { content: "§"; }
-dfn > a.self-link::before      { content: "#"; }</style>
+dfn > a.self-link::before      { content: "#"; }
+</style>
 <style>/* style-syntax-highlighting */
-pre.idl.highlight { color: #708090; }
-.highlight:not(.idl) { background: hsl(24, 20%, 95%); }
+
+            pre.idl.highlight {
+                background: var(--borderedblock-bg, var(--def-bg));
+            }
+            
 code.highlight { padding: .1em; border-radius: .3em; }
 pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
+
+.highlight:not(.idl) { background: #fdf6e3; }
 c-[a] { color: #990055 } /* Keyword.Declaration */
 c-[b] { color: #990055 } /* Keyword.Type */
 c-[c] { color: #708090 } /* Comment */
@@ -1479,9 +1693,23 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </style>
 <style>/* style-wpt */
 
+:root {
+	--wpt-border: hsl(290, 70%, 60%);
+	--wpt-bg: hsl(290, 70%, 95%)
+	--wpt-text: var(--text);
+	--wptheading-text: hsl(290, 70%, 30%);
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--wpt-border: hsl(290, 70%, 30%);
+		--wpt-bg: var(--borderedblock-bg);
+		--wpt-text: var(--text);
+		--wptheading-text: hsl(290, 70%, 60%);
+	}
+}
 .wpt-tests-block {
 	list-style: none;
-	border-left: .5em solid hsl(290, 70%, 60%);
+	border-left: .5em solid hsl(290, 70%, 30%);
 	background: hsl(290, 70%, 95%);
 	margin: 1em auto;
 	padding: .5em;
@@ -1503,11 +1731,887 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 	border: none;
 }
 </style>
+<style>/* style-darkmode */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text: #ddd;
+        --bg: #111;
+
+        --logo-bg: #1a5e9a;
+        --logo-active-bg: #c00;
+        --logo-text: white;
+
+        --tocnav-normal-text: #999;
+        --tocnav-normal-bg: var(--bg);
+        --tocnav-hover-text: var(--tocnav-normal-text);
+        --tocnav-hover-bg: #080808;
+        --tocnav-active-text: #f44;
+        --tocnav-active-bg: var(--tocnav-normal-bg);
+
+        --tocsidebar-text: var(--text);
+        --tocsidebar-bg: #080808;
+        --tocsidebar-shadow: rgba(255,255,255,.1);
+        --tocsidebar-heading-text: hsla(203,20%,40%,.7);
+
+        --toclink-text: var(--text);
+        --toclink-underline: #6af;
+        --toclink-visited-text: var(--toclink-text);
+        --toclink-visited-underline: #054572;
+
+        --heading-text: #8af;
+
+        --hr-text: var(--text);
+
+        --algo-border: #456;
+
+        --del-text: #f44;
+        --del-bg: transparent;
+        --ins-text: #4a4;
+        --ins-bg: transparent;
+
+        --a-normal-text: #6af;
+        --a-normal-underline: #555;
+        --a-visited-text: var(--a-normal-text);
+        --a-visited-underline: var(--a-normal-underline);
+        --a-hover-bg: rgba(25%, 25%, 25%, .2);
+        --a-active-text: #f44;
+        --a-active-underline: var(--a-active-text);
+
+        --borderedblock-bg: rgba(255, 255, 255, .05);
+
+        --blockquote-border: silver;
+        --blockquote-bg: var(--borderedblock-bg);
+        --blockquote-text: currentcolor;
+
+        --issue-border: #e05252;
+        --issue-bg: var(--borderedblock-bg);
+        --issue-text: var(--text);
+        --issueheading-text: hsl(0deg, 70%, 70%);
+
+        --example-border: hsl(50deg, 90%, 60%);
+        --example-bg: var(--borderedblock-bg);
+        --example-text: var(--text);
+        --exampleheading-text: hsl(50deg, 70%, 70%);
+
+        --note-border: hsl(120deg, 100%, 35%);
+        --note-bg: var(--borderedblock-bg);
+        --note-text: var(--text);
+        --noteheading-text: hsl(120, 70%, 70%);
+        --notesummary-underline: silver;
+
+        --assertion-border: #444;
+        --assertion-bg: var(--borderedblock-bg);
+        --assertion-text: var(--text);
+
+        --advisement-border: orange;
+        --advisement-bg: #222218;
+        --advisement-text: var(--text);
+        --advisementheading-text: #f84;
+
+        --warning-border: red;
+        --warning-bg: hsla(40,100%,20%,0.95);
+        --warning-text: var(--text);
+
+        --def-border: #8ccbf2;
+        --def-bg: #080818;
+        --def-text: var(--text);
+        --defrow-border: #136;
+
+        --datacell-border: silver;
+
+        --indexinfo-text: #aaa;
+
+        --indextable-hover-text: var(--text);
+        --indextable-hover-bg: #181818;
+
+        --outdatedspec-bg: rgba(255, 255, 255, .5);
+        --outdatedspec-text: black;
+        --outdated-bg: maroon;
+        --outdated-text: white;
+        --outdated-shadow: red;
+
+        --editedrec-bg: darkorange;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --selflink-text: black;
+        --selflink-bg: silver;
+        --selflink-hover-text: white;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    .highlight:not(.idl) { background: rgba(255, 255, 255, .05); }
+
+    c-[a] { color: #d33682 } /* Keyword.Declaration */
+    c-[b] { color: #d33682 } /* Keyword.Type */
+    c-[c] { color: #2aa198 } /* Comment */
+    c-[d] { color: #2aa198 } /* Comment.Multiline */
+    c-[e] { color: #268bd2 } /* Name.Attribute */
+    c-[f] { color: #b58900 } /* Name.Tag */
+    c-[g] { color: #cb4b16 } /* Name.Variable */
+    c-[k] { color: #d33682 } /* Keyword */
+    c-[l] { color: #657b83 } /* Literal */
+    c-[m] { color: #657b83 } /* Literal.Number */
+    c-[n] { color: #268bd2 } /* Name */
+    c-[o] { color: #657b83 } /* Operator */
+    c-[p] { color: #657b83 } /* Punctuation */
+    c-[s] { color: #6c71c4 } /* Literal.String */
+    c-[t] { color: #6c71c4 } /* Literal.String.Single */
+    c-[u] { color: #6c71c4 } /* Literal.String.Double */
+    c-[ch] { color: #2aa198 } /* Comment.Hashbang */
+    c-[cp] { color: #2aa198 } /* Comment.Preproc */
+    c-[cpf] { color: #2aa198 } /* Comment.PreprocFile */
+    c-[c1] { color: #2aa198 } /* Comment.Single */
+    c-[cs] { color: #2aa198 } /* Comment.Special */
+    c-[kc] { color: #d33682 } /* Keyword.Constant */
+    c-[kn] { color: #d33682 } /* Keyword.Namespace */
+    c-[kp] { color: #d33682 } /* Keyword.Pseudo */
+    c-[kr] { color: #d33682 } /* Keyword.Reserved */
+    c-[ld] { color: #657b83 } /* Literal.Date */
+    c-[nc] { color: #268bd2 } /* Name.Class */
+    c-[no] { color: #268bd2 } /* Name.Constant */
+    c-[nd] { color: #268bd2 } /* Name.Decorator */
+    c-[ni] { color: #268bd2 } /* Name.Entity */
+    c-[ne] { color: #268bd2 } /* Name.Exception */
+    c-[nf] { color: #268bd2 } /* Name.Function */
+    c-[nl] { color: #268bd2 } /* Name.Label */
+    c-[nn] { color: #268bd2 } /* Name.Namespace */
+    c-[py] { color: #268bd2 } /* Name.Property */
+    c-[ow] { color: #657b83 } /* Operator.Word */
+    c-[mb] { color: #657b83 } /* Literal.Number.Bin */
+    c-[mf] { color: #657b83 } /* Literal.Number.Float */
+    c-[mh] { color: #657b83 } /* Literal.Number.Hex */
+    c-[mi] { color: #657b83 } /* Literal.Number.Integer */
+    c-[mo] { color: #657b83 } /* Literal.Number.Oct */
+    c-[sa] { color: #6c71c4 } /* Literal.String.Affix */
+    c-[sb] { color: #6c71c4 } /* Literal.String.Backtick */
+    c-[sc] { color: #6c71c4 } /* Literal.String.Char */
+    c-[dl] { color: #6c71c4 } /* Literal.String.Delimiter */
+    c-[sd] { color: #6c71c4 } /* Literal.String.Doc */
+    c-[se] { color: #6c71c4 } /* Literal.String.Escape */
+    c-[sh] { color: #6c71c4 } /* Literal.String.Heredoc */
+    c-[si] { color: #6c71c4 } /* Literal.String.Interpol */
+    c-[sx] { color: #6c71c4 } /* Literal.String.Other */
+    c-[sr] { color: #6c71c4 } /* Literal.String.Regex */
+    c-[ss] { color: #6c71c4 } /* Literal.String.Symbol */
+    c-[fm] { color: #268bd2 } /* Name.Function.Magic */
+    c-[vc] { color: #cb4b16 } /* Name.Variable.Class */
+    c-[vg] { color: #cb4b16 } /* Name.Variable.Global */
+    c-[vi] { color: #cb4b16 } /* Name.Variable.Instance */
+    c-[vm] { color: #cb4b16 } /* Name.Variable.Magic */
+    c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
+}
+</style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-09-14">14 September 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-09-21">21 September 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1558,6 +2662,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#patch-messageevent"><span class="secno">4.1</span> <span class="content">The <code class="idl"><span>MessageEvent</span></code> interface</span></a>
       <li><a href="#patch-event-handlers"><span class="secno">4.2</span> <span class="content">Event handlers</span></a>
       <li><a href="#patch-window-apis"><span class="secno">4.3</span> <span class="content">APIs for creating and navigating browsing contexts by name</span></a>
+      <li><a href="#patch-navigation"><span class="secno">4.4</span> <span class="content">Navigation</span></a>
+      <li><a href="#patch-downloading"><span class="secno">4.5</span> <span class="content">Downloading resources</span></a>
      </ol>
     <li>
      <a href="#other-spec-updates"><span class="secno">5</span> <span class="content">Updates to other specifications</span></a>
@@ -1972,8 +3078,6 @@ then <a data-link-type="dfn" href="#close-a-portal-element" id="ref-for-close-a-
 then <a data-link-type="dfn" href="#close-a-portal-element" id="ref-for-close-a-portal-element①">close</a> <var>element</var> and return.</p>
        <p>Otherwise, let <var>url</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#resulting-url-record" id="ref-for-resulting-url-record">resulting URL record</a>.</p>
       <li data-md>
-       <p>If the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme①">scheme</a> of <var>url</var> is not an <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-scheme" id="ref-for-http-scheme②">HTTP(S) scheme</a>, then <a data-link-type="dfn" href="#close-a-portal-element" id="ref-for-close-a-portal-element②">close</a> <var>element</var> and return.</p>
-      <li data-md>
        <p>If <var>element</var>’s <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context⑤">guest browsing context</a> is null, then run the following steps:</p>
        <ol>
         <li data-md>
@@ -1992,15 +3096,15 @@ the <a data-link-type="dfn" href="#host-element" id="ref-for-host-element⑤">ho
        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate" id="ref-for-navigate">Navigate</a> <var>guestBrowsingContext</var> to <var>resource</var>.</p>
      </ol>
      <div class="note" role="note">
-       Unlike an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element②">iframe</a></code> element, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①②">portal</a></code> element supports a state where
-      it has no associated browsing context. This is the initial state of a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①③">portal</a></code> element (i.e., it has no initial <code>about:blank</code> document;
-      instead it navigates directly to the first parsable URL assigned to it). 
-      <p>Similarly, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①④">portal</a></code> element responds to an unparsable <code><a data-link-type="element-sub" href="#element-attrdef-portal-src" id="ref-for-element-attrdef-portal-src③">src</a></code> URL by <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context④">closing</a> its browsing context, rather
-      than by navigating to <code>about:blank</code>.</p>
+       Unlike an <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#the-iframe-element" id="ref-for-the-iframe-element②">iframe</a></code> element, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①②">portal</a></code> element supports a state where it has no associated
+      browsing context. This is the initial state of a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①③">portal</a></code> element. That is, the <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑦">portal
+      browsing context</a> has no web-developer-visible initial <code>about:blank</code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code>; instead it <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate" id="ref-for-navigate①">navigates</a> directly to the first parsable URL assigned to it, and if the navigation cannot
+      finish successfully, it <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context④">closes</a> the browsing context before the
+      navigation algorithm finishes. 
+      <p>Similarly, a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal①④">portal</a></code> element responds to an unparsable <code><a data-link-type="element-sub" href="#element-attrdef-portal-src" id="ref-for-element-attrdef-portal-src③">src</a></code> URL by <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context⑤">closing</a> its browsing context, rather than by navigating to <code>about:blank</code>.</p>
      </div>
     </section>
     <ul class="wpt-tests-block">
-     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portal-non-http-navigation.html">portal-non-http-navigation.html</a> <a href="http://web-platform-tests.live/portals/portal-non-http-navigation.html" title="portals/portal-non-http-navigation.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portal-non-http-navigation.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-cross-origin-load.sub.html">portals-cross-origin-load.sub.html</a> <a href="http://web-platform-tests.live/portals/portals-cross-origin-load.sub.html" title="portals/portals-cross-origin-load.sub.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-cross-origin-load.sub.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-referrer.html">portals-referrer.html</a> <a href="http://web-platform-tests.live/portals/portals-referrer.html" title="portals/portals-referrer.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-referrer.html"><small>(source)</small></a>
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-referrer-inherit-header.html">portals-referrer-inherit-header.html</a> <a href="http://web-platform-tests.live/portals/portals-referrer-inherit-header.html" title="portals/portals-referrer-inherit-header.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-referrer-inherit-header.html"><small>(source)</small></a>
@@ -2049,9 +3153,9 @@ the <a data-link-type="dfn" href="#host-element" id="ref-for-host-element⑤">ho
      <p>Similarly, the steps when a <code><a data-link-type="element" href="#elementdef-portal" id="ref-for-elementdef-portal②②">portal</a></code> element’s <a data-link-type="dfn" href="#set-the-source-url-of-a-portal-element" id="ref-for-set-the-source-url-of-a-portal-element③">source URL is set</a> prevent
     elements from creating a new <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id="ref-for-htmlportalelement-guest-browsing-context①①">guest browsing context</a> while inside such
     documents.</p>
-     <p>It is therefore impossible to embed a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑦">portal browsing context</a> in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context③">nested browsing context</a>.</p>
+     <p>It is therefore impossible to embed a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑧">portal browsing context</a> in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context③">nested browsing context</a>.</p>
     </div>
-    <p>Whenever a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document">Document</a></code> object <var>document</var> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-document-bc" id="ref-for-concept-document-bc①">browsing context</a> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑧">portal browsing context</a> is marked as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#completely-loaded" id="ref-for-completely-loaded">completely loaded</a>, run the following steps as part of
+    <p>Whenever a <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code> object <var>document</var> whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-document-bc" id="ref-for-concept-document-bc①">browsing context</a> is a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑨">portal browsing context</a> is marked as <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/parsing.html#completely-loaded" id="ref-for-completely-loaded">completely loaded</a>, run the following steps as part of
   the queued task:</p>
     <ol>
      <li data-md>
@@ -2109,9 +3213,9 @@ document</a>.</p>
     </ul>
     <h3 class="heading settled" data-level="3.1" id="the-portalhost-interface"><span class="secno">3.1. </span><span class="content">Portal hosts</span><a class="self-link" href="#the-portalhost-interface"></a></h3>
     <p>Every <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window">Window</a></code> has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="portal-host-object">portal host object</dfn>, which is a <code class="idl"><a data-link-type="idl" href="#portalhost" id="ref-for-portalhost①">PortalHost</a></code>. It is exposed
-  through the <code class="idl"><a data-link-type="idl" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost">portalHost</a></code> attribute getter at times when the window may be in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context⑨">portal browsing context</a>.</p>
+  through the <code class="idl"><a data-link-type="idl" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost">portalHost</a></code> attribute getter at times when the window may be in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⓪">portal browsing context</a>.</p>
     <div class="note" role="note"> The <a data-link-type="dfn" href="#portal-host-object" id="ref-for-portal-host-object①">portal host object</a> can be used to communicate with the <a data-link-type="dfn" href="#host-browsing-context" id="ref-for-host-browsing-context②">host browsing context</a>. Its
-    operations throw if used while its context is not a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⓪">portal browsing context</a> (i.e. there is
+    operations throw if used while its context is not a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing context</a> (i.e. there is
     no host), in the event that JavaScript code has saved a reference to it. At such times, the <code class="idl"><a data-link-type="idl" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost①">window.portalHost</a></code> getter will return null. </div>
 <pre class="idl highlight def"><c- b>partial</c-> <c- b>interface</c-> <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window①"><c- g>Window</c-></a> {
     <c- b>readonly</c-> <c- b>attribute</c-> <a class="n" data-link-type="idl-name" href="#portalhost" id="ref-for-portalhost②"><c- n>PortalHost</c-></a>? <a class="idl-code" data-link-type="attribute" data-readonly data-type="PortalHost?" href="#dom-window-portalhost" id="ref-for-dom-window-portalhost②"><c- g>portalHost</c-></a>;
@@ -2313,11 +3417,11 @@ to deliver the message.</p>
        <td><dfn class="dfn-paneled idl-code" data-dfn-for="Window" data-dfn-type="event" data-export id="eventdef-window-portalactivate"><code>portalactivate</code></dfn>
        <td><code class="idl"><a data-link-type="idl" href="#portalactivateevent" id="ref-for-portalactivateevent④">PortalActivateEvent</a></code>
        <td><code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window⑤">Window</a></code>
-       <td>Fired at the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window⑥">Window</a></code> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①①">portal browsing context</a> when that <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①②">portal browsing
+       <td>Fired at the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/window-object.html#window" id="ref-for-window⑥">Window</a></code> of a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①②">portal browsing context</a> when that <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①③">portal browsing
         context</a> is activated.
     </table>
     <h3 class="heading settled" data-level="4.3" id="patch-window-apis"><span class="secno">4.3. </span><span class="content">APIs for creating and navigating browsing contexts by name</span><a class="self-link" href="#patch-window-apis"></a></h3>
-    <p>Modify the definition of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#script-closable" id="ref-for-script-closable">script-closable</a> to prevent window closing while in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①③">portal browsing context</a>:</p>
+    <p>Modify the definition of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#script-closable" id="ref-for-script-closable">script-closable</a> to prevent window closing while in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①④">portal browsing context</a>:</p>
     <p>A <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context⑤">browsing context</a> is <dfn data-dfn-type="dfn" data-noexport id="script-closable">script-closable<a class="self-link" href="#script-closable"></a></dfn> if either of the following is true:</p>
     <ul>
      <li data-md>
@@ -2327,12 +3431,72 @@ of the user); or</p>
       <p>
        it is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context④">top-level browsing context</a> 
        <ins>whose <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①④">portal state</a> is "<code>none</code>"</ins>
-        and whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/history.html#session-history" id="ref-for-session-history①">session history</a> contains only one <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document①">Document</a></code>.
+        and whose <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/history.html#session-history" id="ref-for-session-history①">session history</a> contains only one <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document②">Document</a></code>.
       </p>
     </ul>
     <ul class="wpt-tests-block">
      <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portals-close-window.html">portals-close-window.html</a> <a href="http://web-platform-tests.live/portals/portals-close-window.html" title="portals/portals-close-window.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portals-close-window.html"><small>(source)</small></a>
     </ul>
+    <h3 class="heading settled" data-level="4.4" id="patch-navigation"><span class="secno">4.4. </span><span class="content">Navigation</span><a class="self-link" href="#patch-navigation"></a></h3>
+    <p>Patch the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate" id="ref-for-navigate②">navigate</a> algorithm to prevent certain navigations in a
+  portal as follows:</p>
+    <div class="algorithm" data-algorithm="process a navigate response patch">
+      In <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#process-a-navigate-response" id="ref-for-process-a-navigate-response">process a navigate response</a>, append the following after the step which
+    establishes the value of <var>failure</var>, but before the step which uses it to display an error page: 
+     <ol>
+      <li data-md>
+       <p>If <var>browsingContext</var>’s <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①⑤">portal state</a> is not "<code>none</code>", and any of the following hold:</p>
+       <ul>
+        <li data-md>
+         <p><var>failure</var> is true;</p>
+        <li data-md>
+         <p><var>navigationParams</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigation-params-request" id="ref-for-navigation-params-request">request</a> is null;</p>
+        <li data-md>
+         <p><var>navigationParams</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigation-params-request" id="ref-for-navigation-params-request①">request</a>'s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-current-url" id="ref-for-concept-request-current-url">current URL</a>'s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-url-scheme" id="ref-for-concept-url-scheme①">scheme</a> is not a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-scheme" id="ref-for-http-scheme②">HTTP(S) scheme</a>;</p>
+        <li data-md>
+         <p><var>response</var> has a `<code>Content-Disposition</code>` header specifying the <code>attachment</code> disposition type; or</p>
+        <li data-md>
+         <p><var>response</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-response-status" id="ref-for-concept-response-status">status</a> is 204 or 205,</p>
+       </ul>
+       <p>then:</p>
+       <ol>
+        <li data-md>
+         <p>If <var>browsingContext</var>’s only entry in its <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/history.html#session-history" id="ref-for-session-history②">session history</a> is the initial <code>about:blank</code> <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#document" id="ref-for-document③">Document</a></code>, then:</p>
+         <ol>
+          <li data-md>
+           <p><a data-link-type="dfn" href="#close-a-portal-element" id="ref-for-close-a-portal-element②">Close</a> <var>browsingContext</var>’s <a data-link-type="dfn" href="#host-element" id="ref-for-host-element⑧">host element</a>.</p>
+          <li data-md>
+           <p>Run the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-discarding-steps" id="ref-for-environment-discarding-steps">environment discarding steps</a> for <var>navigationParam</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigation-params-reserved-environment" id="ref-for-navigation-params-reserved-environment">reserved environment</a>.</p>
+         </ol>
+        <li data-md>
+         <p>Return.</p>
+       </ol>
+     </ol>
+    </div>
+    <div class="algorithm" data-algorithm="process a navigate URL scheme patch">
+      In <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#process-a-navigate-url-scheme" id="ref-for-process-a-navigate-url-scheme">process a navigate URL scheme</a>, insert the following step before the step
+    which displays inline content: 
+     <ol>
+      <li data-md>
+       <p>Otherwise, if <var>browsingContext</var>’s <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①⑥">portal state</a> is not "<code>none</code>", then <a data-link-type="dfn" href="#close-a-portal-element" id="ref-for-close-a-portal-element③">close</a> <var>browsingContext</var>’s <a data-link-type="dfn" href="#host-element" id="ref-for-host-element⑨">host element</a>.</p>
+     </ol>
+    </div>
+    <ul class="wpt-tests-block">
+     <li class="wpt-test"><a href="https://wpt.fyi/results/portals/portal-non-http-navigation.html">portal-non-http-navigation.html</a> <a href="http://web-platform-tests.live/portals/portal-non-http-navigation.html" title="portals/portal-non-http-navigation.html"><small>(live test)</small></a> <a href="https://github.com/web-platform-tests/wpt/blob/master/portals/portal-non-http-navigation.html"><small>(source)</small></a>
+    </ul>
+    <h3 class="heading settled" data-level="4.5" id="patch-downloading"><span class="secno">4.5. </span><span class="content">Downloading resources</span><a class="self-link" href="#patch-downloading"></a></h3>
+    <p>Modify the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/links.html#allowed-to-download" id="ref-for-allowed-to-download">allowed to download</a> algorithm to ensure that portaled content never
+  performs downloads, by prepending the following steps:</p>
+    <div class="algorithm" data-algorithm="allowed to download patch">
+     <ol>
+      <li data-md>
+       <p>If <var>initiator browsing context</var>’s <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①⑦">portal state</a> is not "<code>none</code>", then
+return false.</p>
+      <li data-md>
+       <p>If <var>instantiator browsing context</var>’s <a data-link-type="dfn" href="#portal-state" id="ref-for-portal-state①⑧">portal state</a> is not "<code>none</code>", then
+return false.</p>
+     </ol>
+    </div>
    </section>
    <section>
     <h2 class="heading settled" data-level="5" id="other-spec-updates"><span class="secno">5. </span><span class="content">Updates to other specifications</span><a class="self-link" href="#other-spec-updates"></a></h2>
@@ -2343,7 +3507,7 @@ of the user); or</p>
   pending spec updates to the navigation and session history handling.</p>
     <p>The following new subsection of <a href="https://www.w3.org/TR/CSP3/#directives-fetch">Content Security Policy §6.1 Fetch Directives</a> is added:</p>
     <h4 class="heading settled" data-level="5.1.1" id="portal-src-directive"><span class="secno">5.1.1. </span><span class="content"><code>portal-src</code></span><a class="self-link" href="#portal-src-directive"></a></h4>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="portal-src">portal-src</dfn> directive restricts the URLs which may be loaded into <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①④">portal
+    <p>The <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="portal-src">portal-src</dfn> directive restricts the URLs which may be loaded into <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑤">portal
   browsing contexts</a>. The syntax for the directive’s name and value is described by the following
   ABNF:</p>
 <pre class="highlight"><c- nc>directive-name</c->  <c- o>=</c-> <c- l>"portal-src"</c->
@@ -2353,7 +3517,7 @@ of the user); or</p>
      <a class="self-link" href="#example-portal-src"></a> Given a page with the following Content Security Policy: 
 <pre><a data-link-type="http-header" href="https://w3c.github.io/webappsec-csp/#header-content-security-policy" id="ref-for-header-content-security-policy">Content-Security-Policy</a>: <a data-link-type="dfn" href="#portal-src" id="ref-for-portal-src">portal-src</a> https://example.com/
 </pre>
-     <p>Fetches for the following code will return a network errors, and thus result in <a data-link-type="dfn" href="#close-a-portal-element" id="ref-for-close-a-portal-element③">closing</a> the portal, as the URL provided does not match <code>portal-src</code>'s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#source-lists" id="ref-for-source-lists">source list</a>:</p>
+     <p>Fetches for the following code will return a network errors, and thus result in <a data-link-type="dfn" href="#close-a-portal-element" id="ref-for-close-a-portal-element④">closing</a> the portal, as the URL provided does not match <code>portal-src</code>'s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#source-lists" id="ref-for-source-lists">source list</a>:</p>
 <pre class="highlight"><c- p>&lt;</c-><c- f>portal</c-> <c- e>src</c-><c- o>=</c-><c- s>"https://example.org/"</c-><c- p>>&lt;/</c-><c- f>portal</c-><c- p>></c->
 </pre>
     </div>
@@ -2409,11 +3573,11 @@ this directive’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec
       <li data-md>
        <p>Where the algorithm checks whether <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-reserved-client" id="ref-for-concept-request-reserved-client">reserved client</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-target-browsing-context" id="ref-for-concept-environment-target-browsing-context">target
 browsing context</a> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context④">nested browsing context</a>, check instead whether it is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑤">nested
-browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑤">portal browsing context</a>.</p>
+browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑥">portal browsing context</a>.</p>
      </ol>
     </section>
     <div class="note" role="note">
-      The effect of this is that the request for a document in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑥">portal browsing context</a> will contain the following HTTP header, as though it were in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑥">nested browsing context</a>. 
+      The effect of this is that the request for a document in a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑦">portal browsing context</a> will contain the following HTTP header, as though it were in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑥">nested browsing context</a>. 
 <pre>    Sec-Fetch-Mode: nested-navigate
 </pre>
     </div>
@@ -2427,7 +3591,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     spec updates, we should summarize them in a non-normative fashion here. </div>
     <h3 class="heading settled" data-level="6.1" id="security-overview"><span class="secno">6.1. </span><span class="content">Overview</span><a class="self-link" href="#security-overview"></a></h3>
     <p><em>This section is non-normative.</em></p>
-    <p>In general, a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑦">portal browsing context</a> should respect policies that would apply to
+    <p>In general, a <a data-link-type="dfn" href="#portal-browsing-context" id="ref-for-portal-browsing-context①⑧">portal browsing context</a> should respect policies that would apply to
   a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context⑦">nested browsing context</a>, e.g. that would restrict whether a document can be embedded
   in a document from another <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①">origin</a>.</p>
    </section>
@@ -2746,8 +3910,9 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
   <aside class="dfn-panel" data-for="term-for-document">
    <a href="https://dom.spec.whatwg.org/#document">https://dom.spec.whatwg.org/#document</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-document">3. The portal element</a>
-    <li><a href="#ref-for-document①">4.3. APIs for creating and navigating browsing contexts by name</a>
+    <li><a href="#ref-for-document">3. The portal element</a> <a href="#ref-for-document①">(2)</a>
+    <li><a href="#ref-for-document②">4.3. APIs for creating and navigating browsing contexts by name</a>
+    <li><a href="#ref-for-document③">4.4. Navigation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event">
@@ -2850,10 +4015,17 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-sec-promise-objects①">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-request-current-url">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-current-url">https://fetch.spec.whatwg.org/#concept-request-current-url</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-request-current-url">4.4. Navigation</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-http-scheme">
    <a href="https://fetch.spec.whatwg.org/#http-scheme">https://fetch.spec.whatwg.org/#http-scheme</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-http-scheme">3. The portal element</a> <a href="#ref-for-http-scheme①">(2)</a> <a href="#ref-for-http-scheme②">(3)</a>
+    <li><a href="#ref-for-http-scheme">3. The portal element</a> <a href="#ref-for-http-scheme①">(2)</a>
+    <li><a href="#ref-for-http-scheme②">4.4. Navigation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request-referrer-policy">
@@ -2880,6 +4052,12 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <a href="https://fetch.spec.whatwg.org/#concept-response">https://fetch.spec.whatwg.org/#concept-response</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-response">5.1.1.2. portal-src Post-request check</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-response-status">
+   <a href="https://fetch.spec.whatwg.org/#concept-response-status">https://fetch.spec.whatwg.org/#concept-response-status</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-response-status">4.4. Navigation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-request-url">
@@ -2996,6 +4174,12 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-active-window③">3.2. The PortalActivateEvent interface</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-allowed-to-download">
+   <a href="https://html.spec.whatwg.org/multipage/links.html#allowed-to-download">https://html.spec.whatwg.org/multipage/links.html#allowed-to-download</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-allowed-to-download">4.5. Downloading resources</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-document-window">
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window">https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window</a><b>Referenced in:</b>
    <ul>
@@ -3050,7 +4234,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <a href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context">https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-close-a-browsing-context">2. Portal browsing contexts</a> <a href="#ref-for-close-a-browsing-context①">(2)</a> <a href="#ref-for-close-a-browsing-context②">(3)</a>
-    <li><a href="#ref-for-close-a-browsing-context③">3. The portal element</a> <a href="#ref-for-close-a-browsing-context④">(2)</a>
+    <li><a href="#ref-for-close-a-browsing-context③">3. The portal element</a> <a href="#ref-for-close-a-browsing-context④">(2)</a> <a href="#ref-for-close-a-browsing-context⑤">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-completely-loaded">
@@ -3077,6 +4261,12 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <ul>
     <li><a href="#ref-for-a-browsing-context-is-discarded">2. Portal browsing contexts</a> <a href="#ref-for-a-browsing-context-is-discarded①">(2)</a> <a href="#ref-for-a-browsing-context-is-discarded②">(3)</a>
     <li><a href="#ref-for-a-browsing-context-is-discarded③">3. The portal element</a> <a href="#ref-for-a-browsing-context-is-discarded④">(2)</a> <a href="#ref-for-a-browsing-context-is-discarded⑤">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-environment-discarding-steps">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-discarding-steps">https://html.spec.whatwg.org/multipage/webappapis.html#environment-discarding-steps</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-environment-discarding-steps">4.4. Navigation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-event-handlers">
@@ -3137,7 +4327,8 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
   <aside class="dfn-panel" data-for="term-for-navigate">
    <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate">https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigate</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-navigate">3. The portal element</a>
+    <li><a href="#ref-for-navigate">3. The portal element</a> <a href="#ref-for-navigate①">(2)</a>
+    <li><a href="#ref-for-navigate②">4.4. Navigation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-nested-browsing-context">
@@ -3167,6 +4358,18 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <ul>
     <li><a href="#ref-for-dom-messageevent-ports">3. The portal element</a>
     <li><a href="#ref-for-dom-messageevent-ports①">3.1. Portal hosts</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-process-a-navigate-response">
+   <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#process-a-navigate-response">https://html.spec.whatwg.org/multipage/browsing-the-web.html#process-a-navigate-response</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-process-a-navigate-response">4.4. Navigation</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-process-a-navigate-url-scheme">
+   <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#process-a-navigate-url-scheme">https://html.spec.whatwg.org/multipage/browsing-the-web.html#process-a-navigate-url-scheme</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-process-a-navigate-url-scheme">4.4. Navigation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-prompt-to-unload-a-document">
@@ -3222,6 +4425,18 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-relevant-settings-object③">3.1. Portal hosts</a> <a href="#ref-for-relevant-settings-object④">(2)</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-navigation-params-request">
+   <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigation-params-request">https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigation-params-request</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-navigation-params-request">4.4. Navigation</a> <a href="#ref-for-navigation-params-request①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-navigation-params-reserved-environment">
+   <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigation-params-reserved-environment">https://html.spec.whatwg.org/multipage/browsing-the-web.html#navigation-params-reserved-environment</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-navigation-params-reserved-environment">4.4. Navigation</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-resulting-url-record">
    <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#resulting-url-record">https://html.spec.whatwg.org/multipage/urls-and-fetching.html#resulting-url-record</a><b>Referenced in:</b>
    <ul>
@@ -3260,6 +4475,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <ul>
     <li><a href="#ref-for-session-history">2. Portal browsing contexts</a>
     <li><a href="#ref-for-session-history①">4.3. APIs for creating and navigating browsing contexts by name</a>
+    <li><a href="#ref-for-session-history②">4.4. Navigation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-messageevent-source">
@@ -3343,7 +4559,8 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
   <aside class="dfn-panel" data-for="term-for-concept-url-scheme">
    <a href="https://url.spec.whatwg.org/#concept-url-scheme">https://url.spec.whatwg.org/#concept-url-scheme</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-url-scheme">3. The portal element</a> <a href="#ref-for-concept-url-scheme①">(2)</a>
+    <li><a href="#ref-for-concept-url-scheme">3. The portal element</a>
+    <li><a href="#ref-for-concept-url-scheme①">4.4. Navigation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-url">
@@ -3458,11 +4675,13 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
+     <li><span class="dfn-paneled" id="term-for-concept-request-current-url" style="color:initial">current url</span>
      <li><span class="dfn-paneled" id="term-for-http-scheme" style="color:initial">http(s) scheme</span>
      <li><span class="dfn-paneled" id="term-for-concept-request-referrer-policy" style="color:initial">referrer policy</span>
      <li><span class="dfn-paneled" id="term-for-concept-request" style="color:initial">request</span>
      <li><span class="dfn-paneled" id="term-for-concept-request-reserved-client" style="color:initial">reserved client</span>
      <li><span class="dfn-paneled" id="term-for-concept-response" style="color:initial">response</span>
+     <li><span class="dfn-paneled" id="term-for-concept-response-status" style="color:initial">status</span>
      <li><span class="dfn-paneled" id="term-for-concept-request-url" style="color:initial">url</span>
     </ul>
    <li>
@@ -3483,6 +4702,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
      <li><span class="dfn-paneled" id="term-for-active-document" style="color:initial">active document</span>
      <li><span class="dfn-paneled" id="term-for-active-sandboxing-flag-set" style="color:initial">active sandboxing flag set</span>
      <li><span class="dfn-paneled" id="term-for-active-window" style="color:initial">active window</span>
+     <li><span class="dfn-paneled" id="term-for-allowed-to-download" style="color:initial">allowed to download</span>
      <li><span class="dfn-paneled" id="term-for-concept-document-window" style="color:initial">associated document</span>
      <li><span class="dfn-paneled" id="term-for-auxiliary-browsing-context" style="color:initial">auxiliary browsing context</span>
      <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-connected" style="color:initial">become browsing-context connected</span>
@@ -3496,6 +4716,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
      <li><span class="dfn-paneled" id="term-for-creating-a-new-top-level-browsing-context" style="color:initial">create a new top-level browsing context</span>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-data" style="color:initial">data</span>
      <li><span class="dfn-paneled" id="term-for-a-browsing-context-is-discarded" style="color:initial">discard a browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-environment-discarding-steps" style="color:initial">environment discarding steps</span>
      <li><span class="dfn-paneled" id="term-for-event-handlers" style="color:initial">event handler</span>
      <li><span class="dfn-paneled" id="term-for-event-handler-content-attributes" style="color:initial">event handler content attribute</span>
      <li><span class="dfn-paneled" id="term-for-event-handler-event-type" style="color:initial">event handler event type</span>
@@ -3510,6 +4731,8 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
      <li><span class="dfn-paneled" id="term-for-concept-settings-object-origin" style="color:initial">origin <small>(for environment settings object)</small></span>
      <li><span class="dfn-paneled" id="term-for-parse-a-url" style="color:initial">parse a url</span>
      <li><span class="dfn-paneled" id="term-for-dom-messageevent-ports" style="color:initial">ports</span>
+     <li><span class="dfn-paneled" id="term-for-process-a-navigate-response" style="color:initial">process a navigate response</span>
+     <li><span class="dfn-paneled" id="term-for-process-a-navigate-url-scheme" style="color:initial">process a navigate url scheme</span>
      <li><span class="dfn-paneled" id="term-for-prompt-to-unload-a-document" style="color:initial">prompt to unload</span>
      <li><span class="dfn-paneled" id="term-for-queue-a-global-task" style="color:initial">queue a global task</span>
      <li><span class="dfn-paneled" id="term-for-queue-an-element-task" style="color:initial">queue an element task</span>
@@ -3518,6 +4741,8 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
      <li><span class="dfn-paneled" id="term-for-reflect" style="color:initial">reflect</span>
      <li><span class="dfn-paneled" id="term-for-concept-relevant-global" style="color:initial">relevant global object</span>
      <li><span class="dfn-paneled" id="term-for-relevant-settings-object" style="color:initial">relevant settings object</span>
+     <li><span class="dfn-paneled" id="term-for-navigation-params-request" style="color:initial">request</span>
+     <li><span class="dfn-paneled" id="term-for-navigation-params-reserved-environment" style="color:initial">reserved environment</span>
      <li><span class="dfn-paneled" id="term-for-resulting-url-record" style="color:initial">resulting url record</span>
      <li><span class="dfn-paneled" id="term-for-same-origin" style="color:initial">same origin</span>
      <li><span class="dfn-paneled" id="term-for-same-origin-domain" style="color:initial">same origin-domain</span>
@@ -3671,19 +4896,21 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-portal-state⑨">3. The portal element</a> <a href="#ref-for-portal-state①⓪">(2)</a> <a href="#ref-for-portal-state①①">(3)</a>
     <li><a href="#ref-for-portal-state①②">3.1. Portal hosts</a> <a href="#ref-for-portal-state①③">(2)</a>
     <li><a href="#ref-for-portal-state①④">4.3. APIs for creating and navigating browsing contexts by name</a>
+    <li><a href="#ref-for-portal-state①⑤">4.4. Navigation</a> <a href="#ref-for-portal-state①⑥">(2)</a>
+    <li><a href="#ref-for-portal-state①⑦">4.5. Downloading resources</a> <a href="#ref-for-portal-state①⑧">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="portal-browsing-context">
    <b><a href="#portal-browsing-context">#portal-browsing-context</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-portal-browsing-context">2. Portal browsing contexts</a> <a href="#ref-for-portal-browsing-context①">(2)</a> <a href="#ref-for-portal-browsing-context②">(3)</a>
-    <li><a href="#ref-for-portal-browsing-context③">3. The portal element</a> <a href="#ref-for-portal-browsing-context④">(2)</a> <a href="#ref-for-portal-browsing-context⑤">(3)</a> <a href="#ref-for-portal-browsing-context⑥">(4)</a> <a href="#ref-for-portal-browsing-context⑦">(5)</a> <a href="#ref-for-portal-browsing-context⑧">(6)</a>
-    <li><a href="#ref-for-portal-browsing-context⑨">3.1. Portal hosts</a> <a href="#ref-for-portal-browsing-context①⓪">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①①">4.2. Event handlers</a> <a href="#ref-for-portal-browsing-context①②">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①③">4.3. APIs for creating and navigating browsing contexts by name</a>
-    <li><a href="#ref-for-portal-browsing-context①④">5.1.1. portal-src</a>
-    <li><a href="#ref-for-portal-browsing-context①⑤">5.2. Fetch Metadata Request Headers</a> <a href="#ref-for-portal-browsing-context①⑥">(2)</a>
-    <li><a href="#ref-for-portal-browsing-context①⑦">6.1. Overview</a>
+    <li><a href="#ref-for-portal-browsing-context③">3. The portal element</a> <a href="#ref-for-portal-browsing-context④">(2)</a> <a href="#ref-for-portal-browsing-context⑤">(3)</a> <a href="#ref-for-portal-browsing-context⑥">(4)</a> <a href="#ref-for-portal-browsing-context⑦">(5)</a> <a href="#ref-for-portal-browsing-context⑧">(6)</a> <a href="#ref-for-portal-browsing-context⑨">(7)</a>
+    <li><a href="#ref-for-portal-browsing-context①⓪">3.1. Portal hosts</a> <a href="#ref-for-portal-browsing-context①①">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①②">4.2. Event handlers</a> <a href="#ref-for-portal-browsing-context①③">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①④">4.3. APIs for creating and navigating browsing contexts by name</a>
+    <li><a href="#ref-for-portal-browsing-context①⑤">5.1.1. portal-src</a>
+    <li><a href="#ref-for-portal-browsing-context①⑥">5.2. Fetch Metadata Request Headers</a> <a href="#ref-for-portal-browsing-context①⑦">(2)</a>
+    <li><a href="#ref-for-portal-browsing-context①⑧">6.1. Overview</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="host-element">
@@ -3692,6 +4919,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
     <li><a href="#ref-for-host-element">2. Portal browsing contexts</a> <a href="#ref-for-host-element①">(2)</a> <a href="#ref-for-host-element②">(3)</a> <a href="#ref-for-host-element③">(4)</a>
     <li><a href="#ref-for-host-element④">3. The portal element</a> <a href="#ref-for-host-element⑤">(2)</a> <a href="#ref-for-host-element⑥">(3)</a>
     <li><a href="#ref-for-host-element⑦">3.1. Portal hosts</a>
+    <li><a href="#ref-for-host-element⑧">4.4. Navigation</a> <a href="#ref-for-host-element⑨">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="host-browsing-context">
@@ -3829,8 +5057,9 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
   <aside class="dfn-panel" data-for="close-a-portal-element">
    <b><a href="#close-a-portal-element">#close-a-portal-element</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-close-a-portal-element">3. The portal element</a> <a href="#ref-for-close-a-portal-element①">(2)</a> <a href="#ref-for-close-a-portal-element②">(3)</a>
-    <li><a href="#ref-for-close-a-portal-element③">5.1.1. portal-src</a>
+    <li><a href="#ref-for-close-a-portal-element">3. The portal element</a> <a href="#ref-for-close-a-portal-element①">(2)</a>
+    <li><a href="#ref-for-close-a-portal-element②">4.4. Navigation</a> <a href="#ref-for-close-a-portal-element③">(2)</a>
+    <li><a href="#ref-for-close-a-portal-element④">5.1.1. portal-src</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="set-the-source-url-of-a-portal-element">
