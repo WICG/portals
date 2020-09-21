@@ -29,6 +29,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
         urlPrefix: browsing-the-web.html
             text: prompt to unload; url: prompt-to-unload-a-document
             text: reserved environment; for: navigation params; url: navigation-params-reserved-environment
+            text: request; for: navigation params; url: navigation-params-request
         urlPrefix: common-dom-interfaces.html
             text: limited to only known values; url: limited-to-only-known-values
             text: reflect; url: reflect
@@ -982,7 +983,9 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     1. If |browsingContext|'s [=portal state=] is not "`none`", and any of the following hold:
 
           * |failure| is true;
-          * |response|'s [=response/url=] is null;
+          * |navigationParams|'s [=navigation params/request=] is null;
+          * |navigationParams|'s [=navigation params/request=]'s [=request/current URL=]'s
+            [=url/scheme=] is not a [=HTTP(S) scheme=];
           * |response| has a \``Content-Disposition`\` header specifying the `attachment`
               disposition type; or
           * |response|'s [=response/status=] is 204 or 205,
@@ -995,17 +998,6 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
             1. Run the [=environment discarding steps=] for <var ignore>navigationParam</var>'s
                 [=navigation params/reserved environment=].
         1. Return.
-
-        <p class="note">If |response| has a non-null [=response/url=], then by the time we reach <a
-        spec=HTML>process a navigate response</a>, that URL's [=url/scheme=] will always be a
-        [=HTTP(S) scheme=]. <a spec=FETCH>Scheme fetch</a> translates all other request URL schemes
-        into null-[=response/url=] [=responses=]. And if a redirect causes a non-HTTP(S) response
-        URL, then earlier parts of the navigation algorithm will either translate them into a
-        (null-[=response/url=]) [=network error=], or call back into [=fetch=] (and thus <a
-        spec=FETCH>scheme fetch</a>).</p>
-
-        <p class="note">Attempts to navigate to `javascript:` URLs will reach this part of the spec,
-        with |response|'s [=response/url=] always being null.</p>
   </div>
 
   <div algorithm="process a navigate URL scheme patch">
