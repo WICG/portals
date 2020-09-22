@@ -233,6 +233,8 @@ Navigations within portals are subject to certain security restrictions for load
 
 Navigation errors within portals may cause portal activation to be rejected. Instead of, for example, the user agent showing an error page to the user as with a conventional navigation, the promise returned by the activate method allows a page to gracefully handle the rejection. Furthermore, user agents have existing limitations on navigations initiated by the page where they may be ignored if they are considered to conflict with a user's intent to perform a different navigation. Such cases are not described by the existing navigation spec (see [#218](https://github.com/WICG/portals/issues/218)), but portal activations are subject to these limitations. In the case where another navigation takes precedence over portal activation, the promise returned by the activate method rejects.
 
+See the [rough algorithms](history-traversal.md) for cases where portals may be auto-activated, and pages may be reportaled, when traversing session history.
+
 TODO:
 
 - Talk about how bfcache is tricky.
