@@ -300,6 +300,67 @@ An additional reason for avoiding these mechanisms is that it makes writing port
 
 To conclude, instead of giving embedders this control as iframes do, we believe that the browser can take the role of mitigating any problematic features. For example, instead of requiring embedders to use `sandbox=""` to turn off modal `alert()`/`confirm()`/`prompt()` dialogs, or permissions policy to turn off autoplaying media, those features are [always disabled](https://github.com/WICG/portals#other-restrictions-while-portaled) in pre-activation portals. And because portals are isolated from communicating with their embedder pre-activation, any problems which CSP Embedded Enforcement would attempt to protect against will instead be caught by this communications barrier and prevented from impacting the embedder.
 
+### Activation
+
+The basics of activation are explained [in the intro example](#example): calling `portalElement.activate()` causes the embedding window to navigate to the content which is already loaded into the portal. This section discusses some of the subtler details.
+
+First, note that a portal may be in a "closed" state, when it is not displaying valid, activatable content. This could happen for several reasons:
+
+- The host page author has incorrectly set the portal to a non-HTTP(S) URL, e.g. using `<portal src="data:text/html,hello"></portal>`. Portals can only display HTTP(S) URLs.
+- The portaled page cannot be loaded, for reasons outside of the host page author's control. For example, if the portaled content does a HTTP redirect to a `data:` URL, or if the portaled content gives a network error.
+- The user is offline, which also causes a network error.
+
+(What, exactly, the `<portal>` element displays in this state is still under discussion: [#251](https://github.com/WICG/portals/issues/251).)
+
+Attempting to activate a closed portal will fail. Activation can also fail if another navigation is in progress, as discussed [above](#session-history-navigation-and-bfcache). In all of these cases, the promise returned by the `activate()` method will be rejected, allowing page authors to gracefully handle the failure with a custom error experience.
+
+Another consideration is how activation behaves when the portal is currently loading content. This breaks down into two cases:
+
+- During the initial load of content into a portal, e.g. given
+
+  ```js
+  const portal = document.createElement("portal");
+  portal.src = "https://slow.example.com/";
+  document.body.append(portal);
+  portal.activate();
+  ```
+
+  the promise returned by `activate()` will not settle until the navigation is far enough along to determine whether or not it will be successful. This requires waiting for the response to start arriving, to ensure there are no network errors and that the final response URL is a HTTP(S) URL. Once it reaches that point, then the promise will fulfill or reject appropriately. If the promise fulfills, then activation will have completed, and the content will be loading into the newly-activated browsing context. If it rejects, then no activation will have occurred.
+
+- After the initial load of the portal, e.g. given
+
+  ```js
+  const portal = getSomeExistingFullyLoadedPortal();
+  portal.src = "https://different-url.example.com/";
+  portal.activate();
+  ```
+
+  activation of the already-loaded content will happen immediately, and the navigation to the new content will happen in the newly-activated browsing context. In these cases, the promise returned by `activate()` will generally fulfill, as it is almost always possible to activate the already-loaded content. (The exceptions are edge cases like if another user-initiated navigation, or another portal activation, is already ongoing.)
+
+Combined, these behaviors allow authors to write fairly simple code to activate and handle errors. For example, consider a page which wants to use portals to create an [InstantClick](http://instantclick.io/)-like experience, prerendering the content of a link on hover, and activating it onclick. This could look something like the following:
+
+```js
+const portal = document.createElement("portal");
+portal.src = aElement.href;
+portal.hidden = true;
+
+aElement.onmouseover = () => {
+  document.body.append(portal);
+};
+
+aElement.onclick = async e => {
+  e.preventDefault();
+
+  try {
+    await portal.activate()
+  } catch (e) {
+    // Show a custom error toast.
+    // Or maybe just load the error page/non-HTTP(S) URL,
+    // using location.href = aElement.href;
+  }
+};
+```
+
 ## Summary of differences between portals and iframes
 
 Portals are somewhat reminiscent of iframes, but are different in enough significant ways that we propose them as a new element.
