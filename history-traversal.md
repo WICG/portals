@@ -13,7 +13,7 @@ Eventually, these steps will be moved into the portal spec, and the history trav
 
 ## Activate a portal in a 'push' style
 
-This is a regular activation that clears any 'forward' items in join session history and adds a new top-level history entry for the portaled document.
+This is a regular activation that clears any 'forward' items in joint session history and adds a new top-level history entry for the portaled document.
 
 1. Let _document_ be the portal's session history item's document.
 1. Let _targetHistoryItem_ be a copy of the portal's session history item.
@@ -27,7 +27,7 @@ This is a regular activation that clears any 'forward' items in join session his
 
 ## Activate a portal in a 'back' style
 
-This is an activation that goes back through join session history. The API for this hasn't been designed, but if it exists it's likely to be an option to `activate()`.
+This is an activation that goes back through joint session history. The API for this hasn't been designed, but if it exists it's likely to be an option to `activate()`.
 
 1. Let _targetHistoryItem_ be the previous history item in the parent navigable, where the browsing context or URL differs from the current history item, ignoring the hash portion of the URLs.
 1. If _targetHistoryItem_ does not have a weak reference to the portal's history item's document, reject and abort these steps.
@@ -37,7 +37,7 @@ This is an activation that goes back through join session history. The API for t
 
 ## Activate a portal in a 'forwards' style
 
-This is an activation that go forward through join session history, without destroying existing items. The API for this hasn't been designed, but if it exists it's likely to be an option to `activate()`.
+This is an activation that go forward through joint session history, without destroying existing items. The API for this hasn't been designed, but if it exists it's likely to be an option to `activate()`.
 
 1. Let _targetHistoryItem_ be the next history item in the parent navigable, where the browsing context or URL differs from the current history item, ignoring the hash portion of the URLs.
 1. If _targetHistoryItem_ does not have a weak reference to the portal's history item's document, reject and abort these steps.
@@ -77,7 +77,7 @@ With _targetHistoryItem_ and _isReplacement_.
 
    Note: To avoid multiple levels of reportaling, reportaling and implicit activation is skipped if the navigation spans across multiple documents
 
-1. Asset: _documentChangesInDelta_ is not 0.
+1. Assert: _documentChangesInDelta_ is not 0.
 
    Note: This should have been catered for in step 1.
 
@@ -102,6 +102,6 @@ With _targetHistoryItem_ and _isReplacement_.
    1. For each item in the navigable's session history, remove its document if the document is _documentToPortal_, and give it a weak reference to _documentToPortal_.
 1. Otherwise, unload the current history item's document.
 
-   Note: This may include excluding it from bfcache.
+   Note: This may involve removing the document from the history item, to exclude it from bfcache (eg if it has an unload handler).
 
 1. Continue traversing to _targetHistoryItem_ in the regular way.
