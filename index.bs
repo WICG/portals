@@ -131,6 +131,22 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. [=Assert=]: The [=portal state=] of |predecessorBrowsingContext| is "`none`".
 
+    1. If |successorBrowsingContext|'s only entry in its [=session history=] is the initial
+        `about:blank` {{Document}}, then wait until either this is no longer true, or
+        |successorBrowsingContext|'s [=host element=] becomes null.
+
+        <p class="note">This means that the initial load is still happening in
+        |successorBrowsingContext|. We wait for it to complete, either successfully or
+        unsuccessfully, before continuing.</p>
+
+    1. If |successorBrowsingContext|'s [=host element=] is null, then:
+
+        1. [=Queue a global task=] on the [=portal task source=] given
+            |predecessorBrowsingContext|'s [=browsing context/active window=] to [=reject=]
+            |promise| with an "{{InvalidStateError}}" {{DOMException}}.
+
+        1. Return.
+
     1. Set the [=host element=] of |successorBrowsingContext| to null.
 
         User agents *should*, however, attempt to preserve the rendering of the
@@ -512,7 +528,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. [=Assert=]: |hostBrowsingContext| is a [=top-level browsing context=].
 
-    1. [=close the portal element|Close=] |element|.
+    1. [=close a portal element|Close=] |element|.
 
     1. If |element| has no <{portal/src}> attribute specified, or its value is the empty string,
         then return.
