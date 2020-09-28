@@ -314,7 +314,7 @@ First, note that a portal may be in a "closed" state, when it is not displaying 
 
 Attempting to activate a closed portal will fail. Activation can also fail if another navigation is in progress, as discussed [above](#session-history-navigation-and-bfcache). In all of these cases, the promise returned by the `activate()` method will be rejected, allowing page authors to gracefully handle the failure with a custom error experience.
 
-Another consideration is how activation behaves when the portal is currently loading content. This breaks down into two cases:
+Another consideration is how activation behaves when the portal is currently loading content. This breaks down into a few cases:
 
 - During the initial load of content into a portal, e.g. given
 
@@ -327,7 +327,7 @@ Another consideration is how activation behaves when the portal is currently loa
 
   the promise returned by `activate()` will not settle until the navigation is far enough along to determine whether or not it will be successful. This requires waiting for the response to start arriving, to ensure there are no network errors and that the final response URL is a HTTP(S) URL. Once it reaches that point, then the promise will fulfill or reject appropriately. If the promise fulfills, then activation will have completed, and the content will be loading into the newly-activated browsing context. If it rejects, then no activation will have occurred.
 
-- After the initial load of the portal, e.g. given
+- After the initial load of the portal, via a host-initiated navigation. For example, given
 
   ```js
   const portal = getSomeExistingFullyLoadedPortal();
@@ -335,7 +335,26 @@ Another consideration is how activation behaves when the portal is currently loa
   portal.activate();
   ```
 
-  activation of the already-loaded content will happen immediately, and the navigation to the new content will happen in the newly-activated browsing context. In these cases, the promise returned by `activate()` will generally fulfill, as it is almost always possible to activate the already-loaded content. (The exceptions are edge cases like if another user-initiated navigation, or another portal activation, is already ongoing.)
+  the assignment to `src=""` will immediately close the currently-displayed browsing context, and start loading the assigned URL in a new browsing context. So, this ends up behaving the same as the previous case: the promise returned by `activate()` will not settle until the navigation is far enough along to determine success.
+
+- After the initial load of the portal, via a portaled-content–initiated navigation. For example, given
+
+  ```js
+  const portal = document.createElement("portal");
+  portal.src = "https://example.com/";
+  document.body.append(portal);
+  portal.onload = () => portal.activate();
+  ```
+
+  where `https://example.com/` itself contains
+
+  ```html
+  <script>
+  location.href = "https://slow.example.org";
+  </script>
+  ```
+
+  we will immediately activate the portal's content, and the navigation to the new content will happen at top-level, not delaying `activate()`. In these cases, the promise returned by `activate()` will generally fulfill, as it is almost always possible to activate the already-loaded content. (The exceptions are edge cases like if another user-initiated navigation, or another portal activation, is already ongoing.)
 
 Combined, these behaviors allow authors to write fairly simple code to activate and handle errors. For example, consider a page which wants to use portals to create an [InstantClick](http://instantclick.io/)-like experience, prerendering the content of a link on hover, and activating it onclick. This could look something like the following:
 
