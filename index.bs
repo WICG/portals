@@ -28,6 +28,7 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
             text: create a new top-level browsing context; url: creating-a-new-top-level-browsing-context
         urlPrefix: browsing-the-web.html
             text: prompt to unload; url: prompt-to-unload-a-document
+            text: unload; url: unload-a-document
             text: reserved environment; for: navigation params; url: navigation-params-reserved-environment
             text: request; for: navigation params; url: navigation-params-request
         urlPrefix: common-dom-interfaces.html
@@ -212,9 +213,9 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
                   the document after previously being attached. This is
                   distinct from the case where the predecessor was never
                   adopted, below, which [=close a browsing context|closes=] the
-                  browsing context, which dispatches the
-                  {{Window/unload!!event}} event, somewhat similarly to if it
-                  had performed an ordinary navigation.
+                  browsing context. Closing [=unload|unloads=] the predecessor's
+                  document, somewhat similarly to if it had performed an ordinary
+                  navigation.
 
                   Typically authors would not call
                   {{PortalActivateEvent/adoptPredecessor()}} unless they intend
@@ -233,6 +234,20 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
                 The user agent *should not* ask the user for confirmation during the
                 [=prompt to unload=] step (and so the browsing context should be
                 [=discard a browsing context|discarded=]).
+
+                <div class="note">
+                  Authors should not expect the {{Window/unload!!event}} event
+                  to be dispatched consistently following portal activation. In
+                  addition to adoption of the predecessor, where the predecessor
+                  would not be [=unload|unloaded=] at all, the predecessor could
+                  also enter bfcache (back forward cache) where the unload event
+                  would not be dispatched.
+                </div>
+                <div class="issue">
+                  Determine how to treat unload/beforeunload handlers. See
+                  <a href="https://github.com/WICG/portals/issues/225">issue #225</a>
+                  for discussion.
+                </div>
   </section>
 
   <wpt>
