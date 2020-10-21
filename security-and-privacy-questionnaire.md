@@ -4,9 +4,7 @@ The following are the answers to the W3C TAG's [security and privacy self-review
 
 ## What information might this feature expose to web sites or other parties, and for what purposes is that exposure necessary?
 
-The design of portals is to [prevent as much information exposure as possible](#privacy-threat-model-and-restrictions). The only information that is exposed to the portaled content about its host, or to the host about the portaled content, is information that leaks through via side channels.
-
-We've done our best to plug as many of these side channels as possible. See, for example, the explainer's section on [rendering](https://github.com/WICG/portals#rendering), and how the restrictions there [prevent side-channel communication](https://github.com/WICG/portals#communications-channels-that-are-blocked).
+The design of portals, and other prerendering browsing contexts, is to [prevent as much information exposure as possible](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-contexts.md#privacy-based-restrictions). The only information that is exposed to the portaled content about its host, or to the host about the portaled content, is information that leaks through via side channels. We've done our best to plug as many of these side channels as possible, as detailed in the linked prerendering browsing context explainer.
 
 Some side channels, such as server-side timing correlation, are not realistically blockable. To mitigate any leaks possible via such avenues, we block pre-activation access to first-party storage, to prevent the portaled content from exposing any _interesting_ information to the host via such side channels.
 
@@ -16,7 +14,7 @@ Yes.
 
 ## How does this specification deal with personal information or personally-identifiable information or information derived thereof?
 
-This specification does not deal with such information in itself. In terms of how it interacts with other existing features that do, we note that portaled content is [prohibited](https://github.com/WICG/portals#other-restrictions-while-portaled) from accessing any permission-requiring features before activation.
+This specification does not deal with such information in itself. In terms of how it interacts with other existing features that do, we note that portaled content is [prohibited](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-contexts.md#restrictions-on-the-basis-of-being-non-user-visible) from accessing any permission-requiring features before activation.
 
 ## How does this specification deal with sensitive information?
 
