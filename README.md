@@ -114,7 +114,12 @@ for (const link of document.querySelectorAll('a.seamless')) {
 
     // Once the preview is now displayed as the whole viewport, activate.
     // This performs the instant navigation/URL bar update/etc.
-    portal.activate();
+    try {
+      portal.activate();
+    } catch {
+      // If activation failed, fall back to a normal navigation.
+      location.href = link.href;
+    }
   };
 }
 </script>
@@ -207,7 +212,7 @@ Authors should respect the `prefers-reduced-motion` media query by conditionally
 
 ### Session history, navigation, and bfcache
 
-At a base level, portals behave the same as other prerendering browsing contexts do with respect to [session history](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#session-history) and [navigation](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#navigation). To summarize, content inside the portal has a trivial session history, and activation acts like a navigation of the host page, appending the current document in the portal to the host page's session history. This works to preserve user expectations for the back button. Note that this is very different from how iframes behave, and is one of the reasons it is better to think of portals as "inline-displayed popups" or "prerendered links" than as iframes. (Discussed further [below](#summary-of-differences-between-portals-and-iframes).)
+At a base level, portals behave the same as other prerendering browsing contexts do with respect to [session history](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#session-history) and [navigation](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#navigation). To summarize, content inside the portal has a trivial session history, and activation acts like a navigation of the host page, appending the portal's current session history entry to the host page's session history. This works to preserve user expectations for the back button. Note that this is very different from how iframes behave, and is one of the reasons it is better to think of portals as "inline-displayed popups" or "prerendered links" than as iframes. (Discussed further [below](#summary-of-differences-between-portals-and-iframes).)
 
 Because of the predecessor adoption feature, portals have some additional complexity, where they can cause the predecessor (i.e., the host document) to move into a prerendering browsing context. TODO describe this more.
 
@@ -221,7 +226,7 @@ TODO:
 
 ### Activation
 
-The basics of activation are explained [in the intro examples](#examples): calling `portalElement.activate()` causes the embedding window to navigate to the content which is already loaded into the portal, i.e. it is a developer-controlled way of activating the general activation operation that all prerendering browsing contexts have. This section discusses some of the subtler details created by exposing this functionality to developers, instead of leaving it up to the browser as other prerendering browsing contexts do.
+The basics of activation are explained [in the intro examples](#examples): calling `portalElement.activate()` causes the embedding window to navigate to the content which is already loaded into the portal. That is, it is a developer-controlled way of performing the general activation operation that all prerendering browsing contexts have. This section discusses some of the subtler details created by exposing this functionality to developers, instead of leaving it up to the browser as other prerendering browsing contexts do.
 
 First, note that a portal's prerendering browsing context may be in a "closed" state, when it is not displaying valid, activatable content. This could happen for several reasons:
 
