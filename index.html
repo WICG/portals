@@ -1198,7 +1198,7 @@ Possible extra rowspan handling
 	ul.index ul,
 	ul.index dl { font-size: smaller; }
 	@media not print {
-		ul.index li span {
+		ul.index li span:not(.dfn-paneled) {
 			white-space: nowrap;
 			color: transparent; }
 		ul.index li a:hover + span,
@@ -1322,7 +1322,7 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 5f7b0e20, updated Tue Aug 18 15:46:28 2020 -0700" name="generator">
+  <meta content="Bikeshed version 89ebb6ab, updated Fri Oct 9 15:32:07 2020 -0700" name="generator">
   <link href="https://wicg.github.io/portals/" rel="canonical">
 <style>/* darkmode */
 
@@ -1553,7 +1553,7 @@ figcaption:not(.no-marker)::before {
 .dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
 .dfn-panel > b { display: block; }
-.dfn-panel a { color: black; }
+.dfn-panel a { color: var(--dfnpanel-text); }
 .dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
 .dfn-panel > b + b { margin-top: 0.25em; }
 .dfn-panel ul { padding: 0; }
@@ -1641,7 +1641,7 @@ dfn > a.self-link::before      { content: "#"; }
 code.highlight { padding: .1em; border-radius: .3em; }
 pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
 
-.highlight:not(.idl) { background: #fdf6e3; }
+.highlight:not(.idl) { background: rgba(0, 0, 0, .03); }
 c-[a] { color: #990055 } /* Keyword.Declaration */
 c-[b] { color: #990055 } /* Keyword.Type */
 c-[c] { color: #708090 } /* Comment */
@@ -1710,7 +1710,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 
 :root {
 	--wpt-border: hsl(290, 70%, 60%);
-	--wpt-bg: hsl(290, 70%, 95%)
+	--wpt-bg: hsl(290, 70%, 95%);
 	--wpt-text: var(--text);
 	--wptheading-text: hsl(290, 70%, 30%);
 }
@@ -1931,9 +1931,9 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 </style>
  <body class="h-entry">
   <div class="head">
-   <p data-fill-with="logo"></p>
+   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Portals</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-09-28">28 September 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-10-28">28 October 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2010,7 +2010,12 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#security-overview"><span class="secno">6.1</span> <span class="content">Overview</span></a>
      </ol>
     <li><a href="#untriaged-tests"><span class="secno">7</span> <span class="content">Untriaged tests</span></a>
-    <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
+    <li>
+     <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
+     <ol class="toc">
+      <li><a href="#w3c-conventions"><span class="secno"></span> <span class="content">Document conventions</span></a>
+      <li><a href="#w3c-conformant-algorithms"><span class="secno"></span> <span class="content">Conformant Algorithms</span></a>
+     </ol>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
      <ol class="toc">
@@ -2153,8 +2158,9 @@ its <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id=
   the document after previously being attached. This is
   distinct from the case where the predecessor was never
   adopted, below, which <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context①">closes</a> the
-  browsing context, which dispatches the <code class="idl"><a class="idl-code" data-link-type="event" href="https://html.spec.whatwg.org/multipage/indices.html#event-unload" id="ref-for-event-unload">unload</a></code> event, somewhat similarly to if it
-  had performed an ordinary navigation. 
+  browsing context. Closing <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#unload-a-document" id="ref-for-unload-a-document">unloads</a> the predecessor’s
+  document, somewhat similarly to if it had performed an ordinary
+  navigation. 
             <p>Typically authors would not call <code class="idl"><a data-link-type="idl" href="#dom-portalactivateevent-adoptpredecessor" id="ref-for-dom-portalactivateevent-adoptpredecessor①">adoptPredecessor()</a></code> unless they intend
   to insert it into the document before the <a data-link-type="dfn" href="#htmlportalelement-just-adopted-flag" id="ref-for-htmlportalelement-just-adopted-flag①">just-adopted flag</a> becomes false.</p>
            </div>
@@ -2167,6 +2173,13 @@ its <a data-link-type="dfn" href="#htmlportalelement-guest-browsing-context" id=
           <li data-md>
            <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#close-a-browsing-context" id="ref-for-close-a-browsing-context②">Close</a> <var>predecessorBrowsingContext</var>.</p>
            <p>The user agent <em>should not</em> ask the user for confirmation during the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#prompt-to-unload-a-document" id="ref-for-prompt-to-unload-a-document">prompt to unload</a> step (and so the browsing context should be <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#a-browsing-context-is-discarded" id="ref-for-a-browsing-context-is-discarded②">discarded</a>).</p>
+           <div class="note" role="note"> Authors should not expect the <code class="idl"><a class="idl-code" data-link-type="event" href="https://html.spec.whatwg.org/multipage/indices.html#event-unload" id="ref-for-event-unload">unload</a></code> event
+  to be dispatched consistently following portal activation. In
+  addition to adoption of the predecessor, where the predecessor
+  would not be <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#unload-a-document" id="ref-for-unload-a-document①">unloaded</a> at all, the predecessor could
+  also enter bfcache (back forward cache) where the unload event
+  would not be dispatched. </div>
+           <div class="issue" id="issue-c722a2b5"><a class="self-link" href="#issue-c722a2b5"></a> Determine how to treat unload/beforeunload handlers. See <a href="https://github.com/WICG/portals/issues/225">issue #225</a> for discussion. </div>
          </ol>
        </ol>
      </ol>
@@ -2952,151 +2965,47 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    </section>
   </main>
   <div data-fill-with="conformance">
-   <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
-   <p> Conformance requirements are expressed with a combination of descriptive assertions and RFC 2119 terminology.
-            The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
-            in the normative parts of this document
-            are to be interpreted as described in RFC 2119.
-            However, for readability,
-            these words do not appear in all uppercase letters in this specification. </p>
-   <p> All of the text of this specification is normative
-            except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119">[RFC2119]</a> </p>
-   <p> Examples in this specification are introduced with the words “for example”
-            or are set apart from the normative text with <code>class="example"</code>, like this: </p>
-   <div class="example" id="example-example"><a class="self-link" href="#example-example"></a> This is an example of an informative example. </div>
-   <p> Informative notes begin with the word “Note”
-            and are set apart from the normative text with <code>class="note"</code>, like this: </p>
-   <p class="note" role="note"> Note, this is an informative note. </p>
+   <h2 class="no-ref no-num heading settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
+   <h3 class="no-ref no-num heading settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
+   <p>Conformance requirements are expressed
+    with a combination of descriptive assertions
+    and RFC 2119 terminology.
+    The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
+    in the normative parts of this document
+    are to be interpreted as described in RFC 2119.
+    However, for readability,
+    these words do not appear in all uppercase letters in this specification. </p>
+   <p>All of the text of this specification is normative
+    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119">[RFC2119]</a> </p>
+   <p>Examples in this specification are introduced with the words “for example”
+    or are set apart from the normative text
+    with <code>class="example"</code>,
+    like this: </p>
+   <div class="example" id="w3c-example">
+    <a class="self-link" href="#w3c-example"></a> 
+    <p>This is an example of an informative example. </p>
+   </div>
+   <p>Informative notes begin with the word “Note”
+    and are set apart from the normative text
+    with <code>class="note"</code>,
+    like this: </p>
+   <p class="note" role="note">Note, this is an informative note. </p>
+   <h3 class="no-ref no-num heading settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
+   <p>Requirements phrased in the imperative as part of algorithms
+    (such as "strip any leading space characters"
+    or "return false and abort these steps")
+    are to be interpreted with the meaning of the key word
+    ("must", "should", "may", etc)
+    used in introducing the algorithm. </p>
+   <p>Conformance requirements phrased as algorithms or specific steps
+    can be implemented in any manner,
+    so long as the end result is equivalent.
+    In particular, the algorithms defined in this specification
+    are intended to be easy to understand
+    and are not intended to be performant.
+    Implementers are encouraged to optimize. </p>
   </div>
-<script>
-(function() {
-  "use strict";
-  var collapseSidebarText = '<span aria-hidden="true">←</span> '
-                          + '<span>Collapse Sidebar</span>';
-  var expandSidebarText   = '<span aria-hidden="true">→</span> '
-                          + '<span>Pop Out Sidebar</span>';
-  var tocJumpText         = '<span aria-hidden="true">↑</span> '
-                          + '<span>Jump to Table of Contents</span>';
-
-  var sidebarMedia = window.matchMedia('screen and (min-width: 78em)');
-  var autoToggle   = function(e){ toggleSidebar(e.matches) };
-  if(sidebarMedia.addListener) {
-    sidebarMedia.addListener(autoToggle);
-  }
-
-  function toggleSidebar(on) {
-    if (on == undefined) {
-      on = !document.body.classList.contains('toc-sidebar');
-    }
-
-    /* Don’t scroll to compensate for the ToC if we’re above it already. */
-    var headY = 0;
-    var head = document.querySelector('.head');
-    if (head) {
-      // terrible approx of "top of ToC"
-      headY += head.offsetTop + head.offsetHeight;
-    }
-    var skipScroll = window.scrollY < headY;
-
-    var toggle = document.getElementById('toc-toggle');
-    var tocNav = document.getElementById('toc');
-    if (on) {
-      var tocHeight = tocNav.offsetHeight;
-      document.body.classList.add('toc-sidebar');
-      document.body.classList.remove('toc-inline');
-      toggle.innerHTML = collapseSidebarText;
-      if (!skipScroll) {
-        window.scrollBy(0, 0 - tocHeight);
-      }
-      tocNav.focus();
-      sidebarMedia.addListener(autoToggle); // auto-collapse when out of room
-    }
-    else {
-      document.body.classList.add('toc-inline');
-      document.body.classList.remove('toc-sidebar');
-      toggle.innerHTML = expandSidebarText;
-      if (!skipScroll) {
-        window.scrollBy(0, tocNav.offsetHeight);
-      }
-      if (toggle.matches(':hover')) {
-        /* Unfocus button when not using keyboard navigation,
-           because I don’t know where else to send the focus. */
-        toggle.blur();
-      }
-    }
-  }
-
-  function createSidebarToggle() {
-    /* Create the sidebar toggle in JS; it shouldn’t exist when JS is off. */
-    var toggle = document.createElement('a');
-      /* This should probably be a button, but appearance isn’t standards-track.*/
-    toggle.id = 'toc-toggle';
-    toggle.class = 'toc-toggle';
-    toggle.href = '#toc';
-    toggle.innerHTML = collapseSidebarText;
-
-    sidebarMedia.addListener(autoToggle);
-    var toggler = function(e) {
-      e.preventDefault();
-      sidebarMedia.removeListener(autoToggle); // persist explicit off states
-      toggleSidebar();
-      return false;
-    }
-    toggle.addEventListener('click', toggler, false);
-
-
-    /* Get <nav id=toc-nav>, or make it if we don’t have one. */
-    var tocNav = document.getElementById('toc-nav');
-    if (!tocNav) {
-      tocNav = document.createElement('p');
-      tocNav.id = 'toc-nav';
-      /* Prepend for better keyboard navigation */
-      document.body.insertBefore(tocNav, document.body.firstChild);
-    }
-    /* While we’re at it, make sure we have a Jump to Toc link. */
-    var tocJump = document.getElementById('toc-jump');
-    if (!tocJump) {
-      tocJump = document.createElement('a');
-      tocJump.id = 'toc-jump';
-      tocJump.href = '#toc';
-      tocJump.innerHTML = tocJumpText;
-      tocNav.appendChild(tocJump);
-    }
-
-    tocNav.appendChild(toggle);
-  }
-
-  var toc = document.getElementById('toc');
-  if (toc) {
-    createSidebarToggle();
-    toggleSidebar(sidebarMedia.matches);
-
-    /* If the sidebar has been manually opened and is currently overlaying the text
-       (window too small for the MQ to add the margin to body),
-       then auto-close the sidebar once you click on something in there. */
-    toc.addEventListener('click', function(e) {
-      if(e.target.tagName.toLowerCase() == "a" && document.body.classList.contains('toc-sidebar') && !sidebarMedia.matches) {
-        toggleSidebar(false);
-      }
-    }, false);
-  }
-  else {
-    console.warn("Can’t find Table of Contents. Please use <nav id='toc'> around the ToC.");
-  }
-
-  /* Wrap tables in case they overflow */
-  var tables = document.querySelectorAll(':not(.overlarge) > table.data, :not(.overlarge) > table.index');
-  var numTables = tables.length;
-  for (var i = 0; i < numTables; i++) {
-    var table = tables[i];
-    var wrapper = document.createElement('div');
-    wrapper.className = 'overlarge';
-    table.parentNode.insertBefore(wrapper, table);
-    wrapper.appendChild(table);
-  }
-
-})();
-</script>
+<script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
@@ -3991,162 +3900,162 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
    <li>
     <a data-link-type="biblio">[CSP]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-header-content-security-policy" style="color:initial">content-security-policy</span>
-     <li><span class="dfn-paneled" id="term-for-directive-post-request-check" style="color:initial">post-request check</span>
-     <li><span class="dfn-paneled" id="term-for-directive-pre-request-check" style="color:initial">pre-request check</span>
-     <li><span class="dfn-paneled" id="term-for-sandbox" style="color:initial">sandbox</span>
-     <li><span class="dfn-paneled" id="term-for-grammardef-serialized-source-list" style="color:initial">serialized-source-list</span>
-     <li><span class="dfn-paneled" id="term-for-source-lists" style="color:initial">source lists</span>
-     <li><span class="dfn-paneled" id="term-for-directive-value" style="color:initial">value</span>
+     <li><span class="dfn-paneled" id="term-for-header-content-security-policy">content-security-policy</span>
+     <li><span class="dfn-paneled" id="term-for-directive-post-request-check">post-request check</span>
+     <li><span class="dfn-paneled" id="term-for-directive-pre-request-check">pre-request check</span>
+     <li><span class="dfn-paneled" id="term-for-sandbox">sandbox</span>
+     <li><span class="dfn-paneled" id="term-for-grammardef-serialized-source-list">serialized-source-list</span>
+     <li><span class="dfn-paneled" id="term-for-source-lists">source lists</span>
+     <li><span class="dfn-paneled" id="term-for-directive-value">value</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-document" style="color:initial">Document</span>
-     <li><span class="dfn-paneled" id="term-for-event" style="color:initial">Event</span>
-     <li><span class="dfn-paneled" id="term-for-dictdef-eventinit" style="color:initial">EventInit</span>
-     <li><span class="dfn-paneled" id="term-for-eventtarget" style="color:initial">EventTarget</span>
-     <li><span class="dfn-paneled" id="term-for-eventtarget-activation-behavior" style="color:initial">activation behavior</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-adopt-ext" style="color:initial">adopting steps</span>
-     <li><span class="dfn-paneled" id="term-for-concept-create-element" style="color:initial">creating an element</span>
-     <li><span class="dfn-paneled" id="term-for-concept-event-create" style="color:initial">creating an event</span>
-     <li><span class="dfn-paneled" id="term-for-concept-event-dispatch" style="color:initial">dispatch</span>
-     <li><span class="dfn-paneled" id="term-for-concept-event-constructor-ext" style="color:initial">event constructing steps</span>
-     <li><span class="dfn-paneled" id="term-for-concept-event-fire" style="color:initial">fire an event</span>
-     <li><span class="dfn-paneled" id="term-for-concept-node-document" style="color:initial">node document</span>
-     <li><span class="dfn-paneled" id="term-for-concept-document-origin" style="color:initial">origin</span>
-     <li><span class="dfn-paneled" id="term-for-dom-event-type" style="color:initial">type</span>
-     <li><span class="dfn-paneled" id="term-for-concept-document-url" style="color:initial">url</span>
+     <li><span class="dfn-paneled" id="term-for-document">Document</span>
+     <li><span class="dfn-paneled" id="term-for-event">Event</span>
+     <li><span class="dfn-paneled" id="term-for-dictdef-eventinit">EventInit</span>
+     <li><span class="dfn-paneled" id="term-for-eventtarget">EventTarget</span>
+     <li><span class="dfn-paneled" id="term-for-eventtarget-activation-behavior">activation behavior</span>
+     <li><span class="dfn-paneled" id="term-for-concept-node-adopt-ext">adopting steps</span>
+     <li><span class="dfn-paneled" id="term-for-concept-create-element">creating an element</span>
+     <li><span class="dfn-paneled" id="term-for-concept-event-create">creating an event</span>
+     <li><span class="dfn-paneled" id="term-for-concept-event-dispatch">dispatch</span>
+     <li><span class="dfn-paneled" id="term-for-concept-event-constructor-ext">event constructing steps</span>
+     <li><span class="dfn-paneled" id="term-for-concept-event-fire">fire an event</span>
+     <li><span class="dfn-paneled" id="term-for-concept-node-document">node document</span>
+     <li><span class="dfn-paneled" id="term-for-concept-document-origin">origin</span>
+     <li><span class="dfn-paneled" id="term-for-dom-event-type">type</span>
+     <li><span class="dfn-paneled" id="term-for-concept-document-url">url</span>
     </ul>
    <li>
     <a data-link-type="biblio">[ECMASCRIPT]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-sec-agents" style="color:initial">agent</span>
-     <li><span class="dfn-paneled" id="term-for-sec-promise-objects" style="color:initial">promise</span>
+     <li><span class="dfn-paneled" id="term-for-sec-agents">agent</span>
+     <li><span class="dfn-paneled" id="term-for-sec-promise-objects">promise</span>
     </ul>
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-concept-request-current-url" style="color:initial">current url</span>
-     <li><span class="dfn-paneled" id="term-for-http-scheme" style="color:initial">http(s) scheme</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request-referrer-policy" style="color:initial">referrer policy</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request" style="color:initial">request</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request-reserved-client" style="color:initial">reserved client</span>
-     <li><span class="dfn-paneled" id="term-for-concept-response" style="color:initial">response</span>
-     <li><span class="dfn-paneled" id="term-for-concept-response-status" style="color:initial">status</span>
-     <li><span class="dfn-paneled" id="term-for-concept-request-url" style="color:initial">url</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-current-url">current url</span>
+     <li><span class="dfn-paneled" id="term-for-http-scheme">http(s) scheme</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-referrer-policy">referrer policy</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request">request</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-reserved-client">reserved client</span>
+     <li><span class="dfn-paneled" id="term-for-concept-response">response</span>
+     <li><span class="dfn-paneled" id="term-for-concept-response-status">status</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-url">url</span>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-cereactions" style="color:initial">CEReactions</span>
-     <li><span class="dfn-paneled" id="term-for-eventhandler" style="color:initial">EventHandler</span>
-     <li><span class="dfn-paneled" id="term-for-htmlconstructor" style="color:initial">HTMLConstructor</span>
-     <li><span class="dfn-paneled" id="term-for-htmlelement" style="color:initial">HTMLElement</span>
-     <li><span class="dfn-paneled" id="term-for-messageevent" style="color:initial">MessageEvent</span>
-     <li><span class="dfn-paneled" id="term-for-messageport" style="color:initial">MessagePort</span>
-     <li><span class="dfn-paneled" id="term-for-postmessageoptions" style="color:initial">PostMessageOptions</span>
-     <li><span class="dfn-paneled" id="term-for-structureddeserializewithtransfer" style="color:initial">StructuredDeserializeWithTransfer</span>
-     <li><span class="dfn-paneled" id="term-for-structuredserializewithtransfer" style="color:initial">StructuredSerializeWithTransfer</span>
-     <li><span class="dfn-paneled" id="term-for-window" style="color:initial">Window</span>
-     <li><span class="dfn-paneled" id="term-for-windoweventhandlers" style="color:initial">WindowEventHandlers</span>
-     <li><span class="dfn-paneled" id="term-for-windowproxy" style="color:initial">WindowProxy</span>
-     <li><span class="dfn-paneled" id="term-for-active-document" style="color:initial">active document</span>
-     <li><span class="dfn-paneled" id="term-for-active-sandboxing-flag-set" style="color:initial">active sandboxing flag set</span>
-     <li><span class="dfn-paneled" id="term-for-active-window" style="color:initial">active window</span>
-     <li><span class="dfn-paneled" id="term-for-allowed-to-download" style="color:initial">allowed to download</span>
-     <li><span class="dfn-paneled" id="term-for-concept-document-window" style="color:initial">associated document</span>
-     <li><span class="dfn-paneled" id="term-for-auxiliary-browsing-context" style="color:initial">auxiliary browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-connected" style="color:initial">become browsing-context connected</span>
-     <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-disconnected" style="color:initial">become browsing-context disconnected</span>
-     <li><span class="dfn-paneled" id="term-for-window-bc" style="color:initial">browsing context <small>(for Window)</small></span>
-     <li><span class="dfn-paneled" id="term-for-browsing-context-group" style="color:initial">browsing context group</span>
-     <li><span class="dfn-paneled" id="term-for-browsing-context-connected" style="color:initial">browsing-context connected</span>
-     <li><span class="dfn-paneled" id="term-for-child-browsing-context" style="color:initial">child browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-close-a-browsing-context" style="color:initial">close a browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-completely-loaded" style="color:initial">completely loaded</span>
-     <li><span class="dfn-paneled" id="term-for-creating-a-new-top-level-browsing-context" style="color:initial">create a new top-level browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-dom-messageevent-data" style="color:initial">data</span>
-     <li><span class="dfn-paneled" id="term-for-a-browsing-context-is-discarded" style="color:initial">discard a browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-environment-discarding-steps" style="color:initial">environment discarding steps</span>
-     <li><span class="dfn-paneled" id="term-for-event-handlers" style="color:initial">event handler</span>
-     <li><span class="dfn-paneled" id="term-for-event-handler-content-attributes" style="color:initial">event handler content attribute</span>
-     <li><span class="dfn-paneled" id="term-for-event-handler-event-type" style="color:initial">event handler event type</span>
-     <li><span class="dfn-paneled" id="term-for-event-handler-idl-attributes" style="color:initial">event handler idl attribute</span>
-     <li><span class="dfn-paneled" id="term-for-concept-agent-event-loop" style="color:initial">event loop <small>(for agent)</small></span>
-     <li><span class="dfn-paneled" id="term-for-the-iframe-element" style="color:initial">iframe</span>
-     <li><span class="dfn-paneled" id="term-for-in-parallel" style="color:initial">in parallel</span>
-     <li><span class="dfn-paneled" id="term-for-limited-to-only-known-values" style="color:initial">limited to only known values</span>
-     <li><span class="dfn-paneled" id="term-for-event-load" style="color:initial">load</span>
-     <li><span class="dfn-paneled" id="term-for-navigate" style="color:initial">navigate</span>
-     <li><span class="dfn-paneled" id="term-for-nested-browsing-context" style="color:initial">nested browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-concept-settings-object-origin" style="color:initial">origin <small>(for environment settings object)</small></span>
-     <li><span class="dfn-paneled" id="term-for-parse-a-url" style="color:initial">parse a url</span>
-     <li><span class="dfn-paneled" id="term-for-dom-messageevent-ports" style="color:initial">ports</span>
-     <li><span class="dfn-paneled" id="term-for-process-a-navigate-response" style="color:initial">process a navigate response</span>
-     <li><span class="dfn-paneled" id="term-for-process-a-navigate-url-scheme" style="color:initial">process a navigate url scheme</span>
-     <li><span class="dfn-paneled" id="term-for-prompt-to-unload-a-document" style="color:initial">prompt to unload</span>
-     <li><span class="dfn-paneled" id="term-for-queue-a-global-task" style="color:initial">queue a global task</span>
-     <li><span class="dfn-paneled" id="term-for-queue-an-element-task" style="color:initial">queue an element task</span>
-     <li><span class="dfn-paneled" id="term-for-concept-global-object-realm" style="color:initial">realm <small>(for global object)</small></span>
-     <li><span class="dfn-paneled" id="term-for-referrer-policy-attribute" style="color:initial">referrer policy attribute</span>
-     <li><span class="dfn-paneled" id="term-for-reflect" style="color:initial">reflect</span>
-     <li><span class="dfn-paneled" id="term-for-concept-relevant-global" style="color:initial">relevant global object</span>
-     <li><span class="dfn-paneled" id="term-for-relevant-settings-object" style="color:initial">relevant settings object</span>
-     <li><span class="dfn-paneled" id="term-for-navigation-params-request" style="color:initial">request</span>
-     <li><span class="dfn-paneled" id="term-for-navigation-params-reserved-environment" style="color:initial">reserved environment</span>
-     <li><span class="dfn-paneled" id="term-for-resulting-url-record" style="color:initial">resulting url record</span>
-     <li><span class="dfn-paneled" id="term-for-same-origin" style="color:initial">same origin</span>
-     <li><span class="dfn-paneled" id="term-for-same-origin-domain" style="color:initial">same origin-domain</span>
-     <li><span class="dfn-paneled" id="term-for-script-closable" style="color:initial">script-closable</span>
-     <li><span class="dfn-paneled" id="term-for-ascii-serialisation-of-an-origin" style="color:initial">serialization of an origin</span>
-     <li><span class="dfn-paneled" id="term-for-session-history" style="color:initial">session history</span>
-     <li><span class="dfn-paneled" id="term-for-dom-messageevent-source" style="color:initial">source</span>
-     <li><span class="dfn-paneled" id="term-for-concept-environment-target-browsing-context" style="color:initial">target browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-task-source" style="color:initial">task source</span>
-     <li><span class="dfn-paneled" id="term-for-top-level-browsing-context" style="color:initial">top-level browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-dom-postmessageoptions-transfer" style="color:initial">transfer</span>
-     <li><span class="dfn-paneled" id="term-for-event-unload" style="color:initial">unload</span>
-     <li><span class="dfn-paneled" id="term-for-valid-non-empty-url-potentially-surrounded-by-spaces" style="color:initial">valid non-empty url potentially surrounded by spaces</span>
+     <li><span class="dfn-paneled" id="term-for-cereactions">CEReactions</span>
+     <li><span class="dfn-paneled" id="term-for-eventhandler">EventHandler</span>
+     <li><span class="dfn-paneled" id="term-for-htmlconstructor">HTMLConstructor</span>
+     <li><span class="dfn-paneled" id="term-for-htmlelement">HTMLElement</span>
+     <li><span class="dfn-paneled" id="term-for-messageevent">MessageEvent</span>
+     <li><span class="dfn-paneled" id="term-for-messageport">MessagePort</span>
+     <li><span class="dfn-paneled" id="term-for-postmessageoptions">PostMessageOptions</span>
+     <li><span class="dfn-paneled" id="term-for-structureddeserializewithtransfer">StructuredDeserializeWithTransfer</span>
+     <li><span class="dfn-paneled" id="term-for-structuredserializewithtransfer">StructuredSerializeWithTransfer</span>
+     <li><span class="dfn-paneled" id="term-for-window">Window</span>
+     <li><span class="dfn-paneled" id="term-for-windoweventhandlers">WindowEventHandlers</span>
+     <li><span class="dfn-paneled" id="term-for-windowproxy">WindowProxy</span>
+     <li><span class="dfn-paneled" id="term-for-active-document">active document</span>
+     <li><span class="dfn-paneled" id="term-for-active-sandboxing-flag-set">active sandboxing flag set</span>
+     <li><span class="dfn-paneled" id="term-for-active-window">active window</span>
+     <li><span class="dfn-paneled" id="term-for-allowed-to-download">allowed to download</span>
+     <li><span class="dfn-paneled" id="term-for-concept-document-window">associated document</span>
+     <li><span class="dfn-paneled" id="term-for-auxiliary-browsing-context">auxiliary browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-connected">become browsing-context connected</span>
+     <li><span class="dfn-paneled" id="term-for-becomes-browsing-context-disconnected">become browsing-context disconnected</span>
+     <li><span class="dfn-paneled" id="term-for-window-bc">browsing context <small>(for Window)</small></span>
+     <li><span class="dfn-paneled" id="term-for-browsing-context-group">browsing context group</span>
+     <li><span class="dfn-paneled" id="term-for-browsing-context-connected">browsing-context connected</span>
+     <li><span class="dfn-paneled" id="term-for-child-browsing-context">child browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-close-a-browsing-context">close a browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-completely-loaded">completely loaded</span>
+     <li><span class="dfn-paneled" id="term-for-creating-a-new-top-level-browsing-context">create a new top-level browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-dom-messageevent-data">data</span>
+     <li><span class="dfn-paneled" id="term-for-a-browsing-context-is-discarded">discard a browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-environment-discarding-steps">environment discarding steps</span>
+     <li><span class="dfn-paneled" id="term-for-event-handlers">event handler</span>
+     <li><span class="dfn-paneled" id="term-for-event-handler-content-attributes">event handler content attribute</span>
+     <li><span class="dfn-paneled" id="term-for-event-handler-event-type">event handler event type</span>
+     <li><span class="dfn-paneled" id="term-for-event-handler-idl-attributes">event handler idl attribute</span>
+     <li><span class="dfn-paneled" id="term-for-concept-agent-event-loop">event loop <small>(for agent)</small></span>
+     <li><span class="dfn-paneled" id="term-for-the-iframe-element">iframe</span>
+     <li><span class="dfn-paneled" id="term-for-in-parallel">in parallel</span>
+     <li><span class="dfn-paneled" id="term-for-limited-to-only-known-values">limited to only known values</span>
+     <li><span class="dfn-paneled" id="term-for-event-load">load</span>
+     <li><span class="dfn-paneled" id="term-for-navigate">navigate</span>
+     <li><span class="dfn-paneled" id="term-for-nested-browsing-context">nested browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-concept-settings-object-origin">origin <small>(for environment settings object)</small></span>
+     <li><span class="dfn-paneled" id="term-for-parse-a-url">parse a url</span>
+     <li><span class="dfn-paneled" id="term-for-dom-messageevent-ports">ports</span>
+     <li><span class="dfn-paneled" id="term-for-process-a-navigate-response">process a navigate response</span>
+     <li><span class="dfn-paneled" id="term-for-process-a-navigate-url-scheme">process a navigate url scheme</span>
+     <li><span class="dfn-paneled" id="term-for-prompt-to-unload-a-document">prompt to unload</span>
+     <li><span class="dfn-paneled" id="term-for-queue-a-global-task">queue a global task</span>
+     <li><span class="dfn-paneled" id="term-for-queue-an-element-task">queue an element task</span>
+     <li><span class="dfn-paneled" id="term-for-concept-global-object-realm">realm <small>(for global object)</small></span>
+     <li><span class="dfn-paneled" id="term-for-referrer-policy-attribute">referrer policy attribute</span>
+     <li><span class="dfn-paneled" id="term-for-reflect">reflect</span>
+     <li><span class="dfn-paneled" id="term-for-concept-relevant-global">relevant global object</span>
+     <li><span class="dfn-paneled" id="term-for-relevant-settings-object">relevant settings object</span>
+     <li><span class="dfn-paneled" id="term-for-navigation-params-request">request</span>
+     <li><span class="dfn-paneled" id="term-for-navigation-params-reserved-environment">reserved environment</span>
+     <li><span class="dfn-paneled" id="term-for-resulting-url-record">resulting url record</span>
+     <li><span class="dfn-paneled" id="term-for-same-origin">same origin</span>
+     <li><span class="dfn-paneled" id="term-for-same-origin-domain">same origin-domain</span>
+     <li><span class="dfn-paneled" id="term-for-script-closable">script-closable</span>
+     <li><span class="dfn-paneled" id="term-for-ascii-serialisation-of-an-origin">serialization of an origin</span>
+     <li><span class="dfn-paneled" id="term-for-session-history">session history</span>
+     <li><span class="dfn-paneled" id="term-for-dom-messageevent-source">source</span>
+     <li><span class="dfn-paneled" id="term-for-concept-environment-target-browsing-context">target browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-task-source">task source</span>
+     <li><span class="dfn-paneled" id="term-for-top-level-browsing-context">top-level browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-dom-postmessageoptions-transfer">transfer</span>
+     <li><span class="dfn-paneled" id="term-for-event-unload">unload <small>(for Window)</small></span>
+     <li><span class="dfn-paneled" id="term-for-valid-non-empty-url-potentially-surrounded-by-spaces">valid non-empty url potentially surrounded by spaces</span>
     </ul>
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-assert" style="color:initial">assert</span>
-     <li><span class="dfn-paneled" id="term-for-boolean" style="color:initial">boolean</span>
-     <li><span class="dfn-paneled" id="term-for-html-namespace" style="color:initial">html namespace</span>
+     <li><span class="dfn-paneled" id="term-for-assert">assert</span>
+     <li><span class="dfn-paneled" id="term-for-boolean">boolean</span>
+     <li><span class="dfn-paneled" id="term-for-html-namespace">html namespace</span>
     </ul>
    <li>
     <a data-link-type="biblio">[REFERRER-POLICY]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-referrer-policy" style="color:initial">referrer policy</span>
+     <li><span class="dfn-paneled" id="term-for-referrer-policy">referrer policy</span>
     </ul>
    <li>
     <a data-link-type="biblio">[service-workers-1]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-serviceworker" style="color:initial">ServiceWorker</span>
+     <li><span class="dfn-paneled" id="term-for-serviceworker">ServiceWorker</span>
     </ul>
    <li>
     <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-concept-url-scheme" style="color:initial">scheme</span>
-     <li><span class="dfn-paneled" id="term-for-concept-url" style="color:initial">url</span>
+     <li><span class="dfn-paneled" id="term-for-concept-url-scheme">scheme</span>
+     <li><span class="dfn-paneled" id="term-for-concept-url">url</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-idl-DOMException" style="color:initial">DOMException</span>
-     <li><span class="dfn-paneled" id="term-for-idl-DOMString" style="color:initial">DOMString</span>
-     <li><span class="dfn-paneled" id="term-for-Exposed" style="color:initial">Exposed</span>
-     <li><span class="dfn-paneled" id="term-for-invalidstateerror" style="color:initial">InvalidStateError</span>
-     <li><span class="dfn-paneled" id="term-for-NewObject" style="color:initial">NewObject</span>
-     <li><span class="dfn-paneled" id="term-for-idl-promise" style="color:initial">Promise</span>
-     <li><span class="dfn-paneled" id="term-for-idl-USVString" style="color:initial">USVString</span>
-     <li><span class="dfn-paneled" id="term-for-idl-any" style="color:initial">any</span>
-     <li><span class="dfn-paneled" id="term-for-dfn-frozen-array-type" style="color:initial">frozen array type</span>
-     <li><span class="dfn-paneled" id="term-for-reject" style="color:initial">reject</span>
-     <li><span class="dfn-paneled" id="term-for-this" style="color:initial">this</span>
-     <li><span class="dfn-paneled" id="term-for-idl-undefined" style="color:initial">undefined</span>
+     <li><span class="dfn-paneled" id="term-for-idl-DOMException">DOMException</span>
+     <li><span class="dfn-paneled" id="term-for-idl-DOMString">DOMString</span>
+     <li><span class="dfn-paneled" id="term-for-Exposed">Exposed</span>
+     <li><span class="dfn-paneled" id="term-for-invalidstateerror">InvalidStateError</span>
+     <li><span class="dfn-paneled" id="term-for-NewObject">NewObject</span>
+     <li><span class="dfn-paneled" id="term-for-idl-promise">Promise</span>
+     <li><span class="dfn-paneled" id="term-for-idl-USVString">USVString</span>
+     <li><span class="dfn-paneled" id="term-for-idl-any">any</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-frozen-array-type">frozen array type</span>
+     <li><span class="dfn-paneled" id="term-for-reject">reject</span>
+     <li><span class="dfn-paneled" id="term-for-this">this</span>
+     <li><span class="dfn-paneled" id="term-for-idl-undefined">undefined</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -4230,6 +4139,7 @@ browsing context</a> or a <a data-link-type="dfn" href="#portal-browsing-context
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
+   <div class="issue"> Determine how to treat unload/beforeunload handlers. See <a href="https://github.com/WICG/portals/issues/225">issue #225</a> for discussion. <a href="#issue-c722a2b5"> ↵ </a></div>
    <div class="issue"> In the case that structured deserialization throws, it may be useful to do something else to indicate it,
     rather than simply providing null data. <a href="#issue-b49e4903"> ↵ </a></div>
    <div class="issue"> We need to specify how the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/history.html#session-history">session history</a> of each browsing context is
