@@ -115,7 +115,7 @@ for (const link of document.querySelectorAll('a.seamless')) {
     // Once the preview is now displayed as the whole viewport, activate.
     // This performs the instant navigation/URL bar update/etc.
     try {
-      portal.activate();
+      await portal.activate();
     } catch {
       // If activation failed, restore the portal to hidden (so that back-navigations
       // don't show the full-viewport portal), and fall back to a normal navigation.
@@ -176,14 +176,14 @@ An embedder which portals same-origin content has the ability to communicate wit
 
 As shown in the [introductory example](#introductory-example), this is done by exposing the `postMessage()` method directly on the `HTMLPortalElement` interface. Unlike an iframe, there is no direct access to the `contentWindow` of the portaled content; message passing is the only interface available.
 
-Additionally, all pages get a `window.portalHost` property, which is non-null for same-origin portaled content. This is the way that portaled content recieves or transmits messages from or to its embedder:
+Additionally, all pages get a `window.portalHost` property, which is non-null for all portaled content. This is the way that portaled content recieves or transmits messages from or to its embedder:
 
 ```js
 window.portalHost.onmessage = e => { /* ... */ };
 window.portalHost.postMessage(/* ... */);
 ```
 
-Cross-origin portaled content cannot communicate with its embedder, as doing so would [allow cross-site tracking](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#privacy-based-restrictions).
+Cross-origin portaled content cannot communicate with its embedder, as doing so would [allow cross-site tracking](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#privacy-based-restrictions). In those cases, no `message` events will be sent to `window.portalHost`, and `window.portalHost.postMessage()` will not deliver any message.
 
 ### Rendering
 
