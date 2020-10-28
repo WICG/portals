@@ -117,7 +117,10 @@ for (const link of document.querySelectorAll('a.seamless')) {
     try {
       portal.activate();
     } catch {
-      // If activation failed, fall back to a normal navigation.
+      // If activation failed, restore the portal to hidden (so that back-navigations
+      // don't show the full-viewport portal), and fall back to a normal navigation.
+      portal.hidden = true;
+      portal.style = 'width: 100px; height: 100px;';
       location.href = link.href;
     }
   };
