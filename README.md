@@ -107,8 +107,8 @@ for (const link of document.querySelectorAll('a.seamless')) {
     e.preventDefault();
 
     // Show the portal, and animate it to the whole viewport over 300 milliseconds.
-    portal.hidden = false;
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      portal.hidden = false;
       await portal.animate([{ width: '100vw', height: '100vh' }], { duration: 300 }).finished;
     }
 
@@ -120,7 +120,8 @@ for (const link of document.querySelectorAll('a.seamless')) {
       // If activation failed, restore the portal to hidden (so that back-navigations
       // don't show the full-viewport portal), and fall back to a normal navigation.
       portal.hidden = true;
-      portal.style = 'width: 100px; height: 100px;';
+      portal.style.width = '100px';
+      portal.style.height = '100px';
       location.href = link.href;
     }
   };
