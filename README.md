@@ -94,7 +94,7 @@ for (const link of document.querySelectorAll('a.seamless')) {
   const portal = document.createElement('portal');
   portal.src = link.href;
   portal.hidden = true;
-  portal.style = 'position: fixed; top: 0; left: 0; width: 100px; height: 100px;';
+  portal.style = 'position: fixed; top: 0; left: 0; width: 10vw; height: 10vh;';
   document.body.append(portal);
 
   link.onclick = async e => {
@@ -120,8 +120,8 @@ for (const link of document.querySelectorAll('a.seamless')) {
       // If activation failed, restore the portal to hidden (so that back-navigations
       // don't show the full-viewport portal), and fall back to a normal navigation.
       portal.hidden = true;
-      portal.style.width = '100px';
-      portal.style.height = '100px';
+      portal.style.width = '10vw';
+      portal.style.height = '10vh';
       location.href = link.href;
     }
   };
@@ -177,10 +177,10 @@ An embedder which portals same-origin content has the ability to communicate wit
 
 As shown in the [introductory example](#introductory-example), this is done by exposing the `postMessage()` method directly on the `HTMLPortalElement` interface. Unlike an iframe, there is no direct access to the `contentWindow` of the portaled content; message passing is the only interface available.
 
-Additionally, all pages get a `window.portalHost` property, which is non-null for all portaled content. This is the way that portaled content recieves or transmits messages from or to its embedder:
+Additionally, all pages get a `window.portalHost` property, which is non-null for all portaled content. This is the way that portaled content receives or transmits messages from or to its embedder:
 
 ```js
-window.portalHost.onmessage = e => { /* ... */ };
+window.portalHost.addEventListener("message", e => { /* ... */ });
 window.portalHost.postMessage(/* ... */);
 ```
 
