@@ -1148,7 +1148,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
   <dl class="switch">
     : "`portal-src`"
     ::
-        1. Return « "`portal-src`", "`default-src`" ».
+        1. Return « "`portal-src`", "`prefetch-src`", "`default-src`" ».
   </dl>
 
   Fetch Metadata Request Headers {#fetch-metadata}
