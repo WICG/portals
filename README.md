@@ -247,13 +247,13 @@ onrestoration | The previous contents were restored into this portal element.
 ondiscard | The portal contents have been discarded due to a need to reclaim resources or due to the inability to perform restoration.
 onfreeze/onresume | Indicates when the portal context has been [frozen/resumed](https://github.com/WICG/page-lifecycle).
 
-There is one more event, `window.onportaladopt`, needed to communicate to a page that it has become a portal when other forms (`activate` promise resolving or `onactivation` of a predecessor portal) are not applicable.
+There is one more event, `window.onportaladopt`, needed to communicate to a page that it has become a portal when other forms (`activate()` promise resolving or `onactivation` of a predecessor portal) are not applicable.
 
-Depending on the semantics of the page, the activation of a predecessor may be viewed as traversing session history. For example, if scrolling a preview portal into view activates the preview, then scrolling back up could be considered a back navigation. A page can specify how a portal activation should affect session history by setting the `history` field in the activation options to one of `push` (default), `replace`, `back`, `forward`.
+Depending on the semantics of the page, the activation of a predecessor may be viewed as traversing session history. For example, if scrolling a preview portal into view activates the preview, then scrolling back up could be considered a back navigation. A page can specify how a portal activation should affect session history by setting the `history` field in the activation options to one of `push` (default), `replace`, `back`, or `forward`.
 
 Consider how the [navigation transition example above](#navigation-transitions) may be extended to handle back button transitions.
 ```js
-portal.addEventListener(‘restoration’, async () => {
+portal.addEventListener('restoration', async () => {
   // Reverse the animation from the whole viewport preview.
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     await portal.animate([{ width: '100px', height: '100px' }], { duration: 300 }).finished;
@@ -264,7 +264,7 @@ portal.addEventListener(‘restoration’, async () => {
     portal.style.height = '100px';
   }
 });
-portal.addEventListener(‘discard’, () => {
+portal.addEventListener('discard', () => {
   portal.hidden = true;
 });
 ```
