@@ -224,7 +224,7 @@ Furthermore, there is a period of time between activation and adoption when it h
 
 If the predecessor is not adopted, then it may enter back/forward cache (bfcache). If the predecessor can't be cached then it is unloaded.
 
-In addition to enabling seamless transitions to portaled content, we also want to enable seamless transitions from previously portaled content, the successor, back to its predecessor. This is done by re-hosting the successor context in its original portal element, and can be thought of as a form of implicit adoption. When a live predecessor is navigated to (e.g. by the user pressing the back button), we restore the successor context to its portal element in the predecessor. We then fire a `restoration` event on the element so that the predecessor can respond (e.g. by reversing the animation before the original activation). The live predecessor may be taken from bfcache, or if the predecessor was adopted, taken from a portal in the successor. In the latter case, this involves an implicit activation of the portal in the successor. Also note that since this restoration involves turning a top-level browsing context back into a portal context, only limited forms of restoration are proposed for the cross-origin case, as described above for regular adoption.
+In addition to enabling seamless transitions to portaled content, we also want to enable seamless transitions from previously portaled content, the successor, back to its predecessor. This is done by re-hosting the successor context in its original portal element, and can be thought of as a form of implicit adoption. When a live predecessor is navigated to (e.g. by the user pressing the back button), we restore the successor context to its portal element in the predecessor. We then fire a `restore` event on the element so that the predecessor can respond (e.g. by reversing the animation before the original activation). The live predecessor may be taken from bfcache, or if the predecessor was adopted, taken from a portal in the successor. In the latter case, this involves an implicit activation of the portal in the successor. Also note that since this restoration involves turning a top-level browsing context back into a portal context, only limited forms of restoration are proposed for the cross-origin case, as described above for regular adoption.
 
 If the predecessor page can't handle being restored, it may set the `irreversible` field in the activation options as an escape hatch to ensure it's unloaded. This prevents adoption and causes the predecessor to be ineligible for bfcache. Furthermore, eligibility for bfcache is a requirement for being adoptable.
 
@@ -242,8 +242,8 @@ The events fired on a portal element to notify of its lifecycle changes are as f
 
 Event | Meaning
 ----- | -------
-onactivation | The portal contents have been activated by something other than an explicit call to the `activate` method (e.g. default click, back navigation).
-onrestoration | The previous contents were restored into this portal element.
+onactivate | The portal contents have been activated by something other than an explicit call to the `activate` method (e.g. default click, back navigation).
+onrestore | The previous contents were restored into this portal element.
 ondiscard | The portal contents have been discarded due to a need to reclaim resources or due to the inability to perform restoration.
 onfreeze/onresume | Indicates when the portal context has been [frozen/resumed](https://github.com/WICG/page-lifecycle).
 
@@ -253,20 +253,123 @@ Depending on the semantics of the page, the activation of a predecessor may be v
 
 Consider how the [navigation transition example above](#navigation-transitions) may be extended to handle back button transitions.
 ```js
-portal.addEventListener('restoration', async () => {
+// This event fires when the user performs a back-navigation that causes the
+// browser to restore this page from bfcache (or from being an adopted portal)
+// as the top level document. This portal element's previous content has been
+// returned to it. The user now sees this page as it was before we called
+// activate when we were showing the whole viewport preview with this portal.
+// We now reverse the transition, back from 100vw/100vh to 10vw/10vh.
+portal.addEventListener('restore', async () => {
   // Reverse the animation from the whole viewport preview.
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    await portal.animate([{ width: '100px', height: '100px' }], { duration: 300 }).finished;
+    await portal.animate([{ width: '10vw', height: '10vh' }], { duration: 300 }).finished;
+    portal.hidden = true;
+  }
+});
+
+// If the browser could not restore the portal's contents when the user performed
+// a back-navigation (see above about limitations of restoration), then we need
+// to stop showing the portal element, as it's now empty.
+// Note that a portal element may be discarded for other reasons, such as memory
+// pressure on the system, so it's a good idea to handle discards in general.
+portal.addEventListener('discard', async () => {
+  // If we're showing the preview when it's discarded and the user still sees
+  // the previous content, then we can make discarding look nicer by animating
+  // the portal away. Otherwise, just hide it.
+  if (portal.state === 'epitaph' && !portal.hidden &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    await portal.animate([{ width: '10vw', height: '10vh' }], { duration: 300 }).finished;
     portal.hidden = true;
   } else {
     portal.hidden = true;
-    portal.style.width = '100px';
-    portal.style.height = '100px';
+    portal.style.width = '10vw';
+    portal.style.height = '10vh';
   }
 });
-portal.addEventListener('discard', () => {
-  portal.hidden = true;
+```
+
+Now let's consider a more advanced example where a user goes back and forth between pages of a site. Suppose we have a page embedding a widget with a portal. When the user taps on it, it's activated so the user can interact with the widget. The widget page adopts the host page and displays it as a background to produce a lightbox style UI. Suppose the user then performs a back navigation followed by a forward navigation.\
+Host page:
+```js
+function createWidget() {
+  let widgetContainer = document.getElementById('widgetContainer');
+  let portal = document.createElement('portal');
+  portal.src = 'widget-page.html';
+  widgetContainer.append(portal);
+  portal.addEventListener('load', () => {
+    widgetContainer.hidden = false;
+  });
+
+  portal.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      await portal.animate(/* ... */).finished;
+    }
+
+    await portal.activate();
+
+    // We happen to know that the widget will adopt us, but if we needed to
+    // check, we can test for |portalHost|.
+    if (!window.portalHost)
+      return;
+
+    // The host is adopted now, so make any desired visual changes for being
+    // embedded.
+  });
+
+  portal.addEventListener(‘restore’, () => {
+    // The user pressed back, so undo any visual changes done to the host while
+    // it was adopted.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      await portal.animate(/* ... */).finished;
+    }
+  });
+  portal.addEventListener(‘activate’, () => {
+    // After the user returned from the widget page, they pressed forward. The
+    // widget page is implicitly activated again.
+    // Make any desired visual changes to the host page for being embedded.
+  });
+}
+```
+Widget page:
+```js
+// It may be that the user can access the widget by visiting directly. Check
+// whether we're in a portal so we can show an appropriate view.
+if (window.portalHost) {
+  // Show embedded view.
+} else {
+  // Show full view.
+}
+
+window.addEventListener('portalactivate', (e) => {
+  // Show full view.
+
+  // Augment the full view by showing the host in the background.
+  let predecessorContainer = document.getElementById('predecessorContainer');
+  let predecessor = e.adoptPredecessor();
+  // Note that the second time |portalactivate| is called (when the user presses
+  // forward), the predecessor will be the existing predecessor portal created
+  // the first time. We don't need to check for that here, since the following
+  // lines will essentially be no-ops in that case.
+  predecessorContainer.appendChild(predecessor);
+  predecessor.onactivate = () => {
+    // The user pressed back to return to the host page.
+    // Show embedded view.
+  };
 });
+```
+
+With this, the user can keep pressing back and forward which has the effect of dismissing and re-showing the widget. Suppose we now want to have the ability to dismiss the widget by tapping on the background of the widget. This can be done as follows:\
+Widget page:
+```js
+// Continuing with |predecessor| in |portalactivate|:
+predecessor.onclick = async (e) => {
+  e.preventDefault();
+  // Tapping outside of the widget is like pressing the back button, so we
+  // specify that this activation traverses session history.
+  await predecessor.activate({history: 'back'});
+  // Show embedded view.
+};
 ```
 
 ### Activation
