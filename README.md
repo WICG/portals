@@ -2,7 +2,7 @@
 
 Portals enable seamless and instant navigations between pages. In particular, we propose a new `<portal>` HTML element which enables a page to show another page as an inset, and then *activate* it to perform a seamless transition to a new state, where the formerly-inset page becomes the top-level document.
 
-Portals are part of a general effort toward [privacy-conscious, well-specified prerendering](https://github.com/jeremyroman/alternate-loading-modes/README.md). They go beyond basic prerendering support by also providing the inset _preview_ of the content. This makes them suitable for seamless navigations, not just instant ones; for example, they enable web-developer-controlled navigation transitions between the referring page and the prerendered page. Their inset form also can serve as a more-private and more-secure form of an iframe, in certain cases.
+Portals are part of a general effort toward [privacy-conscious, well-specified prerendering](https://github.com/jeremyroman/alternate-loading-modes/blob/main/README.md). They go beyond basic prerendering support by also providing the inset _preview_ of the content. This makes them suitable for seamless navigations, not just instant ones; for example, they enable web-developer-controlled navigation transitions between the referring page and the prerendered page. Their inset form also can serve as a more-private and more-secure form of an iframe, in certain cases.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -42,7 +42,7 @@ A document can include a `<portal>` element, which prerenders the specified URL 
 <portal id="myPortal" src="https://example.com/"></portal>
 ```
 
-This prerenders `https://example.com/` in a [prerendering browsing context](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md), which imposes certain restrictions such as no use of permission-requiring APIs, or no access to storage in the cross-origin case. Importantly, cross-origin content will need to [opt in](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/opt-in.md) to such prerendering.
+This prerenders `https://example.com/` in a [prerendering browsing context](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md), which imposes certain restrictions such as no use of permission-requiring APIs, or no access to storage in the cross-origin case. Importantly, cross-origin content will need to [opt in](https://github.com/jeremyroman/alternate-loading-modes/blob/main/opt-in.md) to such prerendering.
 
 But unlike other prerendering technologies, where the prerendering takes place entirely offscreen, the portal element shows a preview of the prerendered content. In this way it is somewhat like an iframe, providing a rendered view of another page. Note, however, that a portal's preview is much more restricted than the general embedding mechanism iframes provide; e.g., user interaction with [does not pass through to the portaled content](#interactivity).
 
@@ -52,9 +52,9 @@ When the portaled content is same-origin, the embedding page can communicate wit
 myPortal.postMessage(data);
 ```
 
-This can be useful to coordinate the preview displayed. However, when the portaled content is cross-origin, `postMessage()` does not function, so as to [prevent cross-site tracking](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#privacy-based-restrictions).
+This can be useful to coordinate the preview displayed. However, when the portaled content is cross-origin, `postMessage()` does not function, so as to [prevent cross-site tracking](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#privacy-based-restrictions).
 
-While all prerendered content can be [activated](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md), becoming fully-rendered top-level content, portals expose this ability to web developers directly. That is, while other prerendering technologies rely on the browser to implicitly activate the prerendered content, with portals the web developer can call
+While all prerendered content can be [activated](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md), becoming fully-rendered top-level content, portals expose this ability to web developers directly. That is, while other prerendering technologies rely on the browser to implicitly activate the prerendered content, with portals the web developer can call
 
 ```js
 myPortal.activate();
@@ -77,7 +77,7 @@ window.addEventListener('portalactivate', e => {
 });
 ```
 
-If `https://example.com/` does not need the predecessor-adoption capability, then it can instead use the generic APIs for reacting to prerendering activation or other relevant changes, outlined [in that explainer](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#javascript-api).
+If `https://example.com/` does not need the predecessor-adoption capability, then it can instead use the generic APIs for reacting to prerendering activation or other relevant changes, outlined [in that explainer](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#javascript-api).
 
 ### Navigation transitions
 
@@ -167,7 +167,7 @@ Non-goals:
 
 ## Details
 
-The general idea of portals is summed up above: prerendering-with-preview, activation, and predecessor adoption. Many further details are covered in the [prerendering browsing contexts explainer](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md); in particular, the restrictions on portaled content, the session history and navigation integration, and some of the baseline rendering-related behavior.
+The general idea of portals is summed up above: prerendering-with-preview, activation, and predecessor adoption. Many further details are covered in the [prerendering browsing contexts explainer](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md); in particular, the restrictions on portaled content, the session history and navigation integration, and some of the baseline rendering-related behavior.
 
 These subsections go into more detail on important parts of how portals work, with a focus on how portals extend the baseline prerendering browsing context concept.
 
@@ -184,11 +184,11 @@ window.portalHost.addEventListener("message", e => { /* ... */ });
 window.portalHost.postMessage(/* ... */);
 ```
 
-Cross-origin portaled content cannot communicate with its embedder, as doing so would [allow cross-site tracking](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#privacy-based-restrictions). In those cases, no `message` events will be sent to `window.portalHost`, and `window.portalHost.postMessage()` will not deliver any message.
+Cross-origin portaled content cannot communicate with its embedder, as doing so would [allow cross-site tracking](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#privacy-based-restrictions). In those cases, no `message` events will be sent to `window.portalHost`, and `window.portalHost.postMessage()` will not deliver any message.
 
 ### Rendering
 
-Like iframes, portals can render their contents inline in another document. However, because the portaled content is rendered in a prerendering browsing context, many APIs will treat the rendered content as non-visible. See the [prerendering browsing context explainer's section on this](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#rendering-related-behavior) for more information. This "not rendered, but prerendered" mode might require adaptation on the part of authors, which is part of the reason that an [opt-in](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/opt-in.md) is required for prerendering.
+Like iframes, portals can render their contents inline in another document. However, because the portaled content is rendered in a prerendering browsing context, many APIs will treat the rendered content as non-visible. See the [prerendering browsing context explainer's section on this](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#rendering-related-behavior) for more information. This "not rendered, but prerendered" mode might require adaptation on the part of authors, which is part of the reason that an [opt-in](https://github.com/jeremyroman/alternate-loading-modes/blob/main/opt-in.md) is required for prerendering.
 
 TODO: do we really want to treat portals the same as `<link rel="prerender">` or similar? Unlike those cases, they can be visible.
 
@@ -216,7 +216,7 @@ Authors should respect the `prefers-reduced-motion` media query by conditionally
 
 ### Session history, navigation, and bfcache
 
-At a base level, portals behave the same as other prerendering browsing contexts do with respect to [session history](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#session-history) and [navigation](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#navigation). To summarize, content inside the portal has a trivial session history, and activation acts like a navigation of the host page, appending the portal's current session history entry to the host page's session history. This works to preserve user expectations for the back button. Note that this is very different from how iframes behave, and is one of the reasons it is better to think of portals as "inline-displayed popups" or "prerendered links" than as iframes. (Discussed further [below](#summary-of-differences-between-portals-and-iframes).)
+At a base level, portals behave the same as other prerendering browsing contexts do with respect to [session history](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#session-history) and [navigation](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#navigation). To summarize, content inside the portal has a trivial session history, and activation acts like a navigation of the host page, appending the portal's current session history entry to the host page's session history. This works to preserve user expectations for the back button. Note that this is very different from how iframes behave, and is one of the reasons it is better to think of portals as "inline-displayed popups" or "prerendered links" than as iframes. (Discussed further [below](#summary-of-differences-between-portals-and-iframes).)
 
 Because of the predecessor adoption feature, portals have some additional complexity, where they can cause the predecessor (i.e., the host document) to move into a prerendering browsing context. TODO describe this more.
 
@@ -234,7 +234,7 @@ The basics of activation are explained [in the intro examples](#examples): calli
 
 First, note that a portal's prerendering browsing context may be in a "closed" state, when it is not displaying valid, activatable content. This could happen for several reasons:
 
-- The host page author has incorrectly set the portal to a non-HTTP(S) URL, e.g. using `<portal src="data:text/html,hello"></portal>`. Portals, [like all prerendering browsing contexts](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#restrictions-on-loaded-content), can only display HTTP(S) URLs.
+- The host page author has incorrectly set the portal to a non-HTTP(S) URL, e.g. using `<portal src="data:text/html,hello"></portal>`. Portals, [like all prerendering browsing contexts](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#restrictions-on-loaded-content), can only display HTTP(S) URLs.
 - The portaled page cannot be loaded, for reasons outside of the host page author's control. For example, if the portaled content does a HTTP redirect to a `data:` URL, or if the portaled content gives a network error.
 - The user is offline, which also causes a network error.
 
@@ -292,7 +292,7 @@ Combined, these behaviors allow authors to write fairly simple code to activate 
 
 ### CSP integration
 
-CSP has various interactions with embedded content and navigations. Portaled content follows all the [baseline rules](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#csp-integration) for prerendering browsing contexts. The following section outlines some additional integrations.
+CSP has various interactions with embedded content and navigations. Portaled content follows all the [baseline rules](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#csp-integration) for prerendering browsing contexts. The following section outlines some additional integrations.
 
 The host page's CSP has the following mechanisms available to prevent content from being loaded into a portal, or being activated:
 
@@ -305,7 +305,7 @@ Note that `portal-src` does *not* fall back to `frame-src` or `child-src`, despi
 
 A natural worry about not falling back to `frame-src` or similar is that portals might introduce new attack vectors to pages that set `frame-src` with the intention of protecting themselves from injected embedded content. However, we believe this is not the case. Portaled content is limited enough in how it communicates with the host page that the only relevant attack CSP can prevent is exfiltration of data via the `<portal>`'s `src=""` attribute. But if the page author is concerned about this sort of attack, then they also needs to prevent all resource loads in general, which means they will have set `default-src` or `prefetch-src`. And since `portal-src` falls back to these values, this means the attack is prevented even under our proposed scheme.
 
-Finally, we note that because portaled content must [opt in](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/opt-in.md) to being portaled, portaled content is not subject to any of the existing opt-outs that other embedded content such as iframes use. For example, specifying the [`frame-ancestors`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors) CSP directive, or its legacy counterpart in the `X-Frame-Options` header, does not change whether the content is portaled. This allows pages to allow themselves to be portaled via the opt-in, while also using these existing mechanisms to prevent themselves from being framed.
+Finally, we note that because portaled content must [opt in](https://github.com/jeremyroman/alternate-loading-modes/blob/main/opt-in.md) to being portaled, portaled content is not subject to any of the existing opt-outs that other embedded content such as iframes use. For example, specifying the [`frame-ancestors`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors) CSP directive, or its legacy counterpart in the `X-Frame-Options` header, does not change whether the content is portaled. This allows pages to allow themselves to be portaled via the opt-in, while also using these existing mechanisms to prevent themselves from being framed.
 
 ### Embedder-imposed policies and delegation
 
@@ -322,9 +322,9 @@ In particular, after portal activation, it doesn't make sense for the host page 
 
 So, any mechanism for supporting this kind of embedder control or delegation would need to switch off upon activation. But these features aren't designed to do that; they all are imposed for the entire lifetime of the browsing context. We could try to create variants of them that only lasted for a document's lifetime, instead of an entire browsing context's lifetime, but this would pile confusion on top of an already-complicated space.
 
-An additional reason for avoiding these mechanisms is that it makes writing portalable content even harder. Not only would the content author have to deal with browser-imposed pre-activation [restrictions](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-contexts.md#restrictions)—it would also have to deal with embedder-specific restrictions, which could vary from embedder to embedder. Since, unlike iframes, portaled content generally wants to be portaled by many different embedders (e.g. different content aggregators all using portals for prerendering), this kind of ecosystem fragmentation is undesirable.
+An additional reason for avoiding these mechanisms is that it makes writing portalable content even harder. Not only would the content author have to deal with browser-imposed pre-activation [restrictions](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#restrictions)—it would also have to deal with embedder-specific restrictions, which could vary from embedder to embedder. Since, unlike iframes, portaled content generally wants to be portaled by many different embedders (e.g. different content aggregators all using portals for prerendering), this kind of ecosystem fragmentation is undesirable.
 
-To conclude, instead of giving embedders this control as iframes do, we believe that the browser can take the role of mitigating any problematic features. For example, instead of requiring embedders to use `sandbox=""` to turn off modal `alert()`/`confirm()`/`prompt()` dialogs, or permissions policy to turn off autoplaying media, those features are [always disabled](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-contexts.md#restrictions-on-the-basis-of-being-non-user-visible) in pre-activation portals. And because portals are isolated from communicating with their embedder pre-activation, any problems which CSP Embedded Enforcement would attempt to protect against will instead be caught by this communications barrier and prevented from impacting the embedder.
+To conclude, instead of giving embedders this control as iframes do, we believe that the browser can take the role of mitigating any problematic features. For example, instead of requiring embedders to use `sandbox=""` to turn off modal `alert()`/`confirm()`/`prompt()` dialogs, or permissions policy to turn off autoplaying media, those features are [always disabled](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#restrictions-on-the-basis-of-being-non-user-visible) in pre-activation portals. And because portals are isolated from communicating with their embedder pre-activation, any problems which CSP Embedded Enforcement would attempt to protect against will instead be caught by this communications barrier and prevented from impacting the embedder.
 
 ## Summary of differences between portals and iframes
 
@@ -332,11 +332,11 @@ Portals are somewhat reminiscent of iframes, but are different in enough signifi
 
 From a user's perspective, a portal behaves more like a "super link" than an iframe. That is, it has the same [interactivity](#interactivity) and [accessibility](#accessibility) model of being a single activatable element, which will cause a navigation of the page they're currently viewing. It'll be fancier than a link, in that the portal might display a preview of the portaled content, and the navigation experience will be quicker (and potentially animated, if the site author so chooses). But the ways in which it is fancier will generally not remind users of iframes, i.e. of scrollable viewports into an independently-interactive piece of content hosted on another page.
 
-From the perspective of implementers and specification authors, portals behave something like "popups that display inline". This is because [prerendering browsing contexts](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-contexts.md) are [top-level browsing contexts](https://html.spec.whatwg.org/#top-level-browsing-context), and not [nested browsing contexts](https://html.spec.whatwg.org/#nested-browsing-context). More specifically, prerendering browsing contexts sit alongside [auxiliary browsing contexts](https://html.spec.whatwg.org/#auxiliary-browsing-context) (popups) as two distinct types of top-level browsing context, and much of the specification infrastructure is shared. This becomes even more true after activation, when the portal browsing context becomes just another tab (and ceasing being a prerendering browsing context).
+From the perspective of implementers and specification authors, portals behave something like "popups that display inline". This is because [prerendering browsing contexts](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md) are [top-level browsing contexts](https://html.spec.whatwg.org/#top-level-browsing-context), and not [nested browsing contexts](https://html.spec.whatwg.org/#nested-browsing-context). More specifically, prerendering browsing contexts sit alongside [auxiliary browsing contexts](https://html.spec.whatwg.org/#auxiliary-browsing-context) (popups) as two distinct types of top-level browsing context, and much of the specification infrastructure is shared. This becomes even more true after activation, when the portal browsing context becomes just another tab (and ceasing being a prerendering browsing context).
 
 Finally, the web developer dealing with a portal element's API sees the following differences from iframes:
 
-- Portaled content needs to [opt-in](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/opt-in.md) to being portaled. Iframed content can only opt-out from being iframed (via `X-Frame-Options` or CSP's `frame-ancestors`).
+- Portaled content needs to [opt-in](https://github.com/jeremyroman/alternate-loading-modes/blob/main/opt-in.md) to being portaled. Iframed content can only opt-out from being iframed (via `X-Frame-Options` or CSP's `frame-ancestors`).
 
 - Even same-origin portals do not provide synchronous DOM access to the portaled `Window` or `Document` objects, whereas iframes give such access via `frame.contentWindow`/`frame.contentDocument`. This gives a more uniform isolation boundary for more predictable performance and security.
 
@@ -348,9 +348,9 @@ Finally, the web developer dealing with a portal element's API sees the followin
 
 - Portals can only load `http:` and `https:` URLs. This removes an entire category of confusing interactions regarding `about:blank`, `javascript:`, `blob:`, and `data:` URLs, as well as the `<iframe srcdoc="">` feature and its resulting `about:srcdoc` URLs. Notably, the portaled content will always have an origin derived from its URL, without any inheritance from the host document.
 
-- Pre-activation, portals are [restricted](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-contexts.md#restrictions-on-the-basis-of-being-non-user-visible) from using a variety of features, like any API that requires a permission or user gesture, or modal dialogs, or downloads. There is no equivalent of `<iframe>`'s `allow=""` attribute which lets portaled pages act on behalf of their host.
+- Pre-activation, portals are [restricted](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#restrictions-on-the-basis-of-being-non-user-visible) from using a variety of features, like any API that requires a permission or user gesture, or modal dialogs, or downloads. There is no equivalent of `<iframe>`'s `allow=""` attribute which lets portaled pages act on behalf of their host.
 
-- Pre-activation, cross-origin portals [do not have access to storage or other communication channels](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-contexts.md#privacy-based-restrictions). In exchange, they get full access to unpartitioned first-party storage after activation. (In contrast, iframes are moving toward having access to [partitioned storage](https://github.com/privacycg/storage-partitioning) throughout their lifetime.)
+- Pre-activation, cross-origin portals [do not have access to storage or other communication channels](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#privacy-based-restrictions). In exchange, they get full access to unpartitioned first-party storage after activation. (In contrast, iframes are moving toward having access to [partitioned storage](https://github.com/privacycg/storage-partitioning) throughout their lifetime.)
 
 - Portals, like links but unlike iframes, [cannot have policies imposed on them](#embedder-imposed-policies-and-delegation) by the embedding page.
 
@@ -392,7 +392,7 @@ Finally, we believe that attempting to classify a portal as a "type of iframe" o
 
 _See also the [W3C TAG Security and Privacy Questionnaire answers](./security-and-privacy-questionnaire.md)._
 
-The main privacy concern with portals, as with all embedded content, is cross-site tracking. The threat model here is outlined in great detail [elsewhere](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-contexts.md#privacy-based-restrictions), as are the mitigations that portals apply to prevent such tracking. The summary is that portals are much better in this regard than iframes, and instead are designed to have the same privacy properties as links. That is, cross-site tracking is possible using link decoration on the `<portal>`'s `src=""` attribute, similar to the `<a>` element's `href=""`, but this tracking will only be possible once the portal activates/link navigates, which causes a very-user-visible full-page transition to the portaled/linked site.
+The main privacy concern with portals, as with all embedded content, is cross-site tracking. The threat model here is outlined in great detail [elsewhere](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#privacy-based-restrictions), as are the mitigations that portals apply to prevent such tracking. The summary is that portals are much better in this regard than iframes, and instead are designed to have the same privacy properties as links. That is, cross-site tracking is possible using link decoration on the `<portal>`'s `src=""` attribute, similar to the `<a>` element's `href=""`, but this tracking will only be possible once the portal activates/link navigates, which causes a very-user-visible full-page transition to the portaled/linked site.
 
 On the security side, portals are a new element which can emit requests and run script. Although much of the potential damage that a portal could cause is mitigated by the privacy protections—e.g., unlike the `<iframe>` or `<script>` elements, there is no direct access to the host document—it is still important to provide control over portals through the usual mechanisms. This is where our [CSP integration](#csp-integration) comes in.
 
