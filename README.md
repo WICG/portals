@@ -62,7 +62,7 @@ myPortal.activate();
 
 which causes the embedding window to navigate, replacing its document with the prerendered one. At this point, the user will observe that their browser has navigated to `https://example.com/`, e.g., via changes to the URL bar contents and back/forward UI. Since `https://example.com/` was already loaded and prerendered in the portal context, this navigation will occur seamlessly and instantly, without a network round-trip or document re-initialization.
 
-For more advanced use cases, the `https://example.com/` document can react to activation, using the `portalactivate` event. It can use this event to adapt itself to its new context, and even to adopt its *predecessor* (the document which previously occupied the tab) into a new portal context.
+For more advanced use cases, the `https://example.com/` document can react to activation, using the `portalactivate` event. It can use this event to adapt itself to its new context. For example, if the page was only showing preview content while in a portal, it can switch to showing the full content of the page. The page can also adopt its *predecessor* (the document which previously occupied the tab) into a new portal context.
 
 ```js
 window.addEventListener('portalactivate', e => {
@@ -77,7 +77,7 @@ window.addEventListener('portalactivate', e => {
 });
 ```
 
-If `https://example.com/` does not need the predecessor-adoption capability, then it can instead use the generic APIs for reacting to prerendering activation or other relevant changes, outlined [in that explainer](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#javascript-api).
+If `https://example.com/` does not need to adapt portal-specific content when activated and does not need the predecessor-adoption capability, then it can instead use the generic APIs for reacting to prerendering activation or other relevant changes, outlined [in that explainer](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#javascript-api).
 
 ### Navigation transitions
 
@@ -98,7 +98,7 @@ for (const link of document.querySelectorAll('a.seamless')) {
   document.body.append(portal);
 
   link.onclick = async e => {
-    if (portal.state === 'closed') {
+    if (portal.state === 'empty') {
       // The content couldn't be portaled, likely because it didn't opt-in.
       // Let the normal link click go through.
       return;
@@ -218,21 +218,175 @@ Authors should respect the `prefers-reduced-motion` media query by conditionally
 
 At a base level, portals behave the same as other prerendering browsing contexts do with respect to [session history](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#session-history) and [navigation](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#navigation). To summarize, content inside the portal has a trivial session history, and activation acts like a navigation of the host page, appending the portal's current session history entry to the host page's session history. This works to preserve user expectations for the back button. Note that this is very different from how iframes behave, and is one of the reasons it is better to think of portals as "inline-displayed popups" or "prerendered links" than as iframes. (Discussed further [below](#summary-of-differences-between-portals-and-iframes).)
 
-Because of the predecessor adoption feature, portals have some additional complexity, where they can cause the predecessor (i.e., the host document) to move into a prerendering browsing context. TODO describe this more.
+Because of the predecessor adoption feature, portals have some additional complexity, where they can cause the predecessor (i.e. the original host document) to move into a prerendering browsing context which is then hosted by the _successor_ (i.e. the activated page). This means that a top-level browsing context can turn into a prerendering browsing context. This is a problem since a prerendering browsing context is [restricted](https://github.com/jeremyroman/alternate-loading-modes/blob/gh-pages/browsing-context.md#restrictions). In particular, for the cross-origin case, privacy and permission related restrictions may be infeasible to reimpose. So while adoption is appropriate for the same-origin case, we propose more limited forms of this for the cross-origin case. For example, freezing the context on adoption or only showing an image of the previous content.
 
-TODO:
+Furthermore, there is a period of time between activation and adoption when it has not yet been determined if the predecessor will be adopted as a portal or unloaded. We refer to this as the _orphaned_ portal state. The predecessor is subject to the restrictions on a portal context while in this state.
 
-- Talk about relationship to bfcache.
-- Describe reversing transitions on back with bfcache and adopted portals.
-- Outline our solution for these, in terms of observable effects for users (not in terms of spec primitives).
-- Describe an option for activating portals with replacement.
-- Describe an option for activating adopted portals which traverses session history.
+If the predecessor is not adopted, then it may enter back/forward cache (bfcache). If the predecessor can't be cached then it is unloaded.
+
+In addition to enabling seamless transitions to portaled content, we also want to enable seamless transitions from previously portaled content, the successor, back to its predecessor. This is done by re-hosting the successor context in its original portal element, and can be thought of as a form of implicit adoption. When a live predecessor is navigated to (e.g. by the user pressing the back button), we restore the successor context to its portal element in the predecessor. We then fire a `restore` event on the element so that the predecessor can respond (e.g. by reversing the animation before the original activation). The live predecessor may be taken from bfcache, or if the predecessor was adopted, taken from a portal in the successor. In the latter case, this involves an implicit activation of the portal in the successor. Also note that since this restoration involves turning a top-level browsing context back into a portal context, only limited forms of restoration are proposed for the cross-origin case, as described above for regular adoption.
+
+If the predecessor page can't handle being restored, it may set the `irreversible` field in the activation options as an escape hatch to ensure it's unloaded. This prevents adoption and causes the predecessor to be ineligible for bfcache. Furthermore, eligibility for bfcache is a requirement for being adoptable.
+
+Since whether a portal element is hosting a context changes over time, the element itself can be thought of as having a lifecycle. This is exposed to the page via `state`.
+
+State | Meaning
+----- | -------
+empty | Nothing has ever been loaded in the portal, or the previous contents were discarded due to failed restoration, the user agent reclaiming resources, etc.
+live | The portal is hosting a browsing context.
+activated | The portal has activated. This host page is adopted or in bfcache.
+frozen | The portal is hosting a browsing context, but that context has been [frozen](https://github.com/WICG/page-lifecycle).
+epitaph | The previous contents were discarded, but unlike the empty state, there is some visual representation of the previous content.
+
+The events fired on a portal element to notify of its lifecycle changes are as follows.
+
+Event | Meaning
+----- | -------
+onactivate | The portal contents have been activated by something other than an explicit call to the `activate` method (e.g. default click, back navigation).
+onrestore | The previous contents were restored into this portal element.
+ondiscard | The portal contents have been discarded due to a need to reclaim resources or due to the inability to perform restoration.
+onfreeze/onresume | Indicates when the portal context has been [frozen/resumed](https://github.com/WICG/page-lifecycle).
+
+There is one more event, `window.onportaladopt`, needed to communicate to a page that it has become a portal when other forms (`activate()` promise resolving or `onactivation` of a predecessor portal) are not applicable.
+
+Depending on the semantics of the page, the activation of a predecessor may be viewed as traversing session history. For example, if scrolling a preview portal into view activates the preview, then scrolling back up could be considered a back navigation. A page can specify how a portal activation should affect session history by setting the `history` field in the activation options to one of `push` (default), `replace`, `back`, or `forward`.
+
+Consider how the [navigation transition example above](#navigation-transitions) may be extended to handle back button transitions.
+```js
+// This event fires when the user performs a back-navigation that causes the
+// browser to restore this page from bfcache (or from being an adopted portal)
+// as the top level document. This portal element's previous content has been
+// returned to it. The user now sees this page as it was before we called
+// activate when we were showing the whole viewport preview with this portal.
+// We now reverse the transition, back from 100vw/100vh to 10vw/10vh.
+portal.addEventListener('restore', async () => {
+  // Reverse the animation from the whole viewport preview.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    await portal.animate([{ width: '10vw', height: '10vh' }], { duration: 300 }).finished;
+    portal.hidden = true;
+  }
+});
+
+// If the browser could not restore the portal's contents when the user performed
+// a back-navigation (see above about limitations of restoration), then we need
+// to stop showing the portal element, as it's now empty.
+// Note that a portal element may be discarded for other reasons, such as memory
+// pressure on the system, so it's a good idea to handle discards in general.
+portal.addEventListener('discard', async () => {
+  // If we're showing the preview when it's discarded and the user still sees
+  // the previous content, then we can make discarding look nicer by animating
+  // the portal away. Otherwise, just hide it.
+  if (portal.state === 'epitaph' && !portal.hidden &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    await portal.animate([{ width: '10vw', height: '10vh' }], { duration: 300 }).finished;
+    portal.hidden = true;
+  } else {
+    portal.hidden = true;
+    portal.style.width = '10vw';
+    portal.style.height = '10vh';
+  }
+});
+```
+
+Now let's consider a more advanced example where a user goes back and forth between pages of a site. Suppose we have a page embedding a widget with a portal. When the user taps on it, it's activated so the user can interact with the widget. The widget page adopts the host page and displays it as a background to produce a lightbox style UI. Suppose the user then performs a back navigation followed by a forward navigation.
+
+Host page:
+```js
+function createWidget() {
+  let widgetContainer = document.getElementById('widgetContainer');
+  let portal = document.createElement('portal');
+  portal.src = 'widget-page.html';
+  widgetContainer.append(portal);
+  portal.addEventListener('load', () => {
+    widgetContainer.hidden = false;
+  });
+
+  portal.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      await portal.animate(/* ... */).finished;
+    }
+
+    await portal.activate();
+
+    // We happen to know that the widget will adopt us, but if we needed to
+    // check, we can test for |portalHost|.
+    if (!window.portalHost)
+      return;
+
+    // The host is adopted now, so make any desired visual changes for being
+    // embedded.
+    document.body.classList.add('embedded');
+  });
+
+  portal.addEventListener('restore', async () => {
+    // The user pressed back, so undo any visual changes done to the host while
+    // it was adopted.
+    document.body.classList.remove('embedded');
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      await portal.animate(/* ... */).finished;
+    }
+  });
+  portal.addEventListener('activate', () => {
+    // After the user returned from the widget page, they pressed forward. The
+    // widget page is implicitly activated again.
+    // Make any desired visual changes to the host page for being embedded.
+    document.body.classList.add('embedded');
+  });
+}
+```
+Widget page:
+```js
+// It may be that the user can access the widget by visiting directly. Check
+// whether we're in a portal so we can show an appropriate view.
+if (window.portalHost) {
+  // Show embedded view.
+  document.body.classList.add('embedded');
+}
+
+window.addEventListener('portalactivate', (e) => {
+  // Show full view.
+  document.body.classList.remove('embedded');
+
+  // Augment the full view by showing the host in the background.
+  document.body.classList.add('showPredecessor');
+  let predecessorContainer = document.getElementById('predecessorContainer');
+  let predecessor = e.adoptPredecessor();
+  // Note that the second time |portalactivate| is called (when the user presses
+  // forward), the predecessor will be the existing predecessor portal created
+  // the first time. We don't need to check for that here, since the following
+  // lines will essentially be no-ops in that case.
+  predecessorContainer.appendChild(predecessor);
+  predecessor.onactivate = () => {
+    // The user pressed back to return to the host page.
+    // Show embedded view.
+    document.body.classList.remove('showPredecessor');
+    document.body.classList.add('embedded');
+  };
+});
+```
+
+With this, the user can keep pressing back and forward which has the effect of dismissing and re-showing the widget. Suppose we now want to have the ability to dismiss the widget by tapping on the background of the widget. This can be done as follows:
+
+Widget page:
+```js
+// Continuing with |predecessor| in |portalactivate|:
+predecessor.onclick = async (e) => {
+  e.preventDefault();
+  // Tapping outside of the widget is like pressing the back button, so we
+  // specify that this activation traverses session history.
+  await predecessor.activate({history: 'back'});
+  // Show embedded view.
+  document.body.classList.remove('showPredecessor');
+  document.body.classList.add('embedded');
+};
+```
 
 ### Activation
 
 The basics of activation are explained [in the intro examples](#examples): calling `portalElement.activate()` causes the embedding window to navigate to the content which is already loaded into the portal. That is, it is a developer-controlled way of performing the general activation operation that all prerendering browsing contexts have. This section discusses some of the subtler details created by exposing this functionality to developers, instead of leaving it up to the browser as other prerendering browsing contexts do.
 
-First, note that a portal's prerendering browsing context may be in a "closed" state, when it is not displaying valid, activatable content. This could happen for several reasons:
+First, note that a portal element may be in a state where it is not displaying valid, activatable content (see [above](#session-history-navigation-and-bfcache)). This could happen for several reasons:
 
 - The host page author has incorrectly set the portal to a non-HTTP(S) URL, e.g. using `<portal src="data:text/html,hello"></portal>`. Portals, [like all prerendering browsing contexts](https://github.com/jeremyroman/alternate-loading-modes/blob/main/browsing-context.md#restrictions-on-loaded-content), can only display HTTP(S) URLs.
 - The portaled page cannot be loaded, for reasons outside of the host page author's control. For example, if the portaled content does a HTTP redirect to a `data:` URL, or if the portaled content gives a network error.
@@ -240,7 +394,7 @@ First, note that a portal's prerendering browsing context may be in a "closed" s
 
 (What, exactly, the `<portal>` element displays in this state is still under discussion: [#251](https://github.com/WICG/portals/issues/251).)
 
-Attempting to activate a closed portal will fail, causing the `activate()` promise to reject.
+Attempting to activate a portal in such a state will fail, causing the `activate()` promise to reject.
 
 Furthermore, user agents have existing limitations on navigations initiated by the page where they may be ignored if they are considered to conflict with a user's intent to perform a different navigation. Such cases are not described by the existing navigation spec (see [#218](https://github.com/WICG/portals/issues/218)), but portal activations are subject to these limitations. In the case where another navigation takes precedence over portal activation, the promise returned by `activate()` will reject.
 
