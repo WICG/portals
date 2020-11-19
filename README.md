@@ -316,19 +316,22 @@ function createWidget() {
 
     // The host is adopted now, so make any desired visual changes for being
     // embedded.
+    document.body.classList.add('embedded');
   });
 
-  portal.addEventListener(‘restore’, () => {
+  portal.addEventListener('restore', async () => {
     // The user pressed back, so undo any visual changes done to the host while
     // it was adopted.
+    document.body.classList.remove('embedded');
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       await portal.animate(/* ... */).finished;
     }
   });
-  portal.addEventListener(‘activate’, () => {
+  portal.addEventListener('activate', () => {
     // After the user returned from the widget page, they pressed forward. The
     // widget page is implicitly activated again.
     // Make any desired visual changes to the host page for being embedded.
+    document.body.classList.add('embedded');
   });
 }
 ```
@@ -338,14 +341,15 @@ Widget page:
 // whether we're in a portal so we can show an appropriate view.
 if (window.portalHost) {
   // Show embedded view.
-} else {
-  // Show full view.
+  document.body.classList.add('embedded');
 }
 
 window.addEventListener('portalactivate', (e) => {
   // Show full view.
+  document.body.classList.remove('embedded');
 
   // Augment the full view by showing the host in the background.
+  document.body.classList.add('showPredecessor');
   let predecessorContainer = document.getElementById('predecessorContainer');
   let predecessor = e.adoptPredecessor();
   // Note that the second time |portalactivate| is called (when the user presses
@@ -356,6 +360,8 @@ window.addEventListener('portalactivate', (e) => {
   predecessor.onactivate = () => {
     // The user pressed back to return to the host page.
     // Show embedded view.
+    document.body.classList.remove('showPredecessor');
+    document.body.classList.add('embedded');
   };
 });
 ```
@@ -371,6 +377,8 @@ predecessor.onclick = async (e) => {
   // specify that this activation traverses session history.
   await predecessor.activate({history: 'back'});
   // Show embedded view.
+  document.body.classList.remove('showPredecessor');
+  document.body.classList.add('embedded');
 };
 ```
 
