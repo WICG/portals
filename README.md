@@ -288,7 +288,8 @@ portal.addEventListener('discard', async () => {
 });
 ```
 
-Now let's consider a more advanced example where a user goes back and forth between pages of a site. Suppose we have a page embedding a widget with a portal. When the user taps on it, it's activated so the user can interact with the widget. The widget page adopts the host page and displays it as a background to produce a lightbox style UI. Suppose the user then performs a back navigation followed by a forward navigation.\
+Now let's consider a more advanced example where a user goes back and forth between pages of a site. Suppose we have a page embedding a widget with a portal. When the user taps on it, it's activated so the user can interact with the widget. The widget page adopts the host page and displays it as a background to produce a lightbox style UI. Suppose the user then performs a back navigation followed by a forward navigation.
+
 Host page:
 ```js
 function createWidget() {
@@ -359,7 +360,8 @@ window.addEventListener('portalactivate', (e) => {
 });
 ```
 
-With this, the user can keep pressing back and forward which has the effect of dismissing and re-showing the widget. Suppose we now want to have the ability to dismiss the widget by tapping on the background of the widget. This can be done as follows:\
+With this, the user can keep pressing back and forward which has the effect of dismissing and re-showing the widget. Suppose we now want to have the ability to dismiss the widget by tapping on the background of the widget. This can be done as follows:
+
 Widget page:
 ```js
 // Continuing with |predecessor| in |portalactivate|:
