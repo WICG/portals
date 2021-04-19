@@ -1218,6 +1218,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     portals-activate-empty-browsing-context.html
     portals-activate-network-error.html
     portals-activate-while-unloading.html
+    portals-no-frame-crash.html
     portals-focus.sub.html
     portals-navigate-after-adoption.html
     portals-repeated-activate.html
