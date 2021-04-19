@@ -14,6 +14,8 @@ deploy:
   local_dir: out
   deploy_key: deploy_key
   edge: true
+  on:
+    branch: main
 
 notifications:
   email:
