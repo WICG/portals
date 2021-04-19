@@ -350,8 +350,10 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
   </p>
 
   <xmp class="idl">
-      [Exposed=Window, HTMLConstructor]
+      [Exposed=Window]
       interface HTMLPortalElement : HTMLElement {
+          [HTMLConstructor] constructor();
+
           [CEReactions] attribute USVString src;
           [CEReactions] attribute DOMString referrerPolicy;
 
