@@ -3,7 +3,6 @@
  * Controlling all the TTT related features
  */
 class TTTController {
-
     /**
      * Initiating controller
      */
@@ -22,7 +21,7 @@ class TTTController {
         // Add event listeners
         let initialY = 0;
         let initialWidth = 0;
-        window.addEventListener('portalactivate', evt => {
+        window.addEventListener('portalactivate', (evt) => {
             initialY = evt.data.initialY;
             initialWidth = evt.data.initialWidth;
             // animate the audio controller
@@ -33,35 +32,35 @@ class TTTController {
                 evt.data.photoSrc,
                 evt.data.activatedWidth,
                 evt.adoptPredecessor()
-            )
-        })
+            );
+        });
 
-        this.lightbox.addEventListener('click', evt => {
+        this.lightbox.addEventListener('click', (evt) => {
             this.setPredecessorActivateUI(initialY, initialWidth);
-        })
+        });
 
-        this.heroImg.addEventListener('transitionend', evt => {
-            if (evt.propertyName !== 'top') {
+        this.heroImg.addEventListener('transitionend', (evt) => {
+            if (evt.propertyName !== 'transform') {
                 return;
             }
             const predecessor = document.querySelector('portal');
-            predecessor.activate().then(_ => {
+            predecessor.activate().then(() => {
                 this.audioController.show();
                 this.setDefaultUI();
                 this.setEmbedUI();
             });
-        })
+        });
 
         // Controlling the audio on message
-        window.portalHost.addEventListener('message', evt => {
+        window.portalHost.addEventListener('message', (evt) => {
             switch (evt.data.control) {
-                case 'prev': this.audioController.prev(); break;
-                case 'play': this.audioController.play(); break;
-                case 'pause': this.audioController.pause(); break;
-                case 'next': this.audioController.next(); break;
-                case 'hide': this.audioController.hide(); break;
+            case 'prev': this.audioController.prev(); break;
+            case 'play': this.audioController.play(); break;
+            case 'pause': this.audioController.pause(); break;
+            case 'next': this.audioController.next(); break;
+            case 'hide': this.audioController.hide(); break;
             }
-        })
+        });
     }
 
     /**
@@ -80,7 +79,7 @@ class TTTController {
         this.recommendation.style.opacity = 1;
 
         // Resetting all the styles
-        this.main.style.transition = ''
+        this.main.style.transition = '';
         this.main.style.width = '100%';
         this.main.style.marginTop = '0px';
         this.main.style.boxShadow = 'none';
@@ -88,8 +87,9 @@ class TTTController {
         this.main.style.backgroundColor = '#FFF';
         this.lightbox.style.display = 'none';
         this.lightbox.style.opacity = 0;
-        this.heroImg.style.transition = ''
+        this.heroImg.style.transition = '';
         this.heroImg.style.top = '0px';
+        this.heroImg.style.transform = 'translateY(0px) scale(1)';
 
         // clear any exisiting portal element on reset
         const predecessorPortal = this.embed.querySelector('portal');
@@ -118,7 +118,8 @@ class TTTController {
      * @param {Number} activatedWidth
      * @param {HTMLPortalElement} predecessor
      */
-    setPortalActivatedUI(followed, name, photoSrc, activatedWidth, predecessor) {
+    setPortalActivatedUI(
+        followed, name, photoSrc, activatedWidth, predecessor) {
         // Show all the elements
         this.header.classList.add('animateOpacityTo_1_0');
         this.header.style.display = 'block';
@@ -151,7 +152,7 @@ class TTTController {
         this.main.style.borderRadius = '5px 5px 0px 0px';
         this.lightbox.style.display = 'block';
         this.lightbox.style.opacity = 0.6;
-        this.lightbox.classList.add('animateOpacityTo_0_6')
+        this.lightbox.classList.add('animateOpacityTo_0_6');
         this.embed.appendChild(predecessor);
     }
 
@@ -168,13 +169,12 @@ class TTTController {
         this.follow.style.opacity = 0;
         this.recommendation.style.opacity = 0;
         // animate
-        this.heroImg.style.transition = 'top 0.6s'
-        this.heroImg.style.top = (window.pageYOffset + initialY - 170) + 'px';
-        this.main.style.transition = 'width 0.3s'
-        this.main.style.width = `${initialWidth}px`;
+        this.heroImg.style.transition = 'transform 0.6s';
+        this.heroImg.style.transformOrigin = 'top center';
+        this.heroImg.style.transform =
+          `translateY(${(window.pageYOffset + initialY - 170)}px) scale(0.95)`;
         this.audioController.hide();
     }
-
 }
 
 // Initiate the controller when being embedded as a portal

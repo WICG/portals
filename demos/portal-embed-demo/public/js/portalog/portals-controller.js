@@ -1,14 +1,13 @@
 /**
- * Default port used for the portal
+ * Default path used for the portal
  */
-const DEFAULT_PORTAL_PORT = 3001;
+const DEFAULT_PORTAL_PATH = '/ttt';
 
 /**
  * Portals Controller
  * Controlling all the portal related features
  */
 class PortalsController {
-
     /**
      * Initiating paratmeter
      * @constructor
@@ -32,7 +31,7 @@ class PortalsController {
         // Event fires after the portal on-click animation finishes
         this.embedContainer.addEventListener('transitionend', (evt) => {
             // We wait until the top transition finishes
-            if (evt.propertyName !== 'top') {
+            if (evt.propertyName !== 'transform') {
                 return;
             }
             this.activateAfterAnimation();
@@ -52,13 +51,27 @@ class PortalsController {
     populateEmbedContainer() {
         this.portal = document.createElement('portal');
         this.portal.src = this.src;
+        // Accepting autoplay
+        this.portal.setAttribute('allow', 'autoplay');
+
+        // Adding a transparent overlay div element on top of the portal
+        // so that it won't immediately activate when clicking
+        this.transparentOverlay = document.createElement('div');
+        this.transparentOverlay.style.width = '100%';
+        this.transparentOverlay.style.height = '100%';
+        this.transparentOverlay.style.position = 'absolute';
+        this.transparentOverlay.style.top = '0px';
+        this.transparentOverlay.style.backgroundColor = 'transparent';
+
         this.playerUI = this._genPortalMessageUI();
-        this.embedContainer.append(this.portal, this.playerUI);
+        this.embedContainer.append(
+            this.portal, this.transparentOverlay, this.playerUI);
 
         // When the portal is clicked, start animating it.
-        this.embedContainer.addEventListener('click', evt => {
-            if (evt.target === this.portal)
+        this.embedContainer.addEventListener('click', (evt) => {
+            if (evt.target === this.transparentOverlay) {
                 this.animateAndActivate();
+            }
         });
     }
 
@@ -75,16 +88,11 @@ class PortalsController {
         this.playerUI.style.display = 'none';
         this.initialY = this.embedContainer.getBoundingClientRect().y;
         this.initialWidth = this.embedContainer.getBoundingClientRect().width;
-        this.embedContainer.style.transition =
-            `top 0.6s cubic-bezier(.49,.86,.37,1.01),
-             left 0.3s cubic-bezier(.49,.86,.37,1.01),
-             width 0.3s cubic-bezier(.49,.86,.37,1.01),
-             padding-top 0.3s cubic-bezier(.49,.86,.37,1.01)`;
-        this.embedContainer.style.top = `${TARGET_Y - this.initialY}px`;
-        this.embedContainer.style.width = '95%';
-        this.embedContainer.style.paddingTop = 'calc(95% * 0.65)';
-        this.embedContainer.style.left = 'calc((100% - 95%)/2)';
-        this.portal.postMessage({ control: 'hide' }, this.src.origin);
+        this.embedContainer.style.transition = 'transform 0.6s';
+        this.embedContainer.style.transformOrigin = 'top center';
+        this.embedContainer.style.transform =
+            `translateY(${TARGET_Y - this.initialY}px) scale(1.05)`;
+        this.portal.postMessage({control: 'hide'});
     }
 
     /**
@@ -101,16 +109,21 @@ class PortalsController {
                 name: 'Yusuke Utsunomiya',
                 photoSrc: '/img/profile.png',
                 initialY: this.initialY,
-                activatedWidth: this.embedContainer.getBoundingClientRect().width,
+                activatedWidth:
+                    this.embedContainer.getBoundingClientRect().width,
                 initialWidth: this.initialWidth,
-            }
-        }).then((_) => {
+            },
+        }).then(() => {
+            // Reset the position of the container after the portal activates
+            this._resetPositionOfEmbedContainer();
+
             // Check if this page was adopted by the embedded content.
             if (!window.portalHost) {
                 return;
             }
 
-            // hide the scroll bar so that it won't show when used as a predecessor
+            // hide the scroll bar so that it won't show
+            // when used as a predecessor
             document.body.classList.add('hide-scroll-bars');
 
             // don't add event listeners if it was already added
@@ -125,9 +138,6 @@ class PortalsController {
             });
             this.isPortalHostListenerAdded = true;
         });
-
-        // Reset the position of the container after the portal activates
-        this._resetPositionOfEmbedContainer();
     }
 
     /**
@@ -143,7 +153,7 @@ class PortalsController {
 
     /**
      * Generate a transparent UI to control the embedded content via message
-     * @returns {HTMLDivElement}
+     * @return {HTMLDivElement}
      */
     _genPortalMessageUI() {
         const controller = document.createElement('div');
@@ -157,20 +167,20 @@ class PortalsController {
         next.classList.add('message-button');
 
         prev.addEventListener('click', (evt) => {
-            this.portal.postMessage({ control: 'prev' }, this.src.origin);
+            this.portal.postMessage({control: 'prev'});
         });
         play.addEventListener('click', (evt) => {
             const isPlaying = play.getAttribute('playing');
             if (isPlaying === 'true') {
-                this.portal.postMessage({ control: 'pause' }, this.src.origin);
+                this.portal.postMessage({control: 'pause'});
                 play.setAttribute('playing', false);
             } else {
-                this.portal.postMessage({ control: 'play' }, this.src.origin);
+                this.portal.postMessage({control: 'play'});
                 play.setAttribute('playing', true);
             }
         });
         next.addEventListener('click', (evt) => {
-            this.portal.postMessage({ control: 'next' }, this.src.origin);
+            this.portal.postMessage({control: 'next'});
         });
 
         controller.appendChild(prev);
@@ -185,10 +195,7 @@ class PortalsController {
      */
     _resetPositionOfEmbedContainer() {
         this.embedContainer.style.transition = '';
-        this.embedContainer.style.width = '100%';
-        this.embedContainer.style.paddingTop = '65%';
-        this.embedContainer.style.top = '0px';
-        this.embedContainer.style.left = '0px';
+        this.embedContainer.style.transform = 'translateY(0px) scale(1)';
     }
 
     /**
@@ -205,25 +212,23 @@ class PortalsController {
             follow.textContent = 'Following';
         }
     };
-
 }
 
-let portalPort =
-    parseInt(new URL(location).searchParams.get('portalport'))
-    || DEFAULT_PORTAL_PORT;
-let embedContainer = document.querySelector('#embed');
+const portalPath =
+    new URL(location).searchParams.get('portalpath') || DEFAULT_PORTAL_PATH;
+const embedContainer = document.querySelector('#embed');
 if ('HTMLPortalElement' in window) {
     // Create instance
     const portalsController = new PortalsController(
         embedContainer,
-        new URL(`http://localhost:${portalPort}/`)
+        new URL(`${location.origin}${portalPath}`)
     );
 
     // Embed portals and hook events
     portalsController.populateEmbedContainer();
 } else {
     // iframe fallback
-    const embedURL = `http://localhost:${portalPort}`;
+    const embedURL = `${location.origin}${portalPath}`;
     const iframe = document.createElement('iframe');
     const link = document.createElement('div');
     link.style.width = '100%';
@@ -231,7 +236,7 @@ if ('HTMLPortalElement' in window) {
     link.style.position = 'absolute';
     link.style.top = '0px';
     link.style.backgroundColor = 'transparent';
-    link.addEventListener('click', evt => {
+    link.addEventListener('click', (evt) => {
         link.style.backgroundColor = 'skyblue';
         link.style.opacity = 0.4;
         location.href = embedURL;
@@ -239,6 +244,5 @@ if ('HTMLPortalElement' in window) {
     iframe.src = embedURL;
     embedContainer.append(iframe, link);
     // show fallback message
-    document.querySelector('#fallback-message').style.display = "block";
-
+    document.querySelector('#fallback-message').style.display = 'block';
 }
