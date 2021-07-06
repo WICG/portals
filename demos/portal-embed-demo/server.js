@@ -1,20 +1,35 @@
 const express = require('express');
-const PORTALOG_PORT = 3000;
-const TTT_ARCHIVE_PORT = 3001;
+const DEFAULT_PORT = 3000;
 
-const genServer = (serverName, port, rootHTML) => {
+const genServer = (port, root, portal) => {
     const app = express();
     app.use(express.static('public'));
-    app.get('/', (req, res) => {
-        res.sendFile(`${__dirname}/${rootHTML}`);
-    });
-    const listener = app.listen(port, function () {
+    const addRoute = (path, file) => {
+        app.get(path, (req, res) => {
+            res.sendFile(`${__dirname}/${file}`);
+        });
+    };
+    addRoute(root.path, root.file);
+    addRoute(portal.path, portal.file);
+    const listener = app.listen(port, () => {
         const myPort = listener.address().port;
-        console.log(`${serverName} has launched: http://localhost:${myPort}${myPort === PORTALOG_PORT ? '?portalport=' + TTT_ARCHIVE_PORT : ''}`);
+        console.log(`💻 Portal Demo has launched: http://localhost:${myPort}/?portalpath=${portal.path}`);
     });
 };
 
-/** A simple server hosting an article page and a podcast page
- * in a differen port (=simulating cross domain situation). */
-genServer('📝 PORTALOG', PORTALOG_PORT, 'view/portalog.html');
-genServer('🎧 TTT Archive', TTT_ARCHIVE_PORT, 'view/ttt.html');
+/*
+ * A simple server hosting an article page and a podcast page
+ * Due to Privacy considerations, Portals have now limited its communication
+ * chanel to same-origin use cases
+ * e.g. https://github.com/WICG/portals#same-origin-communication-channels
+ * */
+genServer(DEFAULT_PORT,
+    {
+        path: '/',
+        file: 'view/portalog.html',
+    },
+    {
+        path: '/ttt',
+        file: 'view/ttt.html',
+    }
+);
