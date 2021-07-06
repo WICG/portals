@@ -31,7 +31,7 @@ class PortalsController {
         // Event fires after the portal on-click animation finishes
         this.embedContainer.addEventListener('transitionend', (evt) => {
             // We wait until the top transition finishes
-            if (evt.propertyName !== 'top') {
+            if (evt.propertyName !== 'transform') {
                 return;
             }
             this.activateAfterAnimation();
@@ -88,15 +88,10 @@ class PortalsController {
         this.playerUI.style.display = 'none';
         this.initialY = this.embedContainer.getBoundingClientRect().y;
         this.initialWidth = this.embedContainer.getBoundingClientRect().width;
-        this.embedContainer.style.transition =
-            `top 0.6s cubic-bezier(.49,.86,.37,1.01),
-             left 0.3s cubic-bezier(.49,.86,.37,1.01),
-             width 0.3s cubic-bezier(.49,.86,.37,1.01),
-             padding-top 0.3s cubic-bezier(.49,.86,.37,1.01)`;
-        this.embedContainer.style.top = `${TARGET_Y - this.initialY}px`;
-        this.embedContainer.style.width = '95%';
-        this.embedContainer.style.paddingTop = 'calc(95% * 0.65)';
-        this.embedContainer.style.left = 'calc((100% - 95%)/2)';
+        this.embedContainer.style.transition = 'transform 0.6s';
+        this.embedContainer.style.transformOrigin = 'top center';
+        this.embedContainer.style.transform =
+            `translateY(${TARGET_Y - this.initialY}px) scale(1.05)`;
         this.portal.postMessage({control: 'hide'});
     }
 
@@ -200,10 +195,7 @@ class PortalsController {
      */
     _resetPositionOfEmbedContainer() {
         this.embedContainer.style.transition = '';
-        this.embedContainer.style.width = '100%';
-        this.embedContainer.style.paddingTop = '65%';
-        this.embedContainer.style.top = '0px';
-        this.embedContainer.style.left = '0px';
+        this.embedContainer.style.transform = 'translateY(0px) scale(1)';
     }
 
     /**
