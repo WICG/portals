@@ -358,13 +358,13 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
           [CEReactions] attribute DOMString referrerPolicy;
 
           [NewObject] Promise<undefined> activate(optional PortalActivateOptions options = {});
-          undefined postMessage(any message, optional PostMessageOptions options = {});
+          undefined postMessage(any message, optional StructuredSerializeOptions options = {});
 
           attribute EventHandler onmessage;
           attribute EventHandler onmessageerror;
       };
 
-      dictionary PortalActivateOptions : PostMessageOptions {
+      dictionary PortalActivateOptions : StructuredSerializeOptions {
           any data;
       };
   </xmp>
@@ -401,7 +401,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. Let |serializeWithTransferResult| be
         [$StructuredSerializeWithTransfer$](|options|["{{PortalActivateOptions/data}}"],
-        |options|["{{PostMessageOptions/transfer}}"]).
+        |options|["{{StructuredSerializeOptions/transfer}}"]).
         Rethrow any exceptions.
 
     1. Let |promise| be a new [=promise=].
@@ -433,7 +433,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s [=environment settings object/origin=].
 
-    1. Let |transfer| be |options|["{{PostMessageOptions/transfer}}"].
+    1. Let |transfer| be |options|["{{StructuredSerializeOptions/transfer}}"].
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
@@ -755,7 +755,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
   <xmp class="idl">
       [Exposed=Window]
       interface PortalHost : EventTarget {
-          undefined postMessage(any message, optional PostMessageOptions options = {});
+          undefined postMessage(any message, optional StructuredSerializeOptions options = {});
 
           attribute EventHandler onmessage;
           attribute EventHandler onmessageerror;
@@ -775,7 +775,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
     1. Let |sourceOrigin| be [=this=]'s [=relevant settings object=]'s [=environment settings object/origin=].
 
-    1. Let |transfer| be |options|["{{PostMessageOptions/transfer}}"].
+    1. Let |transfer| be |options|["{{StructuredSerializeOptions/transfer}}"].
 
     1. Let |serializeWithTransferResult| be [$StructuredSerializeWithTransfer$](|message|, |transfer|). Rethrow any exceptions.
 
