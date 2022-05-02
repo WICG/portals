@@ -6,7 +6,6 @@ Status: CG-DRAFT
 Group: WICG
 URL: https://wicg.github.io/portals/
 Editor: Jeremy Roman, Google, jbroman@chromium.org
-Editor: Lucas Gadani, Google, lfg@chromium.org
 Abstract: This specification defines a mechanism that allows for rendering of, and seamless navigation to, embedded content.
 Repository: https://github.com/WICG/portals/
 Markup Shorthands: css no, markdown yes
@@ -96,7 +95,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
     * "`none`": all other browsing contexts
 
     <!-- https://docs.google.com/drawings/d/1uh-YiJIqf8OTV0JfJ9TPPK1V0vy0T39b8hECj1I7emg/edit?usp=sharing -->
-    <img src="portals-state-transitions.svg" style="width: 100%" alt="Diagram of portal state transitions">
+    <img src="portals-state-transitions.svg" width="881" height="392" style="width: 100%" alt="Diagram of portal state transitions">
 
     A top-level "`none`" context can become "`orphaned`" by [=activate a portal browsing context|activating=]
     another context. An "`orphaned`" context can be [=adopt the predecessor browsing context|adopted=] to
@@ -371,6 +370,7 @@ spec: ecma-262; urlPrefix: http://tc39.github.io/ecma262/
 
   <wpt>
     portals-api.html
+    idlharness.window.js
   </wpt>
 
   The <dfn attribute for="HTMLPortalElement">src</dfn> IDL attribute must [=reflect=] the <{portal/src}> content attribute.
