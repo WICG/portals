@@ -1,3 +1,15 @@
+The Portals proposal is not currently being actively pursued. 
+
+Many of the capabilities that Portals would have enabled are being explored in other proposals:
+* [navigation speculation](https://github.com/WICG/nav-speculation) (including speculation rules, prefetch, and prerendering)
+* [View Transitions](https://drafts.csswg.org/css-view-transitions-1/)
+* [Fenced Frame](https://wicg.github.io/fenced-frame/)
+* and more (which may be added here)
+
+This repository is thus effectively archived for the time being.
+
+---
+
 # Portals
 
 Portals enable seamless and instant navigations between pages. In particular, we propose a new `<portal>` HTML element which enables a page to show another page as an inset, and then *activate* it to perform a seamless transition to a new state, where the formerly-inset page becomes the top-level document.
